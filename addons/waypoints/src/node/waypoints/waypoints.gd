@@ -65,9 +65,13 @@ func remove_waypoint(id : int) -> void:
 	var end = _resolve_position_from_id(next_id , true)
 		
 	if end != null:
-		_waypoints[next_id].set_path(_pathing.getPath(start, end))
-		
-	_waypoints[id].hide()
+		var path = _pathing.getPath(start, end)
+		#TODO this is duplication and needs abstraction
+		var world_vec2_path = []
+		for item in path:
+			world_vec2_path.append(_convert_vec3_to_global(item) - _waypoints[next_id].position)
+		_waypoints[next_id].set_path(world_vec2_path)
+	remove_child(_waypoints[id])
 	_waypoints.remove(id)
 
 

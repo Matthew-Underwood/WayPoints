@@ -13,13 +13,7 @@ func _draw():
 			draw_line(start_world_position, end_world_position, Color.green, 1, true)
 			draw_circle(end_world_position, 2, Color.green)
 			
-func hide() -> void:
-	_path = []
-	update()
-	
 	
 func set_path(path : Array) -> void:
 	_path = path
 	update()
-	
-
