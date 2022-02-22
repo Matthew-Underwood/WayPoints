@@ -19,13 +19,9 @@ func create_waypoint(pos : Vector2) -> void:
 	
 	var world_start = _resolve_position_from_id(-1)
 	var world_end = _world.global_to_world(pos)
-
-	var path = _pathing.getPath(world_start, world_end)	
-	var world_vec2_path = []
 	waypoint.position = _convert_vec2_to_global(world_end)
-	for item in path:
-		world_vec2_path.append(_convert_vec3_to_global(item) - waypoint.position)
-	waypoint.set_path(world_vec2_path)
+
+	_process_path(waypoint, world_start, world_end)
 	_waypoints.append(waypoint)
 	add_child(waypoint)
 
@@ -48,29 +44,26 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 	var next_id = id + 1
 	var world_start = _resolve_position_from_id(previous_id, true)
 	var world_end = _world.global_to_world(pos)
-	_waypoints[id].set_path(_pathing.getPath(world_start, world_end))
+	_waypoints[id].position = _convert_vec2_to_global(world_end)
+	_process_path(_waypoints[id], world_start, world_end)
+
 	
 	var position_next_waypoint = _resolve_position_from_id(next_id , true)
 	
 	if position_next_waypoint != null:
 		world_start = _world.global_to_world(pos)
 		world_end = position_next_waypoint
-		_waypoints[next_id].set_path(_pathing.getPath(world_start, world_end))
+		_process_path(_waypoints[next_id], world_start, world_end)
 
 
 func remove_waypoint(id : int) -> void:
-	var next_id = id + 1
 	var previous_id = id - 1
+	var next_id = id + 1
 	var start = _resolve_position_from_id(previous_id , true)
 	var end = _resolve_position_from_id(next_id , true)
 		
 	if end != null:
-		var path = _pathing.getPath(start, end)
-		#TODO this is duplication and needs abstraction
-		var world_vec2_path = []
-		for item in path:
-			world_vec2_path.append(_convert_vec3_to_global(item) - _waypoints[next_id].position)
-		_waypoints[next_id].set_path(world_vec2_path)
+		_process_path(_waypoints[next_id], start, end)
 	remove_child(_waypoints[id])
 	_waypoints.remove(id)
 
@@ -107,7 +100,14 @@ func _resolve_position_from_id(id : int, absolute = false):
 	
 	return _world.global_to_world(_waypoints[id].position)
 	
-	
+
+func _process_path(waypoint : WayPoint, start : Vector2, end : Vector2):
+	var path = _pathing.getPath(start, end)
+	var world_vec2_path = []
+	for item in path:
+		world_vec2_path.append(_convert_vec3_to_global(item) - waypoint.position)
+	waypoint.set_path(world_vec2_path)
+
 func _convert_vec2_to_global(pos : Vector2):
 	return _world.world_to_global(pos)
 
