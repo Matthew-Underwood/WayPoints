@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/path_end.png-b818ef52686a2a984f61ad0bbee90279.stex"
+path="res://.import/path_end.png-c461bc8f834ecdc020c4603c7de1f478.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/waypoints/assets/tile_set/path_end.png"
-dest_files=[ "res://.import/path_end.png-b818ef52686a2a984f61ad0bbee90279.stex" ]
+source_file="res://addons/waypoints/assets/sprites/path_end.png"
+dest_files=[ "res://.import/path_end.png-c461bc8f834ecdc020c4603c7de1f478.stex" ]
 
 [params]
 
