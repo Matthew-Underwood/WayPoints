@@ -101,17 +101,17 @@ func _resolve_position_from_id(id : int, absolute = false):
 	return _world.global_to_world(_waypoints[id].position)
 	
 
-func _process_path(waypoint : WayPoint, start : Vector2, end : Vector2):
+func _process_path(waypoint : WayPoint, start : Vector2, end : Vector2) -> void:
 	var path = _pathing.getPath(start, end)
 	var world_vec2_path = []
 	for item in path:
 		world_vec2_path.append(_convert_vec3_to_global(item) - waypoint.position)
 	waypoint.set_path(world_vec2_path)
 
-func _convert_vec2_to_global(pos : Vector2):
+func _convert_vec2_to_global(pos : Vector2) -> Vector2:
 	return _world.world_to_global(pos)
 
 
-func _convert_vec3_to_global(pos : Vector3):
+func _convert_vec3_to_global(pos : Vector3) -> Vector2:
 	var vec3_pos = MU_Ultilities_Vector.vector3_vector2(pos)
 	return _world.world_to_global(vec3_pos)
