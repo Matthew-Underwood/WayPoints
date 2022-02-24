@@ -57,7 +57,7 @@ _global_script_class_icons={
 [application]
 
 config/name="WayPoints"
-run/main_scene="res://addons/waypoints/scenes/waypoints.tscn"
+run/main_scene="res://test.tscn"
 
 [editor_plugins]
 
