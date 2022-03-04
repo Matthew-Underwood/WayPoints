@@ -1,38 +1,31 @@
 extends AnimatedSprite
 
 class_name WayPoint
-var _path = []
-var _selected = false setget set_selected, is_selected
+var _path = [] 
+var _previous_frame : int setget set_previous_frame
 
 
 func _input(event):
 	if event.is_action_released("confirm_click") && get_frame() == 1:
 		var waypoints = get_tree().get_nodes_in_group("waypoint")
 		for waypoint in waypoints:
-			waypoint.set_selected(false)
-			waypoint.exit_waypoint()
-		
-		set_frame(2)
-		set_selected(true)
+			waypoint.set_frame(0)
+		set_previous_frame(2)
 
 
 func exit_waypoint():
-	if is_selected(): 
-		set_frame(2)
-	else:
-		set_frame(0)
+	set_frame(_previous_frame)
 
 
 func enter_waypoint():
+	_previous_frame = get_frame()
 	set_frame(1)
 	
 
-func is_selected() -> bool:
-	return _selected
+func set_previous_frame(frame : int) -> void:
+	_previous_frame = frame
+	set_frame(frame)
 
-
-func set_selected(selected : bool):
-	_selected = selected
 
 func _draw():
 
