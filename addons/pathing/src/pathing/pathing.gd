@@ -1,9 +1,9 @@
 class_name Pathing
 
 var _aStar : AStar
-var _world
+var _world : MU_World
 
-func _init(aStar : AStar, world):
+func _init(aStar : AStar, world : MU_World):
 	_aStar = aStar
 	_world = world
 
