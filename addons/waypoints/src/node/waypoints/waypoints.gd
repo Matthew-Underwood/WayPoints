@@ -1,14 +1,19 @@
 extends Node2D
 
-var _waypoint_packed : PackedScene
+var _waypoint_packed
 var _pathing : Pathing
 var _world : MU_World
 var _waypoints = []
+var _waypoint_transform
 var _origin : Vector2 = Vector2(1,1)
 export (GDScript) var waypoint_override
 
 func _ready():
 	_waypoint_packed = preload("res://addons/waypoints/scenes/waypoint.tscn")
+	
+
+func set_waypoint_transform(waypoint_transform):
+	_waypoint_transform = waypoint_transform 
 	
 
 func create_waypoint(pos : Vector2) -> void:
@@ -100,12 +105,12 @@ func _resolve_position_from_id(id : int, absolute = false):
 	
 	return _world.global_to_world(_waypoints[id].position)
 	
-
+	
 func _process_path(waypoint : WayPoint, start : Vector2, end : Vector2) -> void:
 	var path = _pathing.getPath(start, end)
 	var world_vec2_path = []
 	for item in path:
-		world_vec2_path.append(_convert_vec3_to_global(item) - waypoint.position)
+		world_vec2_path.append(_waypoint_transform.transform(item) - waypoint.position)
 	waypoint.set_path(world_vec2_path)
 
 func _convert_vec2_to_global(pos : Vector2) -> Vector2:

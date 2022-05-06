@@ -2,22 +2,17 @@ extends Node2D
 
 var _waypoints : Node
 var _origin : Vector2 = Vector2(1,1)
-var _pathing : Pathing
 var _waypoint_id
-var _world
+var _world : MU_World
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var tile_map = get_node("TileMap")
+	var tilemap = get_node("TileMap")
 	var world = load("res://addons/pathing/src/world/world.gd")
-	var pathing_factory = load("res://addons/pathing/src/pathing/pathing_factory.gd")
+	var waypoints_factory = load("res://addons/waypoints/src/classes/waypoints_factory.gd")
 	
-	pathing_factory = pathing_factory.new()
-	_world = world.new(Vector2(10, 10), tile_map.get_used_cells_by_id(0), tile_map)
-	_pathing = pathing_factory.create(_world)
-	_waypoints = get_node("WayPoints")
-	_waypoints.set_world(_world)
-	_waypoints.set_pathing(_pathing)
+	_world = world.new(Vector2(10, 10), tilemap.get_used_cells_by_id(0), tilemap)
+	_waypoints = (waypoints_factory.new(tilemap, _world)).create()
 	
 	
 func _unhandled_input(event):
@@ -49,5 +44,4 @@ func _unhandled_input(event):
 		
 		
 func valid_click(pos : Vector2) -> bool:
-	
 	return (_origin != pos) && _world.is_walkable(pos)
