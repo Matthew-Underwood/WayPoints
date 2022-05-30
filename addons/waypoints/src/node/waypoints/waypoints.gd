@@ -1,8 +1,8 @@
 extends Node2D
 
 var _waypoint_packed
-var _pathing : Pathing
-var _world : MU_World
+var _pathing : MUP_Pathing
+var _world : MUP_World
 var _waypoints = []
 var _waypoint_transform
 var _origin : Vector2 = Vector2(1,1)
@@ -81,11 +81,11 @@ func set_origin(pos : Vector2) -> void:
 	_origin = _world.global_to_world(pos)
 
 
-func set_pathing(pathing : Pathing) -> void:
+func set_pathing(pathing : MUP_Pathing) -> void:
 	_pathing = pathing
 
 
-func set_world(world) -> void:
+func set_world(world : MUP_World) -> void:
 	_world = world
 
 

@@ -1,4 +1,4 @@
-class_name Tilemap_Waypoint_Transform
+class_name MUW_Transform_Tilemap_Transformer
 
 var _tilemap : TileMap
 
