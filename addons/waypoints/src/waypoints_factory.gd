@@ -1,4 +1,4 @@
-class_name Waypoints_Factory
+class_name MUW_Waypoints_Factory
 
 var _pathing_factory : MUP_Pathing_Factory
 var _world_factory : MUP_World_Factory
@@ -10,7 +10,6 @@ func _init(
 	world_factory : MUP_World_Factory,
 	transformer_factory : MUW_Transformer_Factory
 ):
-	_waypoints_packed = preload("res://addons/waypoints/scenes/waypoints.tscn")
 	_world_factory = world_factory
 	_pathing_factory = pathing_factory
 	_transformer_factory = transformer_factory
@@ -18,17 +17,23 @@ func _init(
 func create_2d(tilemap : TileMap) -> WayPoints:
 	var tilemap_world = _world_factory.create_2d(tilemap)
 	var tilemap_transformer = _transformer_factory.create_tilemap_transformer()
-	return _create_waypoints(tilemap_world, tilemap_transformer)
+	# TODO Need to seperate this tscn into 2d and 3d
+	var packed_waypoint = preload("res://addons/waypoints/scenes/waypoint.tscn")
+	return _create_waypoints(tilemap_world, tilemap_transformer, packed_waypoint)
+
 
 func create_spatial(camera : Camera, world : World) -> WayPoints:
 	var spatial_world = _world_factory.create_spatial(camera, world)
 	var mesh_transformer = _transformer_factory.create_mesh_transformer()
-	return _create_waypoints(spatial_world, mesh_transformer)
+	# TODO Need to seperate this tscn into 2d and 3d
+	var packed_waypoint = preload("res://addons/waypoints/scenes/waypoint.tscn")
+	return _create_waypoints(spatial_world, mesh_transformer, packed_waypoint)
 	
 
-func _create_waypoints(world, transformer) -> WayPoints:
+func _create_waypoints(world : MUP_World, transformer, packed_waypoint : PackedScene) -> WayPoints:
 	var pathing = _pathing_factory.create(world)
 	var waypoints = _waypoints_packed.instance()
+	waypoints.set_waypoint(packed_waypoint)
 	waypoints.set_world(world)
 	waypoints.set_pathing(pathing)
 	waypoints.set_waypoint_transform(transformer)

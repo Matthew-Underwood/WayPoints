@@ -1,6 +1,6 @@
 extends Node2D
 
-var _waypoint_packed
+var _waypoint_packed : PackedScene
 var _pathing : MUP_Pathing
 var _world : MUP_World
 var _waypoints = []
@@ -8,9 +8,9 @@ var _waypoint_transform
 var _origin : Vector2 = Vector2(1,1)
 export (GDScript) var waypoint_override
 
-func _ready():
-	_waypoint_packed = preload("res://addons/waypoints/scenes/waypoint.tscn")
-	
+
+func set_waypoint(waypoint : PackedScene):
+	_waypoint_packed = waypoint
 
 func set_waypoint_transform(waypoint_transform):
 	_waypoint_transform = waypoint_transform 
@@ -23,8 +23,9 @@ func create_waypoint(pos : Vector2) -> void:
 		waypoint.set_script(waypoint_override)
 	
 	var world_start = _resolve_position_from_id(-1)
-	var world_end = _world.global_to_world(pos)
-	waypoint.position = _convert_vec2_to_global(world_end)
+	var world_end = _world.screen_to_world(pos)
+	# need to translate to 2d or 3d position
+	waypoint.position = _waypoint_transform.transform(world_end)
 
 	_process_path(waypoint, world_start, world_end)
 	_waypoints.append(waypoint)
@@ -36,9 +37,9 @@ func get_all() -> Array:
 
 
 func get_waypoint_id_from_pos(pos : Vector2):
-	var world_pos = _world.global_to_world(pos)
+	var world_pos = _world.screen_to_world(pos)
 	for id in range(_waypoints.size()):
-		if _world.global_to_world(_waypoints[id].position) == world_pos:
+		if _world.screen_to_world(_waypoints[id].position) == world_pos:
 			return id
 	return null
 	
@@ -48,7 +49,7 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 	var previous_id = id - 1
 	var next_id = id + 1
 	var world_start = _resolve_position_from_id(previous_id, true)
-	var world_end = _world.global_to_world(pos)
+	var world_end = _world.screen_to_world(pos)
 	_waypoints[id].position = _convert_vec2_to_global(world_end)
 	_process_path(_waypoints[id], world_start, world_end)
 
@@ -56,7 +57,7 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 	var position_next_waypoint = _resolve_position_from_id(next_id , true)
 	
 	if position_next_waypoint != null:
-		world_start = _world.global_to_world(pos)
+		world_start = _world.screen_to_world(pos)
 		world_end = position_next_waypoint
 		_process_path(_waypoints[next_id], world_start, world_end)
 
@@ -78,7 +79,7 @@ func empty() -> bool:
 
 
 func set_origin(pos : Vector2) -> void:
-	_origin = _world.global_to_world(pos)
+	_origin = _world.screen_to_world(pos)
 
 
 func set_pathing(pathing : MUP_Pathing) -> void:
@@ -97,13 +98,13 @@ func _resolve_position_from_id(id : int, absolute = false):
 	if absolute:
 		var ids = range(_waypoints.size())
 		if ids.has(id):
-			return _world.global_to_world(_waypoints[id].position)
+			return _world.screen_to_world(_waypoints[id].position)
 		elif id < ids.front():
 			return _origin
 		else:
 			return null
 	
-	return _world.global_to_world(_waypoints[id].position)
+	return _world.screen_to_world(_waypoints[id].position)
 	
 	
 func _process_path(waypoint : WayPoint, start : Vector2, end : Vector2) -> void:
@@ -112,11 +113,3 @@ func _process_path(waypoint : WayPoint, start : Vector2, end : Vector2) -> void:
 	for item in path:
 		world_vec2_path.append(_waypoint_transform.transform(item) - waypoint.position)
 	waypoint.set_path(world_vec2_path)
-
-func _convert_vec2_to_global(pos : Vector2) -> Vector2:
-	return _world.world_to_global(pos)
-
-
-func _convert_vec3_to_global(pos : Vector3) -> Vector2:
-	var vec3_pos = MU_Ultilities_Vector.vector3_vector2(pos)
-	return _world.world_to_global(vec3_pos)
