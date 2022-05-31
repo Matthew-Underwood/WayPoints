@@ -5,14 +5,15 @@ var _pathing : MUP_Pathing
 var _world : MUP_World
 var _waypoints = []
 var _waypoint_transform
-var _origin : Vector2 = Vector2(1,1)
+var _origin = Vector3(1, 1, 0)
 export (GDScript) var waypoint_override
 
 
-func set_waypoint(waypoint : PackedScene):
+func set_waypoint(waypoint : PackedScene) -> void:
 	_waypoint_packed = waypoint
 
-func set_waypoint_transform(waypoint_transform):
+
+func set_waypoint_transform(waypoint_transform) -> void:
 	_waypoint_transform = waypoint_transform 
 	
 
@@ -50,7 +51,7 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 	var next_id = id + 1
 	var world_start = _resolve_position_from_id(previous_id, true)
 	var world_end = _world.screen_to_world(pos)
-	_waypoints[id].position = _convert_vec2_to_global(world_end)
+	_waypoints[id].position = _waypoint_transform.transform(world_end)
 	_process_path(_waypoints[id], world_start, world_end)
 
 	
@@ -107,7 +108,7 @@ func _resolve_position_from_id(id : int, absolute = false):
 	return _world.screen_to_world(_waypoints[id].position)
 	
 	
-func _process_path(waypoint : WayPoint, start : Vector2, end : Vector2) -> void:
+func _process_path(waypoint : WayPoint, start : Vector3, end : Vector3) -> void:
 	var path = _pathing.getPath(start, end)
 	var world_vec2_path = []
 	for item in path:

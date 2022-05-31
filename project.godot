@@ -630,19 +630,24 @@ _global_script_classes=[ {
 "path": "res://addons/pathing/src/world/transformers/screen_tilemap.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Transform_Mesh_Transformer",
+"class": "MUW_Waypoint_Transformer_Factory",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/transform/mesh_transformer.gd"
+"path": "res://addons/waypoints/src/waypoint/transformer_factory.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Transform_Tilemap_Transformer",
+"class": "MUW_Waypoint_Transformers_Mesh_Transformer",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/transform/tilemap_transformer.gd"
+"path": "res://addons/waypoints/src/waypoint/transformers/mesh_transformer.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Transformer_Factory",
+"class": "MUW_Waypoint_Transformers_Tilemap_Transformer",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/transformer_factory.gd"
+"path": "res://addons/waypoints/src/waypoint/transformers/tilemap_transformer.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoints_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoints_factory.gd"
 }, {
 "base": "Reference",
 "class": "MU_Ultilities_Vector",
@@ -738,11 +743,6 @@ _global_script_classes=[ {
 "class": "WayPoints",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoints.gd"
-}, {
-"base": "Reference",
-"class": "Waypoints_Factory",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoints_factory.gd"
 }, {
 "base": "Reference",
 "class": "XmlElement",
@@ -884,9 +884,10 @@ _global_script_class_icons={
 "MUP_World_Mesh_Picking": "",
 "MUP_World_Transformers_Screen_Mesh": "",
 "MUP_World_Transformers_Screen_Tilemap": "",
-"MUW_Transform_Mesh_Transformer": "",
-"MUW_Transform_Tilemap_Transformer": "",
-"MUW_Transformer_Factory": "",
+"MUW_Waypoint_Transformer_Factory": "",
+"MUW_Waypoint_Transformers_Mesh_Transformer": "",
+"MUW_Waypoint_Transformers_Tilemap_Transformer": "",
+"MUW_Waypoints_Factory": "",
 "MU_Ultilities_Vector": "",
 "RPC": "",
 "RPCClientConnect": "",
@@ -906,7 +907,6 @@ _global_script_class_icons={
 "Vector3Fuzzer": "",
 "WayPoint": "",
 "WayPoints": "",
-"Waypoints_Factory": "",
 "XmlElement": "",
 "_TestCase": "",
 "_TestSuiteScanner": ""
@@ -930,7 +930,7 @@ confirm_click={
 }
 remove_waypoint={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 

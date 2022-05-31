@@ -18,15 +18,15 @@ func create_2d(tilemap : TileMap) -> WayPoints:
 	var tilemap_world = _world_factory.create_2d(tilemap)
 	var tilemap_transformer = _transformer_factory.create_tilemap_transformer()
 	# TODO Need to seperate this tscn into 2d and 3d
-	var packed_waypoint = preload("res://addons/waypoints/scenes/waypoint.tscn")
-	return _create_waypoints(tilemap_world, tilemap_transformer, packed_waypoint)
+	var tilemap_waypoint = preload("res://addons/waypoints/scenes/tilemap_waypoint.tscn")
+	return _create_waypoints(tilemap_world, tilemap_transformer, tilemap_waypoint)
 
 
 func create_spatial(camera : Camera, world : World) -> WayPoints:
 	var spatial_world = _world_factory.create_spatial(camera, world)
 	var mesh_transformer = _transformer_factory.create_mesh_transformer()
 	# TODO Need to seperate this tscn into 2d and 3d
-	var packed_waypoint = preload("res://addons/waypoints/scenes/waypoint.tscn")
+	var spatial_waypoint = preload("res://addons/waypoints/scenes/spatial_waypoint.tscn")
 	return _create_waypoints(spatial_world, mesh_transformer, packed_waypoint)
 	
 
