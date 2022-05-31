@@ -25,7 +25,6 @@ func create_waypoint(pos : Vector2) -> void:
 	
 	var world_start = _resolve_position_from_id(-1)
 	var world_end = _world.screen_to_world(pos)
-	# need to translate to 2d or 3d position
 	waypoint.position = _waypoint_transform.transform(world_end)
 
 	_process_path(waypoint, world_start, world_end)
@@ -40,7 +39,8 @@ func get_all() -> Array:
 func get_waypoint_id_from_pos(pos : Vector2):
 	var world_pos = _world.screen_to_world(pos)
 	for id in range(_waypoints.size()):
-		if _world.screen_to_world(_waypoints[id].position) == world_pos:
+		var screen_position = Vector2(_waypoints[id].position.x, _waypoints[id].position.y)
+		if _world.screen_to_world(screen_position) == world_pos:
 			return id
 	return null
 	
@@ -99,13 +99,15 @@ func _resolve_position_from_id(id : int, absolute = false):
 	if absolute:
 		var ids = range(_waypoints.size())
 		if ids.has(id):
-			return _world.screen_to_world(_waypoints[id].position)
+			var screen_position = Vector2(_waypoints[id].position.x, _waypoints[id].position.y)
+			return _world.screen_to_world(screen_position)
 		elif id < ids.front():
 			return _origin
 		else:
 			return null
 	
-	return _world.screen_to_world(_waypoints[id].position)
+	var screen_position = Vector2(_waypoints[id].position.x, _waypoints[id].position.y)
+	return _world.screen_to_world(screen_position)
 	
 	
 func _process_path(waypoint : WayPoint, start : Vector3, end : Vector3) -> void:

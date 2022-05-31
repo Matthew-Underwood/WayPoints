@@ -7,7 +7,6 @@ func _init(tilemap : TileMap):
     _tilemap = tilemap
 
 
-func transform(pos : Vector3) -> Vector3:
+func transform(pos : Vector3) -> Vector2:
     var world_pos = _tilemap.map_to_world(Vector2(pos.x, pos.y))
-    world_pos = world_pos + (_tilemap.cell_size / 2)
-    return Vector3(world_pos.x, world_pos.y, 0)
+    return world_pos + (_tilemap.cell_size / 2)
