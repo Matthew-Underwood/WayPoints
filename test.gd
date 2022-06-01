@@ -9,17 +9,18 @@ func _ready():
 	
 	#TODO create master factory
 	var tilemap = get_node("TileMap")
-	_world = MUP_World_Factory.new(Vector2(10, 10),[]).create_2d(tilemap)
+	_world = MUP_World_Factory.new(Vector2(10, 10), tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
 	var aStar = AStar.new()
 	var waypoint_transformer_factory = MUW_Waypoint_Transformer_Factory.new(tilemap)
 	var pathing_factory = MUP_Pathing_Factory.new(aStar)
-	_waypoints = (MUW_Waypoints_Factory.new(pathing_factory, _world, waypoint_transformer_factory)).create_2d()
+	_waypoints = (MUW_Waypoints_Factory.new(pathing_factory,_world, waypoint_transformer_factory, self)).create_2d()
 
 	
 	
 func _unhandled_input(event):
 	
 	if Input.is_action_just_pressed("confirm_click"):
+		
 		  
 		var mouse_click = get_global_mouse_position()
 		
@@ -46,4 +47,5 @@ func _unhandled_input(event):
 		
 		
 func valid_click(pos : Vector2) -> bool:
-	return (_waypoints.get_origin() != pos) && _world.is_walkable(pos)
+	#TODO need to fix bug where you can create waypoint on player position. This needs handling somewhere else
+	return _world.is_walkable(pos)

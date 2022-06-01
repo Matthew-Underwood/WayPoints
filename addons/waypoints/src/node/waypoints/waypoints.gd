@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 var _waypoint_packed : PackedScene
 var _pathing : MUP_Pathing
@@ -100,7 +100,7 @@ func _resolve_position_from_id(id : int, absolute = false):
 		var ids = range(_waypoints.size())
 		if ids.has(id):
 			var screen_position = Vector2(_waypoints[id].position.x, _waypoints[id].position.y)
-			return _world.screen_to_world(screen_position)
+			return _world.screen_to_world(screen_position) 
 		elif id < ids.front():
 			return _origin
 		else:
@@ -111,7 +111,7 @@ func _resolve_position_from_id(id : int, absolute = false):
 	
 	
 func _process_path(waypoint : WayPoint, start : Vector3, end : Vector3) -> void:
-	var path = _pathing.getPath(start, end)
+	var path = _pathing.get_path(start, end)
 	var world_vec2_path = []
 	for item in path:
 		world_vec2_path.append(_waypoint_transform.transform(item) - waypoint.position)

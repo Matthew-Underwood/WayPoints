@@ -28,7 +28,6 @@ func set_previous_frame(frame : int) -> void:
 
 
 func _draw():
-
 	if !_path.empty():
 		for point in range(1, len(_path)):
 			var start_world_position = _path[point - 1]

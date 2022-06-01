@@ -4,9 +4,10 @@ var _tilemap : TileMap
 
 
 func _init(tilemap : TileMap):
-    _tilemap = tilemap
+	_tilemap = tilemap
 
 
 func transform(pos : Vector3) -> Vector2:
-    var world_pos = _tilemap.map_to_world(Vector2(pos.x, pos.y))
-    return world_pos + (_tilemap.cell_size / 2)
+	var world_pos = _tilemap.map_to_world(Vector2(pos.x, pos.y))
+	var test = world_pos + (_tilemap.cell_size / 2)
+	return test

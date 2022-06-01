@@ -3,15 +3,18 @@ class_name MUW_Waypoints_Factory
 var _pathing_factory : MUP_Pathing_Factory
 var _world : MUP_World
 var _transformer_factory : MUW_Waypoint_Transformer_Factory
+var _parent_node : Node
 
 func _init(
 	pathing_factory : MUP_Pathing_Factory,
 	world : MUP_World,
-	transformer_factory : MUW_Waypoint_Transformer_Factory
+	transformer_factory : MUW_Waypoint_Transformer_Factory,
+	parent_node : Node
 ):
 	_world = world
 	_pathing_factory = pathing_factory
 	_transformer_factory = transformer_factory
+	_parent_node = parent_node
 
 func create_2d() -> Node2D:
 	var tilemap_transformer = _transformer_factory.create_tilemap_transformer()
@@ -30,7 +33,7 @@ func create_spatial() -> Spatial:
 func _create_waypoints(transformer, packed_waypoints : PackedScene, packed_waypoint : PackedScene):
 	var pathing = _pathing_factory.create(_world)
 	var waypoints = packed_waypoints.instance()
-	
+	_parent_node.add_child(waypoints)
 	waypoints.set_waypoint(packed_waypoint)
 	waypoints.set_world(_world)
 	waypoints.set_pathing(pathing)

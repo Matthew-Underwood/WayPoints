@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://addons/waypoints/scenes/waypoints.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/waypoints/scenes/2d/waypoints.tscn" type="PackedScene" id=1]
 [ext_resource path="res://test.gd" type="Script" id=2]
 [ext_resource path="res://addons/waypoints/assets/tile_set/obstacle.png" type="Texture" id=3]
 
