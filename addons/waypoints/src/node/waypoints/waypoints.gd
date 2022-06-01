@@ -79,8 +79,8 @@ func empty() -> bool:
 	return _waypoints.empty()
 
 
-func set_origin(pos : Vector2) -> void:
-	_origin = _world.screen_to_world(pos)
+func get_origin() -> Vector3:
+	return _origin
 
 
 func set_pathing(pathing : MUP_Pathing) -> void:
