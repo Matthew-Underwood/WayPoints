@@ -16,8 +16,8 @@ func _init(
 	_transformer_factory = transformer_factory
 	_parent_node = parent_node
 
-func create_2d() -> Node2D:
-	var tilemap_transformer = _transformer_factory.create_tilemap_transformer()
+func create_2d(tilemap : TileMap) -> Node2D:
+	var tilemap_transformer = _transformer_factory.create_tilemap_transformer(tilemap)
 	var waypoints = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
 	var waypoint = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
 	return _create_waypoints(tilemap_transformer, waypoints, waypoint)

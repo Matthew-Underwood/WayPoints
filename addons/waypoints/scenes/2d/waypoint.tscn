@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://addons/waypoints/src/node/waypoints/waypoint.gd" type="Script" id=1]
+[ext_resource path="res://addons/waypoints/src/node/waypoints/2d/waypoint.gd" type="Script" id=1]
 [ext_resource path="res://addons/waypoints/assets/sprites/path_end.png" type="Texture" id=2]
 [ext_resource path="res://addons/waypoints/assets/sprites/path_selected.png" type="Texture" id=3]
 [ext_resource path="res://addons/waypoints/assets/sprites/path_confirm.png" type="Texture" id=4]
@@ -16,9 +16,7 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 16.1225, 16.0847 )
 
-[node name="WayPoint" type="AnimatedSprite" groups=[
-"waypoint",
-]]
+[node name="WayPoint" type="AnimatedSprite" groups=["waypoint"]]
 frames = SubResource( 1 )
 script = ExtResource( 1 )
 

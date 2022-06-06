@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/waypoints/scenes/2d/waypoints.tscn" type="PackedScene" id=1]
+[ext_resource path="res://test.gd" type="Script" id=2]
+[ext_resource path="res://addons/waypoints/assets/tile_set/obstacle.png" type="Texture" id=3]
+
+[sub_resource type="TileSet" id=1]
+0/name = "obstacle.png 0"
+0/texture = ExtResource( 3 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 32, 32 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="WayPoints" parent="." instance=ExtResource( 1 )]
+
+[node name="TileMap" type="TileMap" parent="."]
+position = Vector2( -1, 0 )
+tile_set = SubResource( 1 )
+cell_size = Vector2( 32, 32 )
+format = 1
+tile_data = PoolIntArray( 5, 0, 0, 65539, 0, 0, 65540, 0, 0, 65541, 0, 0, 131074, 0, 0, 327683, 0, 0, 327684, 0, 0, 327685, 0, 0, 327686, 0, 0, 327687, 0, 0, 393218, 0, 0, 393219, 0, 0, 458754, 0, 0 )
