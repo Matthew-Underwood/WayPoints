@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://test_spatial.gd" type="Script" id=1]
 
 [sub_resource type="SpatialMaterial" id=1]
 
 [sub_resource type="PlaneMesh" id=2]
+
+[sub_resource type="ConcavePolygonShape" id=3]
+data = PoolVector3Array( 1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1 )
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
@@ -20,8 +23,14 @@ mesh = SubResource( 2 )
 skeleton = NodePath("../OmniLight")
 material/0 = null
 
+[node name="StaticBody" type="StaticBody" parent="MeshInstance"]
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance/StaticBody"]
+shape = SubResource( 3 )
+
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 5, 5, 5 )
 projection = 1
-size = 10.0
-near = 0.01
+size = 8.0
+near = 1.0
+far = 1000.0
