@@ -1,4 +1,4 @@
-class_name MUW_Waypoint_Transformers_Tilemap_Transformer
+class_name MUW_Waypoint_Transformers_Tilemap
 
 var _tilemap : TileMap
 

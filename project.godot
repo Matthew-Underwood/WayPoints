@@ -630,19 +630,34 @@ _global_script_classes=[ {
 "path": "res://addons/pathing/src/world/transformers/screen_tilemap.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Waypoint_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint_factory.gd"
+}, {
+"base": "Spatial",
+"class": "MUW_Waypoint_Spatial",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/spatial.gd"
+}, {
+"base": "AnimatedSprite",
+"class": "MUW_Waypoint_Sprite",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/sprite.gd"
+}, {
+"base": "Reference",
 "class": "MUW_Waypoint_Transformer_Factory",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoint/transformer_factory.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Waypoint_Transformers_Mesh_Transformer",
+"class": "MUW_Waypoint_Transformers_Mesh",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/transformers/mesh_transformer.gd"
+"path": "res://addons/waypoints/src/waypoint/transformers/mesh.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Waypoint_Transformers_Tilemap_Transformer",
+"class": "MUW_Waypoint_Transformers_Tilemap",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/transformers/tilemap_transformer.gd"
+"path": "res://addons/waypoints/src/waypoint/transformers/tilemap.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Waypoints_Factory",
@@ -733,16 +748,6 @@ _global_script_classes=[ {
 "class": "Vector3Fuzzer",
 "language": "GDScript",
 "path": "res://addons/gdUnit3/src/fuzzers/Vector3Fuzzer.gd"
-}, {
-"base": "AnimatedSprite",
-"class": "WayPoint",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/node/waypoints/2d/waypoint.gd"
-}, {
-"base": "Reference",
-"class": "WayPoints",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoints.gd"
 }, {
 "base": "Reference",
 "class": "XmlElement",
@@ -884,9 +889,12 @@ _global_script_class_icons={
 "MUP_World_Mesh_Picking": "",
 "MUP_World_Transformers_Screen_Mesh": "",
 "MUP_World_Transformers_Screen_Tilemap": "",
+"MUW_Waypoint_Factory": "",
+"MUW_Waypoint_Spatial": "",
+"MUW_Waypoint_Sprite": "",
 "MUW_Waypoint_Transformer_Factory": "",
-"MUW_Waypoint_Transformers_Mesh_Transformer": "",
-"MUW_Waypoint_Transformers_Tilemap_Transformer": "",
+"MUW_Waypoint_Transformers_Mesh": "",
+"MUW_Waypoint_Transformers_Tilemap": "",
 "MUW_Waypoints_Factory": "",
 "MU_Ultilities_Vector": "",
 "RPC": "",
@@ -905,8 +913,6 @@ _global_script_class_icons={
 "ValueProvider": "",
 "Vector2Fuzzer": "",
 "Vector3Fuzzer": "",
-"WayPoint": "",
-"WayPoints": "",
 "XmlElement": "",
 "_TestCase": "",
 "_TestSuiteScanner": ""
@@ -930,7 +936,7 @@ confirm_click={
 }
 remove_waypoint={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 

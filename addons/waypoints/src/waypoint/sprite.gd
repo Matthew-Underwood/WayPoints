@@ -1,8 +1,24 @@
 extends AnimatedSprite
 
-class_name WayPoint
-var _path = [] 
+class_name MUW_Waypoint_Sprite
+
+var _path = []
+var _world_position : Vector3
 var _previous_frame : int setget set_previous_frame
+var _transformer 
+
+
+func get_world_position() -> Vector3:
+	return _world_position
+
+
+func set_world_position(pos : Vector3):
+	transform.origin = _transformer.transform(pos)
+	_world_position = pos
+
+
+func set_transformer(transformer):
+	_transformer = transformer
 
 
 func _input(event):
@@ -37,5 +53,7 @@ func _draw():
 			
 	
 func set_path(path : Array) -> void:
-	_path = path
+	_path = []
+	for item in path:
+		_path.append(_transformer.transform(item) - transform.origin)
 	update()

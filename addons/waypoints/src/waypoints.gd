@@ -1,85 +1,105 @@
-class_name WayPoints
+extends Node
 
-var _waypoints = {}
-var _characterId : int
-
-	
-func add(characterId : int, start : Vector2, end : Vector2) -> void:
-	if !_waypoints.has(characterId):
-		_waypoints[characterId] = [{"start" : start , "end" : end}]
-	else:
-		_waypoints[characterId].append({"start" : start , "end" : end})
-	
-		
-func getItem(characterId : int, waypointId : int) -> Dictionary:
-	return _waypoints[characterId][waypointId]
-	
-	
-func getAll(characterId : int) -> Array:
-	return _waypoints[characterId]
+var _waypoint_factory
+var _pathing : MUP_Pathing
+var _world : MUP_World
+var _waypoints = []
+var _origin = Vector3(1, 1, 0)
+export (GDScript) var waypoint_override
 
 
-func getCharacterIds() -> Array:
-	var ids = []
-	for id in _waypoints:
-		ids.append(id)
-	return ids
+func set_waypoint_factory(waypoint_factory) -> void:
+	_waypoint_factory = waypoint_factory
+
+
+func create_waypoint(pos : Vector2) -> void:
+	var waypoint = _waypoint_factory.create(waypoint_override)
+
+	var world_start = _resolve_position_from_id(-1)
+	var world_end = _world.screen_to_world(pos)
+	waypoint.set_world_position(world_end)
+
+	_process_path(waypoint, world_start, world_end)
+	_waypoints.append(waypoint)
+	add_child(waypoint)
+
+
+func get_all() -> Array:
+	return _waypoints
+
+
+func get_waypoint_id_from_pos(pos : Vector2):
+	var world_pos = _world.screen_to_world(pos)
+	for id in range(_waypoints.size()):
+		var waypoint_world_position = _waypoints[id].get_world_position()
+		if waypoint_world_position == world_pos:
+			return id
+	return null
 	
-func remove(characterId : int, pos : Vector2):
-	var ids = getIdsFromPosition(characterId, pos)
-	var waypoint
-	var idToRemove
-	var previousWaypointPosition
-	var positionType
-	if ids.empty():
-		return false
+
+func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
+	
+	var previous_id = id - 1
+	var next_id = id + 1
+	var world_start = _resolve_position_from_id(previous_id, true)
+	var world_end = _world.screen_to_world(pos)
+	_waypoints[id].set_world_position(world_end)
+	_process_path(_waypoints[id], world_start, world_end)
+
+	
+	var position_next_waypoint = _resolve_position_from_id(next_id , true)
+	
+	if position_next_waypoint != null:
+		world_start = _world.screen_to_world(pos)
+		world_end = position_next_waypoint
+		_process_path(_waypoints[next_id], world_start, world_end)
+
+
+func remove_waypoint(id : int) -> void:
+	var previous_id = id - 1
+	var next_id = id + 1
+	var start = _resolve_position_from_id(previous_id , true)
+	var end = _resolve_position_from_id(next_id , true)
 		
-	if ids.size() == 2:
-		idToRemove = ids[1]
-		positionType = "start"
+	if end != null:
+		_process_path(_waypoints[next_id], start, end)
+	remove_child(_waypoints[id])
+	_waypoints.remove(id)
+
+
+func empty() -> bool:
+	return _waypoints.empty()
+
+
+func get_origin() -> Vector3:
+	return _origin
+
+
+func set_pathing(pathing : MUP_Pathing) -> void:
+	_pathing = pathing
+
+
+func set_world(world : MUP_World) -> void:
+	_world = world
+
+
+func _resolve_position_from_id(id : int, absolute = false):
+	
+	if _waypoints.empty():
+		return _origin
 		
-	else:
-		idToRemove = ids[0]
-		positionType = "end"
-		
-	waypoint = getItem(characterId, idToRemove)
-	_waypoints[characterId][ids[0]]["end"] = waypoint["end"]
-	_waypoints[characterId].remove(idToRemove)
-	if idToRemove != 0:
-		previousWaypointPosition = _waypoints[characterId][idToRemove - 1][positionType]
-		
-	return previousWaypointPosition
+	if absolute:
+		var ids = range(_waypoints.size())
+		if ids.has(id):
+			return _waypoints[id].get_world_position()
+		elif id < ids.front():
+			return _origin
+		else:
+			return null
+	
+	return _waypoints[id].get_world_position()
 	
 	
-func getLastItem(characterId : int) -> Dictionary:
-	var size = _waypoints[characterId].size() - 1
-	return _waypoints[characterId][size]
-	
-	
-func has(characterId : int, waypointId : int) -> bool:
-	if !_waypoints.has(characterId):
-		return false
-	if _waypoints[characterId].empty():
-		return false
-	return waypointId <= (_waypoints[characterId].size() - 1)
-	
-	
-func getIdsFromPosition(characterId : int, pos : Vector2) -> Array:
-	var found = []
-	var count = 0
-	if !has(characterId, 0):
-		return found
-	for waypoint in getAll(characterId):
-		if waypoint["start"] == pos || waypoint["end"] == pos:
-			found.append(count)
-		count += 1
-	return found
-	
-	
-func updatePosition(characterId : int, ids : Array, positionToUpdate : Vector2) -> void:
-	if ids.size() == 1:
-		_waypoints[characterId][ids[0]]["end"] = positionToUpdate
-		return
-	if ids.size() == 2:
-		_waypoints[characterId][ids[0]]["end"] = positionToUpdate
-		_waypoints[characterId][ids[1]]["start"] = positionToUpdate
+func _process_path(waypoint, start : Vector3, end : Vector3) -> void:
+	var path = _pathing.get_path(start, end)
+	waypoint.set_path(path)
