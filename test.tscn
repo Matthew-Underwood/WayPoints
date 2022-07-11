@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/waypoints/scenes/2d/waypoints.tscn" type="PackedScene" id=1]
-[ext_resource path="res://test.gd" type="Script" id=2]
 [ext_resource path="res://addons/waypoints/assets/tile_set/obstacle.png" type="Texture" id=3]
 
 [sub_resource type="TileSet" id=1]
@@ -21,7 +20,6 @@
 0/z_index = 0
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource( 2 )
 
 [node name="WayPoints" parent="." instance=ExtResource( 1 )]
 

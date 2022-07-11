@@ -670,6 +670,16 @@ _global_script_classes=[ {
 "path": "res://addons/utilities/src/classes/vector.gd"
 }, {
 "base": "Reference",
+"class": "MU_World",
+"language": "GDScript",
+"path": "res://addons/pathing/src/world/world.gd"
+}, {
+"base": "Reference",
+"class": "Pathing",
+"language": "GDScript",
+"path": "res://addons/pathing/src/pathing/pathing.gd"
+}, {
+"base": "Reference",
 "class": "RPC",
 "language": "GDScript",
 "path": "res://addons/gdUnit3/src/network/rpc/RPC.gd"
@@ -897,6 +907,8 @@ _global_script_class_icons={
 "MUW_Waypoint_Transformers_Tilemap": "",
 "MUW_Waypoints_Factory": "",
 "MU_Ultilities_Vector": "",
+"MU_World": "",
+"Pathing": "",
 "RPC": "",
 "RPCClientConnect": "",
 "RPCClientDisconnect": "",
