@@ -15,8 +15,9 @@ func get_world_position() -> Vector3:
 
 
 func set_world_position(pos : Vector3):
-	transform.origin = _transformer.transform(pos)
-	_world_position = pos
+	pos = _transformer.transform(pos)
+	transform.origin = pos
+	_world_position = pos.floor()
 
 
 func set_path(path : Array) -> void:
