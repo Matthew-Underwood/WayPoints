@@ -12,9 +12,11 @@ func _ready():
 	var world = get_world()
 	_world = MUP_World_Factory.new(Vector2(10, 10)).create_spatial(_viewport.get_camera(), world)
 	var aStar = AStar.new()
+	var pathing_dimension = MUP_DIMENSION_3D_PROCESSOR.new()
 	var waypoint_transformer_factory = MUW_Waypoint_Transformer_Factory.new()
-	var pathing_factory = MUP_Pathing_Factory.new(aStar)
-	_waypoints = (MUW_Waypoints_Factory.new(pathing_factory, _world, waypoint_transformer_factory, self)).create_spatial()
+	var pathing_factory = MUP_Pathing_Factory.new(aStar, pathing_dimension)
+	var pathing = pathing_factory.create(_world)
+	_waypoints = (MUW_Waypoints_Factory.new(pathing, _world, waypoint_transformer_factory, self)).create_spatial()
 
 	
 	

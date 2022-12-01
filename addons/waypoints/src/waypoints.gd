@@ -4,7 +4,7 @@ var _waypoint_factory
 var _pathing : MUP_Pathing
 var _world : MUP_World
 var _waypoints = []
-var _origin = Vector3(1, 1, 0)
+var _origin : Vector3
 export (GDScript) var waypoint_override
 
 
@@ -73,6 +73,10 @@ func empty() -> bool:
 
 func get_origin() -> Vector3:
 	return _origin
+
+
+func set_origin(origin : Vector3):
+	_origin = origin
 
 
 func set_pathing(pathing : MUP_Pathing) -> void:

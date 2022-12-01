@@ -2,10 +2,12 @@ class_name MUP_Pathing
 
 var _aStar : AStar
 var _world : MUP_World
+var _pathing_dimension
 
-func _init(aStar : AStar, world : MUP_World):
+func _init(aStar : AStar, world : MUP_World, pathing_dimension):
 	_aStar = aStar
 	_world = world
+	_pathing_dimension = pathing_dimension
 
 
 # Loops through all cells within the world's bounds and
@@ -24,7 +26,7 @@ func add_walkable_cells(obstacle_list = []) -> Array:
 			var point_index = _calculate_index(point)
 			# AStar works for both 2d and 3d, so we have to convert the point
 			# coordinates from and to Vector3s.
-			_aStar.add_point(point_index, Vector3(point.x, point.y, 0))
+			_aStar.add_point(point_index, _pathing_dimension.point_to_position(point))
 	return points_array
 
 
@@ -76,17 +78,18 @@ func connect_walkable_cells_diagonal(points_array : Array) -> void:
 					continue
 				if not _aStar.has_point(relative_index):
 					continue
-				_aStar.connect_points(point_index, relative_index, true)
+				_aStar.connect_points(point_index, relative_index, false)
 
 
 func get_path(start_position : Vector3, end_position : Vector3):
 
-	var start_index = _calculate_index(start_position)
-	var end_index = _calculate_index(end_position)
+
+	var start_index = _calculate_index(_pathing_dimension.position_to_point(start_position))
+	var end_index = _calculate_index(_pathing_dimension.position_to_point(end_position))
 	if !_aStar.has_point(start_index) or !_aStar.has_point(end_index):
 		return null
 	return _aStar.get_point_path(start_index, end_index)
 
 
-func _calculate_index(point):
-	return point.x + _world.get_size().x * point.y
+func _calculate_index(point : Vector2) -> float:
+	return point.x * _world.get_size().x + point.y

@@ -585,6 +585,16 @@ _global_script_classes=[ {
 "path": "res://addons/gdUnit3/src/core/LocalTime.gd"
 }, {
 "base": "Reference",
+"class": "MUP_DIMENSION_2D_PROCESSOR",
+"language": "GDScript",
+"path": "res://addons/pathing/src/dimension/2d_processor.gd"
+}, {
+"base": "Reference",
+"class": "MUP_DIMENSION_3D_PROCESSOR",
+"language": "GDScript",
+"path": "res://addons/pathing/src/dimension/3d_processor.gd"
+}, {
+"base": "Reference",
 "class": "MUP_Pathing",
 "language": "GDScript",
 "path": "res://addons/pathing/src/pathing.gd"
@@ -633,6 +643,11 @@ _global_script_classes=[ {
 "class": "MUW_Waypoint_Factory",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoint_factory.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoint_Line_Spatial",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/line/spatial.gd"
 }, {
 "base": "Spatial",
 "class": "MUW_Waypoint_Spatial",
@@ -890,6 +905,8 @@ _global_script_class_icons={
 "IntFuzzer": "",
 "JUnitXmlReport": "",
 "LocalTime": "",
+"MUP_DIMENSION_2D_PROCESSOR": "",
+"MUP_DIMENSION_3D_PROCESSOR": "",
 "MUP_Pathing": "",
 "MUP_Pathing_Factory": "",
 "MUP_Test_Pathing": "",
@@ -900,6 +917,7 @@ _global_script_class_icons={
 "MUP_World_Transformers_Screen_Mesh": "",
 "MUP_World_Transformers_Screen_Tilemap": "",
 "MUW_Waypoint_Factory": "",
+"MUW_Waypoint_Line_Spatial": "",
 "MUW_Waypoint_Spatial": "",
 "MUW_Waypoint_Sprite": "",
 "MUW_Waypoint_Transformer_Factory": "",
