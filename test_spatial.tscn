@@ -31,6 +31,9 @@ material_override = SubResource( 4 )
 mesh = SubResource( 2 )
 skeleton = NodePath("../OmniLight")
 material/0 = null
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="StaticBody" type="StaticBody" parent="MeshInstance"]
 

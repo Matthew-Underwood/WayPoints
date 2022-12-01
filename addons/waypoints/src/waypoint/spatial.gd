@@ -15,11 +15,20 @@ func get_world_position() -> Vector3:
 
 
 func set_world_position(pos : Vector3):
-	transform.origin = _transformer.transform(pos)
-	_world_position = pos
+	pos = _transformer.transform(pos)
+	transform.origin = pos
+	_world_position = pos.floor()
 
 
 func set_path(path : Array) -> void:
+
+	var directionNode = preload("res://addons/waypoints/scenes/spatial/point.tscn")
 	_path = []
 	for item in path:
 		_path.append(_transformer.transform(item) - transform.origin)
+
+	for point in _path:
+		var direction = directionNode.instance()
+		direction.transform.origin = point
+		add_child(direction)
+
