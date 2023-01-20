@@ -2,18 +2,20 @@ extends Node2D
 
 var _waypoints : Node2D
 var _waypoint_id
-var _world : MUP_World
+var _world : MUW_World
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	#TODO create master factory
 	var tilemap = get_node("TileMap")
-	_world = MUP_World_Factory.new(Vector2(10, 10), tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
+	_world = MUW_World_Factory.new(Vector2(10, 10), tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
 	var aStar = AStar.new()
 	var waypoint_transformer_factory = MUW_Waypoint_Transformer_Factory.new()
-	var pathing_factory = MUP_Pathing_Factory.new(aStar)
-	_waypoints = (MUW_Waypoints_Factory.new(pathing_factory,_world, waypoint_transformer_factory, self)).create_2d(tilemap)
+	var pathing_dimension = MUP_Dimension_2D_Processor.new()
+	var pathing_factory = MUP_Pathing_Factory.new(aStar, pathing_dimension)
+	var pathing = pathing_factory.create(_world)
+	_waypoints = (MUW_Waypoints_Factory.new(pathing, _world, waypoint_transformer_factory, self)).create_2d(tilemap)
 
 	
 	

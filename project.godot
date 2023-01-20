@@ -585,12 +585,12 @@ _global_script_classes=[ {
 "path": "res://addons/gdUnit3/src/core/LocalTime.gd"
 }, {
 "base": "Reference",
-"class": "MUP_DIMENSION_2D_PROCESSOR",
+"class": "MUP_Dimension_2D_Processor",
 "language": "GDScript",
 "path": "res://addons/pathing/src/dimension/2d_processor.gd"
 }, {
 "base": "Reference",
-"class": "MUP_DIMENSION_3D_PROCESSOR",
+"class": "MUP_Dimension_3D_Processor",
 "language": "GDScript",
 "path": "res://addons/pathing/src/dimension/3d_processor.gd"
 }, {
@@ -905,8 +905,8 @@ _global_script_class_icons={
 "IntFuzzer": "",
 "JUnitXmlReport": "",
 "LocalTime": "",
-"MUP_DIMENSION_2D_PROCESSOR": "",
-"MUP_DIMENSION_3D_PROCESSOR": "",
+"MUP_Dimension_2D_Processor": "",
+"MUP_Dimension_3D_Processor": "",
 "MUP_Pathing": "",
 "MUP_Pathing_Factory": "",
 "MUP_Test_Pathing": "",
@@ -951,11 +951,11 @@ _global_script_class_icons={
 [application]
 
 config/name="WayPoints"
-run/main_scene="res://test.tscn"
+run/main_scene="res://test_2d.tscn"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/pathing/plugin.cfg", "res://addons/waypoints/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/pathing/plugin.cfg", "res://addons/waypoints/plugin.cfg", "res://addons/world/plugin.cfg" )
 
 [input]
 

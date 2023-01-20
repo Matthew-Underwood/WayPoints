@@ -1,14 +1,14 @@
 class_name MUW_Waypoints_Factory
 
 var _pathing : MUP_Pathing
-var _world : MUP_World
+var _world : MUW_World
 var _transformer_factory : MUW_Waypoint_Transformer_Factory
 var _parent_node : Node
 var _waypoint_factory : MUW_Waypoint_Factory
 
 func _init(
 	pathing : MUP_Pathing,
-	world : MUP_World,
+	world : MUW_World,
 	transformer_factory : MUW_Waypoint_Transformer_Factory,
 	parent_node : Node
 ):

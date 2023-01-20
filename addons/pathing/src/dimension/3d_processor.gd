@@ -1,4 +1,4 @@
-class_name MUP_DIMENSION_3D_PROCESSOR
+class_name MUP_Dimension_3D_Processor
 
 func point_to_position(point : Vector2) -> Vector3:
 	#TODO work out how to calculcate y

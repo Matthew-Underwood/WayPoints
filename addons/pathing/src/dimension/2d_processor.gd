@@ -1,4 +1,4 @@
-class_name MUP_DIMENSION_2D_PROCESSOR
+class_name MUP_Dimension_2D_Processor
 
 func point_to_position(point: Vector2) -> Vector3:
     return Vector3(point.x, point.y, 0)
