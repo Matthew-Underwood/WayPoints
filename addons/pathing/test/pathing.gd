@@ -5,7 +5,7 @@ func test_add_cells():
 	var obstacles = Vector2(5, 5)
 	var a_star := mock(AStar) as AStar
 	var world_a = mock(MUW_World)	
-	var dimension = mock(MUP_DIMENSION_2D_PROCESSOR)
+	var dimension = mock(MUP_Dimension_2D_Processor)
 	do_return(Vector2(10, 10)).on(world_a).get_size()
 	var pathing = _setup(a_star, world_a, dimension)
 	pathing.add_walkable_cells([obstacles])
