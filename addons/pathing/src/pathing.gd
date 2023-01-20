@@ -1,10 +1,10 @@
 class_name MUP_Pathing
 
 var _aStar : AStar
-var _world : MUP_World
+var _world : MUW_World
 var _pathing_dimension
 
-func _init(aStar : AStar, world : MUP_World, pathing_dimension):
+func _init(aStar : AStar, world : MUW_World, pathing_dimension):
 	_aStar = aStar
 	_world = world
 	_pathing_dimension = pathing_dimension

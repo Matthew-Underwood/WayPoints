@@ -1,4 +1,4 @@
-class_name MUP_World_Transformers_Screen_Tilemap
+class_name MUW_Transformers_Screen_Tilemap
 
 var _tilemap : TileMap
 
