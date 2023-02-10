@@ -624,6 +624,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/world/src/resolver/height_factory.gd"
 }, {
+"base": "Reference",
+"class": "MUW_Spatial_Waypoint_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/factories/spatial.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Sprite_Waypoint_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/factories/sprite.gd"
+}, {
 "base": "GdUnitTestSuite",
 "class": "MUW_Test_World",
 "language": "GDScript",
@@ -643,11 +653,6 @@ _global_script_classes=[ {
 "class": "MUW_Waypoint_Factory",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoint_factory.gd"
-}, {
-"base": "Reference",
-"class": "MUW_Waypoint_Line_Spatial",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/line/spatial.gd"
 }, {
 "base": "Spatial",
 "class": "MUW_Waypoint_Spatial",
@@ -913,11 +918,12 @@ _global_script_class_icons={
 "MUW_Mesh_Picker": "",
 "MUW_Resolver_Height": "",
 "MUW_Resolver_Height_Factory": "",
+"MUW_Spatial_Waypoint_Factory": "",
+"MUW_Sprite_Waypoint_Factory": "",
 "MUW_Test_World": "",
 "MUW_Transformers_Screen_Mesh": "",
 "MUW_Transformers_Screen_Tilemap": "",
 "MUW_Waypoint_Factory": "",
-"MUW_Waypoint_Line_Spatial": "",
 "MUW_Waypoint_Spatial": "",
 "MUW_Waypoint_Sprite": "",
 "MUW_Waypoint_Transformer_Factory": "",
@@ -969,6 +975,11 @@ remove_waypoint={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=100000
+limits/debugger_stdout/max_messages_per_frame=100
 
 [physics]
 
