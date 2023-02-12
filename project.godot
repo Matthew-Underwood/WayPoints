@@ -610,6 +610,11 @@ _global_script_classes=[ {
 "path": "res://addons/pathing/test/pathing.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Factory_Line",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/factories/line.gd"
+}, {
+"base": "Reference",
 "class": "MUW_Mesh_Picker",
 "language": "GDScript",
 "path": "res://addons/world/src/mesh_picker.gd"
@@ -915,6 +920,7 @@ _global_script_class_icons={
 "MUP_Pathing": "",
 "MUP_Pathing_Factory": "",
 "MUP_Test_Pathing": "",
+"MUW_Factory_Line": "",
 "MUW_Mesh_Picker": "",
 "MUW_Resolver_Height": "",
 "MUW_Resolver_Height_Factory": "",
@@ -975,6 +981,11 @@ remove_waypoint={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=100000
+limits/debugger_stdout/max_messages_per_frame=100
 
 [physics]
 

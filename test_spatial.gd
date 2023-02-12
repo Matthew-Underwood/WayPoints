@@ -18,11 +18,12 @@ func _ready():
 	var waypoint_transformer_factory = MUW_Waypoint_Transformer_Factory.new()
 	var pathing_factory = MUP_Pathing_Factory.new(aStar, pathing_dimension)
 	var pathing = pathing_factory.create(_world)
+	var line_factory = MUW_Factory_Line.new()
 	
 	#TODO what am I going to do with these dependencies
 	var transformer = MUW_Waypoint_Transformers_Mesh.new()
 	var packed_waypoint = preload("res://addons/waypoints/scenes/spatial/waypoint.tscn")
-	var waypoint_factory = MUW_Spatial_Waypoint_Factory.new(transformer, packed_waypoint, get_viewport().get_camera())
+	var waypoint_factory = MUW_Spatial_Waypoint_Factory.new(transformer, packed_waypoint, line_factory)
 	_waypoints = MUW_Waypoints_Factory.new(
 		pathing,
 		_world,
