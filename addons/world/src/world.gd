@@ -1,4 +1,4 @@
-class_name MUP_World
+class_name MUW_World
 
 var _size : Vector2
 var _non_walkable_points = []

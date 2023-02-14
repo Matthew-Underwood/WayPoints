@@ -1,8 +1,8 @@
-class_name MUP_World_Transformers_Screen_Mesh
+class_name MUW_Transformers_Screen_Mesh
 
-var _mesh_picking : MUP_World_Mesh_Picking
+var _mesh_picking : MUW_Mesh_Picker
 
-func _init(mesh_picking : MUP_World_Mesh_Picking):
+func _init(mesh_picking : MUW_Mesh_Picker):
 	_mesh_picking = mesh_picking
 	
 

@@ -2,7 +2,7 @@ extends Spatial
 
 var _waypoints : Spatial
 var _waypoint_id
-var _world : MUP_World
+var _world : MUW_World
 var _viewport : Viewport
 
 # Called when the node enters the scene tree for the first time.
@@ -10,13 +10,27 @@ func _ready():
 	_viewport = get_viewport()
 	#TODO create master factory
 	var world = get_world()
-	_world = MUP_World_Factory.new(Vector2(10, 10)).create_spatial(_viewport.get_camera(), world)
+	_world = MUW_World_Factory.new(Vector2(10, 10)).create_spatial(_viewport.get_camera(), world)
 	var aStar = AStar.new()
-	var pathing_dimension = MUP_DIMENSION_3D_PROCESSOR.new()
+	var world_mesh = $MeshInstance
+	var height_resolver = MUW_Resolver_Height_Factory.new().create(world_mesh)
+	var pathing_dimension = MUP_Dimension_3D_Processor.new(height_resolver)
 	var waypoint_transformer_factory = MUW_Waypoint_Transformer_Factory.new()
 	var pathing_factory = MUP_Pathing_Factory.new(aStar, pathing_dimension)
 	var pathing = pathing_factory.create(_world)
-	_waypoints = (MUW_Waypoints_Factory.new(pathing, _world, waypoint_transformer_factory, self)).create_spatial()
+	var line_factory = MUW_Factory_Line.new()
+	
+	#TODO what am I going to do with these dependencies
+	var transformer = MUW_Waypoint_Transformers_Mesh.new()
+	var packed_waypoint = preload("res://addons/waypoints/scenes/spatial/waypoint.tscn")
+	var waypoint_factory = MUW_Spatial_Waypoint_Factory.new(transformer, packed_waypoint, line_factory)
+	_waypoints = MUW_Waypoints_Factory.new(
+		pathing,
+		_world,
+		waypoint_transformer_factory,
+		self,
+		waypoint_factory
+	).create_spatial()
 
 	
 	

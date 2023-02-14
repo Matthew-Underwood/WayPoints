@@ -1,4 +1,4 @@
-class_name MUP_World_Mesh_Picking
+class_name MUW_Mesh_Picker
 
 var _camera : Camera
 var _world : World

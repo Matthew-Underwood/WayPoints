@@ -2,7 +2,7 @@ extends Node
 
 var _waypoint_factory
 var _pathing : MUP_Pathing
-var _world : MUP_World
+var _world : MUW_World
 var _waypoints = []
 var _origin : Vector3
 export (GDScript) var waypoint_override
@@ -83,7 +83,7 @@ func set_pathing(pathing : MUP_Pathing) -> void:
 	_pathing = pathing
 
 
-func set_world(world : MUP_World) -> void:
+func set_world(world : MUW_World) -> void:
 	_world = world
 
 

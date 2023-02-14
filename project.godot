@@ -585,12 +585,12 @@ _global_script_classes=[ {
 "path": "res://addons/gdUnit3/src/core/LocalTime.gd"
 }, {
 "base": "Reference",
-"class": "MUP_DIMENSION_2D_PROCESSOR",
+"class": "MUP_Dimension_2D_Processor",
 "language": "GDScript",
 "path": "res://addons/pathing/src/dimension/2d_processor.gd"
 }, {
 "base": "Reference",
-"class": "MUP_DIMENSION_3D_PROCESSOR",
+"class": "MUP_Dimension_3D_Processor",
 "language": "GDScript",
 "path": "res://addons/pathing/src/dimension/3d_processor.gd"
 }, {
@@ -609,45 +609,55 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/pathing/test/pathing.gd"
 }, {
+"base": "Reference",
+"class": "MUW_Factory_Line",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/factories/line.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Mesh_Picker",
+"language": "GDScript",
+"path": "res://addons/world/src/mesh_picker.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Resolver_Height",
+"language": "GDScript",
+"path": "res://addons/world/src/resolver/height.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Resolver_Height_Factory",
+"language": "GDScript",
+"path": "res://addons/world/src/resolver/height_factory.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Spatial_Waypoint_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/factories/spatial.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Sprite_Waypoint_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/factories/sprite.gd"
+}, {
 "base": "GdUnitTestSuite",
-"class": "MUP_Test_World",
+"class": "MUW_Test_World",
 "language": "GDScript",
-"path": "res://addons/pathing/test/world.gd"
+"path": "res://addons/world/test/world.gd"
 }, {
 "base": "Reference",
-"class": "MUP_World",
+"class": "MUW_Transformers_Screen_Mesh",
 "language": "GDScript",
-"path": "res://addons/pathing/src/world.gd"
+"path": "res://addons/world/src/transformers/screen_mesh.gd"
 }, {
 "base": "Reference",
-"class": "MUP_World_Factory",
+"class": "MUW_Transformers_Screen_Tilemap",
 "language": "GDScript",
-"path": "res://addons/pathing/src/world_factory.gd"
-}, {
-"base": "Reference",
-"class": "MUP_World_Mesh_Picking",
-"language": "GDScript",
-"path": "res://addons/pathing/src/world/mesh_picking.gd"
-}, {
-"base": "Reference",
-"class": "MUP_World_Transformers_Screen_Mesh",
-"language": "GDScript",
-"path": "res://addons/pathing/src/world/transformers/screen_mesh.gd"
-}, {
-"base": "Reference",
-"class": "MUP_World_Transformers_Screen_Tilemap",
-"language": "GDScript",
-"path": "res://addons/pathing/src/world/transformers/screen_tilemap.gd"
+"path": "res://addons/world/src/transformers/screen_tilemap.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Waypoint_Factory",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoint_factory.gd"
-}, {
-"base": "Reference",
-"class": "MUW_Waypoint_Line_Spatial",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/line/spatial.gd"
 }, {
 "base": "Spatial",
 "class": "MUW_Waypoint_Spatial",
@@ -680,19 +690,19 @@ _global_script_classes=[ {
 "path": "res://addons/waypoints/src/waypoints_factory.gd"
 }, {
 "base": "Reference",
+"class": "MUW_World",
+"language": "GDScript",
+"path": "res://addons/world/src/world.gd"
+}, {
+"base": "Reference",
+"class": "MUW_World_Factory",
+"language": "GDScript",
+"path": "res://addons/world/src/world_factory.gd"
+}, {
+"base": "Reference",
 "class": "MU_Ultilities_Vector",
 "language": "GDScript",
 "path": "res://addons/utilities/src/classes/vector.gd"
-}, {
-"base": "Reference",
-"class": "MU_World",
-"language": "GDScript",
-"path": "res://addons/pathing/src/world/world.gd"
-}, {
-"base": "Reference",
-"class": "Pathing",
-"language": "GDScript",
-"path": "res://addons/pathing/src/pathing/pathing.gd"
 }, {
 "base": "Reference",
 "class": "RPC",
@@ -905,28 +915,30 @@ _global_script_class_icons={
 "IntFuzzer": "",
 "JUnitXmlReport": "",
 "LocalTime": "",
-"MUP_DIMENSION_2D_PROCESSOR": "",
-"MUP_DIMENSION_3D_PROCESSOR": "",
+"MUP_Dimension_2D_Processor": "",
+"MUP_Dimension_3D_Processor": "",
 "MUP_Pathing": "",
 "MUP_Pathing_Factory": "",
 "MUP_Test_Pathing": "",
-"MUP_Test_World": "",
-"MUP_World": "",
-"MUP_World_Factory": "",
-"MUP_World_Mesh_Picking": "",
-"MUP_World_Transformers_Screen_Mesh": "",
-"MUP_World_Transformers_Screen_Tilemap": "",
+"MUW_Factory_Line": "",
+"MUW_Mesh_Picker": "",
+"MUW_Resolver_Height": "",
+"MUW_Resolver_Height_Factory": "",
+"MUW_Spatial_Waypoint_Factory": "",
+"MUW_Sprite_Waypoint_Factory": "",
+"MUW_Test_World": "",
+"MUW_Transformers_Screen_Mesh": "",
+"MUW_Transformers_Screen_Tilemap": "",
 "MUW_Waypoint_Factory": "",
-"MUW_Waypoint_Line_Spatial": "",
 "MUW_Waypoint_Spatial": "",
 "MUW_Waypoint_Sprite": "",
 "MUW_Waypoint_Transformer_Factory": "",
 "MUW_Waypoint_Transformers_Mesh": "",
 "MUW_Waypoint_Transformers_Tilemap": "",
 "MUW_Waypoints_Factory": "",
+"MUW_World": "",
+"MUW_World_Factory": "",
 "MU_Ultilities_Vector": "",
-"MU_World": "",
-"Pathing": "",
 "RPC": "",
 "RPCClientConnect": "",
 "RPCClientDisconnect": "",
@@ -951,7 +963,7 @@ _global_script_class_icons={
 [application]
 
 config/name="WayPoints"
-run/main_scene="res://test.tscn"
+run/main_scene="res://test_2d.tscn"
 
 [editor_plugins]
 
@@ -969,6 +981,11 @@ remove_waypoint={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=100000
+limits/debugger_stdout/max_messages_per_frame=100
 
 [physics]
 
