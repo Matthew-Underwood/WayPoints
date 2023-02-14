@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://test_spatial.gd" type="Script" id=1]
+[ext_resource path="res://addons/waypoints/scenes/spatial/obstacle.tscn" type="PackedScene" id=2]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type spatial;
@@ -47,3 +48,15 @@ projection = 1
 size = 12.0
 near = 1.0
 far = 1000.0
+
+[node name="Obstacle1" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 3.5 )
+
+[node name="Obstacle2" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 4.5 )
+
+[node name="Obstacle3" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 5.5 )
+
+[node name="Obstacle4" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 6.5 )
