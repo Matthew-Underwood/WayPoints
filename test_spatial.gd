@@ -7,10 +7,12 @@ var _viewport : Viewport
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+
+	var obstacles = [Vector2(4,3),Vector2(4,4),Vector2(4,5),Vector2(4,6)]
 	_viewport = get_viewport()
 	#TODO create master factory
 	var world = get_world()
-	_world = MUW_World_Factory.new(Vector2(10, 10)).create_spatial(_viewport.get_camera(), world)
+	_world = MUW_World_Factory.new(Vector2(10, 10), obstacles).create_spatial(_viewport.get_camera(), world)
 	var aStar = AStar.new()
 	var world_mesh = $MeshInstance
 	var height_resolver = MUW_Resolver_Height_Factory.new().create(world_mesh)
