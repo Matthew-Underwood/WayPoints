@@ -32,7 +32,6 @@ omni_range = 12.5435
 material_override = SubResource( 2 )
 mesh = SubResource( 3 )
 skeleton = NodePath("../OmniLight")
-material/0 = null
 __meta__ = {
 "_edit_lock_": true
 }
