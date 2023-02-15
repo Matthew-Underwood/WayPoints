@@ -57,6 +57,8 @@ func _unhandled_input(event):
 	if Input.is_action_pressed("confirm_click") && _waypoint_id != null:
 		var mouse_drag = _viewport.get_mouse_position()
 		var waypoint_id = _waypoints.get_waypoint_id_from_pos(mouse_drag)
+		print(mouse_drag)
+		print(waypoint_id)
 		if !valid_click(mouse_drag) || waypoint_id != null:
 			return
 		
