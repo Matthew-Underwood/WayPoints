@@ -1,10 +1,17 @@
 class_name MUW_World
 
+var _dimension_processor
 var _size : Vector2
 var _non_walkable_points = []
 var _screen_to_world_transformer
 
-func _init(size : Vector2, non_walkable_points : Array, screen_to_world_transformer):
+func _init(
+	dimension_processor,
+	size : Vector2,
+	non_walkable_points : Array,
+	screen_to_world_transformer
+	):
+	_dimension_processor = dimension_processor
 	_size = size
 	_non_walkable_points = non_walkable_points
 	_screen_to_world_transformer = screen_to_world_transformer
@@ -20,8 +27,7 @@ func get_non_walkable_points() -> Array:
 
 func is_walkable(pos : Vector2) -> bool:
 	var world_pos = screen_to_world(pos)
-	world_pos = Vector2(world_pos.x, world_pos.y)
-	
+	world_pos = _dimension_processor.position_to_point(world_pos)
 	if is_out_of_bounds(world_pos):
 		return false
 	

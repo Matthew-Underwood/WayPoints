@@ -595,6 +595,11 @@ _global_script_classes=[ {
 "path": "res://addons/pathing/src/dimension/3d_processor.gd"
 }, {
 "base": "Reference",
+"class": "MUP_Dimension_Processor_Factory",
+"language": "GDScript",
+"path": "res://addons/pathing/src/dimension/processor_factory.gd"
+}, {
+"base": "Reference",
 "class": "MUP_Pathing",
 "language": "GDScript",
 "path": "res://addons/pathing/src/pathing.gd"
@@ -917,6 +922,7 @@ _global_script_class_icons={
 "LocalTime": "",
 "MUP_Dimension_2D_Processor": "",
 "MUP_Dimension_3D_Processor": "",
+"MUP_Dimension_Processor_Factory": "",
 "MUP_Pathing": "",
 "MUP_Pathing_Factory": "",
 "MUP_Test_Pathing": "",
