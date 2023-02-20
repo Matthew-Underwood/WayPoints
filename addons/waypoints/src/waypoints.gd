@@ -63,7 +63,7 @@ func remove_waypoint(id : int) -> void:
 		
 	if end != null:
 		_process_path(_waypoints[next_id], start, end)
-	remove_child(_waypoints[id])
+	_waypoints[id].queue_free()
 	_waypoints.remove(id)
 
 
