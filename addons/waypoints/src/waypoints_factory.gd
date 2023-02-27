@@ -22,7 +22,6 @@ func _init(
 func create_2d(tilemap : TileMap) -> Node2D:
 	var tilemap_transformer = _transformer_factory.create_tilemap_transformer(tilemap)
 	var packed_waypoints = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
-	#var waypoint = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
 	var waypoints = _create_waypoints(packed_waypoints)
 	waypoints.set_origin(Vector3(1, 1, 0))
 	return waypoints

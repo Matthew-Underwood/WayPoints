@@ -18,8 +18,9 @@ func create_waypoint(pos : Vector2) -> void:
 	var world_start = _resolve_position_from_id(-1)
 	var world_end = _world.screen_to_world(pos)
 	waypoint.set_world_position(world_end)
-
 	_process_path(waypoint, world_start, world_end)
+	
+	waypoint.set_id(str(_waypoints.size() + 1))
 	_waypoints.append(waypoint)
 	add_child(waypoint)
 
@@ -65,6 +66,11 @@ func remove_waypoint(id : int) -> void:
 		_process_path(_waypoints[next_id], start, end)
 	_waypoints[id].queue_free()
 	_waypoints.remove(id)
+
+	for update_id in range(id, _waypoints.size()):
+		_waypoints[update_id].set_id(str(update_id + 1))
+
+
 
 
 func empty() -> bool:
