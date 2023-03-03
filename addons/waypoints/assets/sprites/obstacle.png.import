@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/poiint.png-7e9be955412bf8f1e46f87feac3f269e.s3tc.stex"
-path.etc2="res://.import/poiint.png-7e9be955412bf8f1e46f87feac3f269e.etc2.stex"
+path.s3tc="res://.import/obstacle.png-4fde04dd6934dd1ca4b2c359efb37fd9.s3tc.stex"
+path.etc2="res://.import/obstacle.png-4fde04dd6934dd1ca4b2c359efb37fd9.etc2.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc2" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://poiint.png"
-dest_files=[ "res://.import/poiint.png-7e9be955412bf8f1e46f87feac3f269e.s3tc.stex", "res://.import/poiint.png-7e9be955412bf8f1e46f87feac3f269e.etc2.stex" ]
+source_file="res://addons/waypoints/assets/sprites/obstacle.png"
+dest_files=[ "res://.import/obstacle.png-4fde04dd6934dd1ca4b2c359efb37fd9.s3tc.stex", "res://.import/obstacle.png-4fde04dd6934dd1ca4b2c359efb37fd9.etc2.stex" ]
 
 [params]
 
@@ -30,6 +30,7 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
+process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=false

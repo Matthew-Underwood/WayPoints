@@ -9,7 +9,8 @@ func _ready():
 	
 	#TODO create master factory
 	var tilemap = get_node("TileMap")
-	_world = MUW_World_Factory.new(Vector2(10, 10), tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
+	var dimension_processor = MUP_Dimension_Processor_Factory.new(MUW_Resolver_Height_Factory.new()).create_2d()
+	_world = MUW_World_Factory.new(dimension_processor,Vector2(10, 10), tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
 	var aStar = AStar.new()
 	var waypoint_transformer_factory = MUW_Waypoint_Transformer_Factory.new()
 	var pathing_dimension = MUP_Dimension_2D_Processor.new()

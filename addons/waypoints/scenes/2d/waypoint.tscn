@@ -20,6 +20,18 @@ extents = Vector2( 16.1225, 16.0847 )
 frames = SubResource( 1 )
 script = ExtResource( 1 )
 
+[node name="Label" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 0.937
+margin_left = -15.0
+margin_top = -14.0
+margin_right = -16.0
+margin_bottom = -15.984
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+align = 1
+valign = 1
+
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]

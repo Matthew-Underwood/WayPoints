@@ -6,6 +6,7 @@ var _world_position : Vector3
 var _transformer 
 var _line_factory : MUW_Factory_Line
 var _line_nodes = []
+var _meta_data : Dictionary
 
 func set_transformer(transformer):
 	_transformer = transformer
@@ -23,6 +24,14 @@ func set_world_position(pos : Vector3):
 	pos = _transformer.transform(pos)
 	transform.origin = pos
 	_world_position = pos.floor()
+
+
+func set_id(id : String):
+	$Label3D.text = id
+
+
+func set_meta_data(meta_data : Dictionary):
+	_meta_data = meta_data
 
 
 func set_path(path : Array) -> void:

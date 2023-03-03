@@ -6,7 +6,7 @@ var _path = []
 var _world_position : Vector3
 var _previous_frame : int setget set_previous_frame
 var _transformer 
-
+var _meta_data : Dictionary
 
 func get_world_position() -> Vector3:
 	return _world_position
@@ -15,6 +15,14 @@ func get_world_position() -> Vector3:
 func set_world_position(pos : Vector3):
 	transform.origin = _transformer.transform(pos)
 	_world_position = pos
+
+
+func set_id(id : String):
+	$Label.text = id
+
+
+func set_meta_data(meta_data : Dictionary):
+	_meta_data = meta_data
 
 
 func set_transformer(transformer):
