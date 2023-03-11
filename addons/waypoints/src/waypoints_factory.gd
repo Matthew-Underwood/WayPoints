@@ -23,14 +23,12 @@ func create_2d(tilemap : TileMap) -> Node2D:
 	var tilemap_transformer = _transformer_factory.create_tilemap_transformer(tilemap)
 	var packed_waypoints = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
 	var waypoints = _create_waypoints(packed_waypoints)
-	waypoints.set_origin(Vector3(1, 1, 0))
 	return waypoints
 
 func create_spatial() -> Spatial:
 	var mesh_transformer = _transformer_factory.create_mesh_transformer()
 	var packed_waypoints = preload("res://addons/waypoints/scenes/spatial/waypoints.tscn")
 	var waypoints = _create_waypoints(packed_waypoints)
-	waypoints.set_origin(Vector3(1, 0, 1))
 	return waypoints
 
 func _create_waypoints(packed_waypoints : PackedScene):
@@ -40,4 +38,5 @@ func _create_waypoints(packed_waypoints : PackedScene):
 	waypoints.set_waypoint_factory(_waypoint_factory)
 	waypoints.set_world(_world)
 	waypoints.set_pathing(_pathing)
+	waypoints.set_origin(Vector2(1, 1))
 	return waypoints

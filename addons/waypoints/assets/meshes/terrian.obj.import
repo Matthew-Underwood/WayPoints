@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/terrian.obj-63cf5507461c58bc65850b49bd863f1a.mesh"
+
+[deps]
+
+files=[ "res://.import/terrian.obj-63cf5507461c58bc65850b49bd863f1a.mesh" ]
+
+source_file="res://addons/waypoints/assets/meshes/terrian.obj"
+dest_files=[ "res://.import/terrian.obj-63cf5507461c58bc65850b49bd863f1a.mesh", "res://.import/terrian.obj-63cf5507461c58bc65850b49bd863f1a.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286
