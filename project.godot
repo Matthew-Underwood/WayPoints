@@ -585,21 +585,6 @@ _global_script_classes=[ {
 "path": "res://addons/gdUnit3/src/core/LocalTime.gd"
 }, {
 "base": "Reference",
-"class": "MUP_Dimension_2D_Processor",
-"language": "GDScript",
-"path": "res://addons/pathing/src/dimension/2d_processor.gd"
-}, {
-"base": "Reference",
-"class": "MUP_Dimension_3D_Processor",
-"language": "GDScript",
-"path": "res://addons/pathing/src/dimension/3d_processor.gd"
-}, {
-"base": "Reference",
-"class": "MUP_Dimension_Processor_Factory",
-"language": "GDScript",
-"path": "res://addons/pathing/src/dimension/processor_factory.gd"
-}, {
-"base": "Reference",
 "class": "MUP_Pathing",
 "language": "GDScript",
 "path": "res://addons/pathing/src/pathing.gd"
@@ -615,24 +600,14 @@ _global_script_classes=[ {
 "path": "res://addons/pathing/test/pathing.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Factory_Line",
+"class": "MUU_Utilities_Vector",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/factories/line.gd"
+"path": "res://addons/utilities/src/vector.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Mesh_Picker",
 "language": "GDScript",
 "path": "res://addons/world/src/mesh_picker.gd"
-}, {
-"base": "Reference",
-"class": "MUW_Resolver_Height",
-"language": "GDScript",
-"path": "res://addons/world/src/resolver/height.gd"
-}, {
-"base": "Reference",
-"class": "MUW_Resolver_Height_Factory",
-"language": "GDScript",
-"path": "res://addons/world/src/resolver/height_factory.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Spatial_Waypoint_Factory",
@@ -679,11 +654,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/world/src/transformers/screen_tilemap.gd"
 }, {
-"base": "Reference",
-"class": "MUW_Waypoint_Factory",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint_factory.gd"
-}, {
 "base": "Spatial",
 "class": "MUW_Waypoint_Spatial",
 "language": "GDScript",
@@ -693,21 +663,6 @@ _global_script_classes=[ {
 "class": "MUW_Waypoint_Sprite",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoint/sprite.gd"
-}, {
-"base": "Reference",
-"class": "MUW_Waypoint_Transformer_Factory",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/transformer_factory.gd"
-}, {
-"base": "Reference",
-"class": "MUW_Waypoint_Transformers_Mesh",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/transformers/mesh.gd"
-}, {
-"base": "Reference",
-"class": "MUW_Waypoint_Transformers_Tilemap",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/transformers/tilemap.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Waypoints_Factory",
@@ -723,11 +678,6 @@ _global_script_classes=[ {
 "class": "MUW_World_Factory",
 "language": "GDScript",
 "path": "res://addons/world/src/world_factory.gd"
-}, {
-"base": "Reference",
-"class": "MU_Ultilities_Vector",
-"language": "GDScript",
-"path": "res://addons/utilities/src/classes/vector.gd"
 }, {
 "base": "Reference",
 "class": "RPC",
@@ -940,16 +890,11 @@ _global_script_class_icons={
 "IntFuzzer": "",
 "JUnitXmlReport": "",
 "LocalTime": "",
-"MUP_Dimension_2D_Processor": "",
-"MUP_Dimension_3D_Processor": "",
-"MUP_Dimension_Processor_Factory": "",
 "MUP_Pathing": "",
 "MUP_Pathing_Factory": "",
 "MUP_Test_Pathing": "",
-"MUW_Factory_Line": "",
+"MUU_Utilities_Vector": "",
 "MUW_Mesh_Picker": "",
-"MUW_Resolver_Height": "",
-"MUW_Resolver_Height_Factory": "",
 "MUW_Spatial_Waypoint_Factory": "",
 "MUW_Sprite_Waypoint_Factory": "",
 "MUW_Test_World": "",
@@ -959,16 +904,11 @@ _global_script_class_icons={
 "MUW_Tiles_Processor_3d": "",
 "MUW_Transformers_Screen_Mesh": "",
 "MUW_Transformers_Screen_Tilemap": "",
-"MUW_Waypoint_Factory": "",
 "MUW_Waypoint_Spatial": "",
 "MUW_Waypoint_Sprite": "",
-"MUW_Waypoint_Transformer_Factory": "",
-"MUW_Waypoint_Transformers_Mesh": "",
-"MUW_Waypoint_Transformers_Tilemap": "",
 "MUW_Waypoints_Factory": "",
 "MUW_World": "",
 "MUW_World_Factory": "",
-"MU_Ultilities_Vector": "",
 "RPC": "",
 "RPCClientConnect": "",
 "RPCClientDisconnect": "",
@@ -997,7 +937,7 @@ run/main_scene="res://test_2d.tscn"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/pathing/plugin.cfg", "res://addons/waypoints/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/pathing/plugin.cfg", "res://addons/utilities/plugin.cfg", "res://addons/waypoints/plugin.cfg", "res://addons/world/plugin.cfg" )
 
 [input]
 

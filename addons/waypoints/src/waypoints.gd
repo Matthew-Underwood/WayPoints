@@ -71,14 +71,8 @@ func remove_waypoint(id : int) -> void:
 		_waypoints[update_id].set_id(str(update_id + 1))
 
 
-
-
 func empty() -> bool:
 	return _waypoints.empty()
-
-
-func get_origin() -> Vector2:
-	return _origin
 
 
 func set_origin(origin : Vector2):

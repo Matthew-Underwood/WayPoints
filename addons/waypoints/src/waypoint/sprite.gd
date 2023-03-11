@@ -5,7 +5,6 @@ class_name MUW_Waypoint_Sprite
 var _path = []
 var _world_position : Vector2
 var _previous_frame : int setget set_previous_frame
-var _transformer 
 var _meta_data : Dictionary
 
 func get_world_position() -> Vector2:
@@ -22,10 +21,6 @@ func set_id(id : String):
 
 func set_meta_data(meta_data : Dictionary):
 	_meta_data = meta_data
-
-
-func set_transformer(transformer):
-	_transformer = transformer
 
 
 func _input(event):
@@ -61,12 +56,9 @@ func _draw():
 	
 func set_path(path : Array) -> void:
 	var last_element = path[path.size() - 1]
-	transform.origin = _convert_vec3_vec2(last_element)
+	transform.origin = MUU_Utilities_Vector.vec3_vec2(last_element)
 	_path = []
 	for item in path:
-		item = _convert_vec3_vec2(item)
+		item = MUU_Utilities_Vector.vec3_vec2(item)
 		_path.append(item - transform.origin)
 	update()
-
-func _convert_vec3_vec2(pos : Vector3) -> Vector2:
-	return Vector2(pos.x, pos.y)

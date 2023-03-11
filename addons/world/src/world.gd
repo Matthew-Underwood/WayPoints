@@ -1,19 +1,16 @@
 class_name MUW_World
 
-var _dimension_processor
 var _size : Vector2
 var _non_walkable_points = []
 var _screen_to_world_transformer
 var _tiles : MUW_Tiles
 
 func _init(
-	dimension_processor,
 	size : Vector2,
 	non_walkable_points : Array,
 	screen_to_world_transformer,
 	tiles : MUW_Tiles
 	):
-	_dimension_processor = dimension_processor
 	_size = size
 	_non_walkable_points = non_walkable_points
 	_screen_to_world_transformer = screen_to_world_transformer

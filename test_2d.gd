@@ -9,26 +9,22 @@ func _ready():
 	
 	#TODO create master factory
 	var tilemap = get_node("TileMap")
-	var dimension_processor = MUP_Dimension_Processor_Factory.new(MUW_Resolver_Height_Factory.new()).create_2d()
 	var world_size = Vector2(10, 10)
 
-	var tile_processor = MUW_Tiles_Processor_2d.new(tilemap)
-	var tiles_factory = MUW_Tiles_Factory.new(tile_processor)
+	var tiles_processor = MUW_Tiles_Processor_2d.new(tilemap)
+	var tiles_factory = MUW_Tiles_Factory.new(tiles_processor)
 
-	_world = MUW_World_Factory.new(dimension_processor, tiles_factory, world_size , tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
+	_world = MUW_World_Factory.new(tiles_factory, world_size , tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
 	var aStar = AStar.new()
-	var waypoint_transformer_factory = MUW_Waypoint_Transformer_Factory.new()
 
 	var pathing_factory = MUP_Pathing_Factory.new(aStar, _world)
 	var pathing = pathing_factory.create()
 
-	var transformer = MUW_Waypoint_Transformers_Tilemap.new(tilemap)
 	var packed_waypoint = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
-	var waypoint_factory = MUW_Sprite_Waypoint_Factory.new(transformer, packed_waypoint)
+	var waypoint_factory = MUW_Sprite_Waypoint_Factory.new(packed_waypoint)
 	_waypoints = MUW_Waypoints_Factory.new(
 		pathing,
 		_world,
-		waypoint_transformer_factory,
 		self,
 		waypoint_factory
 	).create_2d(tilemap)
