@@ -937,7 +937,7 @@ run/main_scene="res://test_2d.tscn"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/pathing/plugin.cfg", "res://addons/utilities/plugin.cfg", "res://addons/waypoints/plugin.cfg", "res://addons/world/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/pathing/plugin.cfg", "res://addons/waypoints/plugin.cfg" )
 
 [input]
 

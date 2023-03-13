@@ -6,7 +6,7 @@ enum {TILE_TYPE_FLAT, TILE_TYPE_CORNER, TILE_TYPE_SLOPE, TILE_TYPE_L_JOIN}
 func _init(tilemap : TileMap):
 	_tilemap = tilemap
 
-func create(world_pos : Vector2):
+func create(world_pos : Vector2, tile_data : Dictionary):
 	var tile = {
 		"center_position" : _pick_tile_center(world_pos),
 		"type" : TILE_TYPE_FLAT 
