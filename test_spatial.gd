@@ -13,6 +13,10 @@ func _ready():
 	var world = get_world()
 	var world_size = Vector2(10, 10)
 	var obstacles = []
+	var slope_vectors = [
+		Vector2(4, 3), Vector2(5, 3), Vector2(6, 3), Vector2(3, 4), Vector2(3, 5), Vector2(3, 6),
+		Vector2(4, 7), Vector2(5, 7), Vector2(6, 7), Vector2(7, 4), Vector2(7, 5), Vector2(7, 6)
+	]
 
 	#TODO create master factory
 	var rc = RayCast.new()
@@ -20,10 +24,22 @@ func _ready():
 	rc.cast_to = Vector3(0, -10, 0)
 	add_child(rc)
 
+	var tile_data = {}
+
+	for x in range(world_size.x):
+		for y in range(world_size.y):
+			tile_data[Vector2(x, y)] = {"type" : MUW_Tiles_Processor_3d.TILE_TYPE_FLAT}
+	
+	tile_data[Vector2(3, 3)] = {"type" : MUW_Tiles_Processor_3d.TILE_TYPE_CORNER}
+	tile_data[Vector2(7, 7)] = {"type" : MUW_Tiles_Processor_3d.TILE_TYPE_CORNER}
+	tile_data[Vector2(7, 3)] = {"type" : MUW_Tiles_Processor_3d.TILE_TYPE_CORNER}
+	tile_data[Vector2(3, 3)] = {"type" : MUW_Tiles_Processor_3d.TILE_TYPE_CORNER}
+
+	for slope_vector in slope_vectors:
+		tile_data[slope_vector] = {"type" : MUW_Tiles_Processor_3d.TILE_TYPE_SLOPE}
+
 	var tile_processor = MUW_Tiles_Processor_3d.new(rc)
-	var tiles_factory = MUW_Tiles_Factory.new(tile_processor)
-
-
+	var tiles_factory = MUW_Tiles_Factory.new(tile_processor, tile_data)
 
 	_world = MUW_World_Factory.new(tiles_factory, world_size, obstacles).create_spatial(_viewport.get_camera(), world)
 	var aStar = AStar.new()

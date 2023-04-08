@@ -2,4 +2,3 @@
 
 [resource]
 flags_unshaded = true
-albedo_color = Color( 1, 0, 0, 1 )

@@ -5,6 +5,7 @@ var _tile_data : Dictionary
 
 func _init(tile_processor, tile_data : Dictionary):
 	_tile_processor = tile_processor
+	_tile_data = tile_data
 
 
 func create(world_size : Vector2) -> MUW_Tiles:

@@ -605,11 +605,6 @@ _global_script_classes=[ {
 "path": "res://addons/utilities/src/vector.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Line_Factory",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/line_factory.gd"
-}, {
-"base": "Reference",
 "class": "MUW_Mesh_Picker",
 "language": "GDScript",
 "path": "res://addons/world/src/mesh_picker.gd"
@@ -904,7 +899,6 @@ _global_script_class_icons={
 "MUP_Pathing_Factory": "",
 "MUP_Test_Pathing": "",
 "MUU_Utilities_Vector": "",
-"MUW_Line_Factory": "",
 "MUW_Mesh_Picker": "",
 "MUW_Spatial_Waypoint_Factory": "",
 "MUW_Sprite_Waypoint_Factory": "",
