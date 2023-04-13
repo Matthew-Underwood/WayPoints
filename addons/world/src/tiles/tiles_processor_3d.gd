@@ -1,57 +1,46 @@
 class_name MUW_Tiles_Processor_3d
 
 var _raycast : RayCast
+var _data : Dictionary
 enum {TILE_TYPE_FLAT, TILE_TYPE_CORNER, TILE_TYPE_SLOPE, TILE_TYPE_L_JOIN}
+
 
 func _init(raycast : RayCast):
 	_raycast = raycast
 
 
-func create(world_pos : Vector2, tile_data : Dictionary):
+func create(world_pos : Vector2, tile_data : Dictionary) -> Dictionary:
 
 	var pick_pos = Vector3(world_pos.x, 5, world_pos.y)
 	var tile_type = tile_data["type"]
-	var tile = {
-		"center_position" : _pick_tile_center(pick_pos),
+	_data = {
+		"world_positions" : {},
 		"type" : tile_type 
 	}
 
-	if tile_type == TILE_TYPE_SLOPE:
-		tile["center_edge"] = _pick_center_edge(pick_pos)
-	
-	if tile_type == TILE_TYPE_CORNER:
-		tile["corner_edge"] = _pick_corner(pick_pos)
+	_add_position(Vector3(pick_pos) + Vector3(0.5, 0, 0.5))
 
-	return tile
+	if tile_type in [TILE_TYPE_SLOPE, TILE_TYPE_CORNER]:
 
-
-func _pick_tile_center(pick_pos : Vector3) -> Vector3:
-	return _pick_point(Vector3(pick_pos) + Vector3(0.5, 0, 0.5))
-
-
-func _pick_center_edge(pick_pos : Vector3) -> Vector3:
-	var relative_points = [Vector3(0.5, 0, 0), Vector3(1, 0, 0.5), Vector3(0.5, 0, 1), Vector3(0, 0, 0.5)]
-	for i in range(len(relative_points) - 1):
-		relative_points[i] = pick_pos + relative_points[i]
-		
-	return _find_highest_from_points(relative_points)
+		var relative_points = [
+			Vector3(0, 0, 0),
+			Vector3(0.5, 0, 0),
+			Vector3(1, 0, 0),
+			Vector3(0, 0, 0.5),
+			Vector3(0, 0, 1),
+			Vector3(1, 0, 0.5),
+			Vector3(0.5, 0, 1),
+			Vector3(1, 0, 1),
+		]
+		for relative_point in relative_points:
+			_add_position(Vector3(pick_pos) + relative_point)
+	return _data
 
 
-func _pick_corner(pick_pos : Vector3) -> Vector3:
-	var relative_points = [Vector3(0, 5, 0), Vector3(1, 5, 0), Vector3(1, 5, 1), Vector3(0, 5, 1)]
-	for i in range(len(relative_points) - 1):
-		relative_points[i] = pick_pos + relative_points[i]
-	
-	return _find_highest_from_points(relative_points)
-
-
-func _find_highest_from_points(points : Array) -> Vector3:
-	var highest_point = Vector3.ZERO
-	for p in points:
-		var picked_point = _pick_point(p)
-		if picked_point.y > highest_point.y:
-			highest_point = picked_point
-	return highest_point
+func _add_position(pick_position : Vector3):
+	var picked_position = _pick_point(pick_position)
+	_data["world_positions"][Vector2(picked_position.x, picked_position.z)] = picked_position
+	return 
 
 
 func _pick_point(raycast_pos : Vector3) -> Vector3:

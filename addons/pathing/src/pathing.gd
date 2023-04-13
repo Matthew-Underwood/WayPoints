@@ -11,22 +11,23 @@ func _init(aStar : AStar, world : MUW_World):
 # Loops through all cells within the world's bounds and
 # adds all points to the _aStar, except the obstacles.
 func add_walkable_cells(obstacle_list = []) -> Array:
-	var points_array = []
+	var tile_positions = []
 	var tiles = _world.get_tiles().get_all()
 	for tile_pos in tiles:
 		if tile_pos in obstacle_list:
 			continue
-		points_array.append(tile_pos)
+		tile_positions.append(tile_pos)
 		# The AStar class references points with indices.
 		# Using a function to calculate the index from a point's coordinates
 		# ensures we always get the same index with the same input point.
-		var point_index = _calculate_index(tile_pos)
 		# AStar works for both 2d and 3d, so we have to convert the point
 		# coordinates from and to Vector3s.
-		var pathing_position = tiles[tile_pos]["center_position"]
-		# coordinates from and to Vector3s.
-		_aStar.add_point(point_index, pathing_position)
-	return points_array
+		for tile_world_position in tiles[tile_pos]["world_positions"]:
+			var point_index = _calculate_index(tile_world_position)
+			if !_aStar.has_point(point_index):
+				var pathing_position = tiles[tile_pos]["world_positions"][tile_world_position]
+				_aStar.add_point(point_index, pathing_position)
+	return tile_positions
 
 
 func is_walkable(point : Vector2) -> bool:
@@ -66,18 +67,25 @@ func connect_walkable_cells(points_array : Array) -> void:
 
 # This is a variation of the method above.
 # It connects cells horizontally, vertically AND diagonally.
-func connect_walkable_cells_diagonal(points_array : Array) -> void:
-	for point in points_array:
-		var point_index = _calculate_index(point)
+func connect_walkable_cells_diagonal(tile_positions : Array) -> void:
+
+	for tile_position in tile_positions:
+		var point_index = _calculate_index(tile_position)
 		for local_y in range(3):
 			for local_x in range(3):
-				var relative = Vector2(point.x + local_x - 1, point.y + local_y - 1)
-				var relative_index = _calculate_index(relative)
-				if relative == point or _world.is_out_of_bounds(relative):
+				var relative_position = Vector2(tile_position.x + local_x - 1, tile_position.y + local_y - 1)
+				var relative_point_index = _calculate_index(relative_position)
+				var local_relative_point_index = _calculate_index(relative_position / 2)
+				
+				if relative_position == tile_position or _world.is_out_of_bounds(relative_position):
 					continue
-				if not _aStar.has_point(relative_index):
+				if !_aStar.has_point(relative_point_index):
 					continue
-				_aStar.connect_points(point_index, relative_index, false)
+				if _aStar.has_point(local_relative_point_index):
+					_aStar.connect_points(point_index, local_relative_point_index, false)
+					point_index = local_relative_point_index
+				
+				_aStar.connect_points(point_index, relative_point_index, false)
 
 
 #TODO may be able to remove null
@@ -91,4 +99,4 @@ func get_path(start_position : Vector2, end_position : Vector2):
 
 
 func _calculate_index(point : Vector2) -> float:
-	return point.x * _world.get_size().x + point.y
+	return point.x * pow(8, 2) + point.y * pow(128, 2)
