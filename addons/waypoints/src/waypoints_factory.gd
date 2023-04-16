@@ -33,5 +33,5 @@ func _create_waypoints(packed_waypoints : PackedScene):
 	waypoints.set_waypoint_factory(_waypoint_factory)
 	waypoints.set_world(_world)
 	waypoints.set_pathing(_pathing)
-	waypoints.set_origin(Vector2(1, 1))
+	
 	return waypoints

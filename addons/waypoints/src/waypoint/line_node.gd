@@ -4,11 +4,12 @@ class_name MUW_WayPoint_Line
 
 
 func create_line(points : Array):
-
+	
 	var org = to_global(get_parent_spatial().transform.origin)
 	var z_axis = transform.basis.z
 	var y_axis = transform.basis.y
 	var global_line_points = PoolVector3Array()
+	var y_offset = 0.04
 
 	for p in range(1, len(points)):
 		var src = points[p - 1] - org
@@ -19,12 +20,12 @@ func create_line(points : Array):
 		var distance_to_src = dest.distance_to(src)
 
 		var line_points = [
-			Vector3(-0.05, 0.02, 0),
-			Vector3(0.05, 0.02, 0),
-			Vector3(0.05, y_diff + 0.02, distance_to_src),
-			Vector3(-0.05, 0.02, 0),
-			Vector3(0.05, y_diff + 0.02, distance_to_src),
-			Vector3(-0.05, y_diff + 0.02, distance_to_src)
+			Vector3(-0.05, y_offset, 0),
+			Vector3(0.05, y_offset, 0),
+			Vector3(0.05, y_diff + y_offset, distance_to_src),
+			Vector3(-0.05, y_offset, 0),
+			Vector3(0.05, y_diff + y_offset, distance_to_src),
+			Vector3(-0.05, y_diff + y_offset, distance_to_src)
 		]
 		var angle_radians = z_axis.signed_angle_to(direction, y_axis)
 		transform.origin = src

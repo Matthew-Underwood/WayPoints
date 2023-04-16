@@ -21,7 +21,6 @@ func create(world_pos : Vector2, tile_data : Dictionary) -> Dictionary:
 	_add_position(Vector3(pick_pos) + Vector3(0.5, 0, 0.5))
 
 	if tile_type in [TILE_TYPE_SLOPE, TILE_TYPE_CORNER]:
-
 		var relative_points = [
 			Vector3(0, 0, 0),
 			Vector3(0.5, 0, 0),

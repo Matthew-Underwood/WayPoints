@@ -2,10 +2,12 @@ class_name MUP_Pathing
 
 var _aStar : AStar
 var _world : MUW_World
+var _offset : Vector2
 
-func _init(aStar : AStar, world : MUW_World):
+func _init(aStar : AStar, world : MUW_World, offset : Vector2):
 	_aStar = aStar
 	_world = world
+	_offset = offset
 
 
 # Loops through all cells within the world's bounds and
@@ -70,12 +72,16 @@ func connect_walkable_cells(points_array : Array) -> void:
 func connect_walkable_cells_diagonal(tile_positions : Array) -> void:
 
 	for tile_position in tile_positions:
-		var point_index = _calculate_index(tile_position)
+		tile_position = tile_position + _offset
 		for local_y in range(3):
 			for local_x in range(3):
-				var relative_position = Vector2(tile_position.x + local_x - 1, tile_position.y + local_y - 1)
+				var point_index = _calculate_index(tile_position)
+				var relative_position_offset = Vector2(local_x - 1, local_y - 1)
+				var relative_position = tile_position + relative_position_offset
 				var relative_point_index = _calculate_index(relative_position)
-				var local_relative_point_index = _calculate_index(relative_position / 2)
+
+				var local_relative_point_position = tile_position + (relative_position_offset / 2)
+				var local_relative_point_index = _calculate_index(local_relative_point_position)
 				
 				if relative_position == tile_position or _world.is_out_of_bounds(relative_position):
 					continue
@@ -84,15 +90,13 @@ func connect_walkable_cells_diagonal(tile_positions : Array) -> void:
 				if _aStar.has_point(local_relative_point_index):
 					_aStar.connect_points(point_index, local_relative_point_index, false)
 					point_index = local_relative_point_index
-				
 				_aStar.connect_points(point_index, relative_point_index, false)
 
 
-#TODO may be able to remove null
 func get_path(start_position : Vector2, end_position : Vector2):
 
-	var start_index = _calculate_index(start_position)
-	var end_index = _calculate_index(end_position)
+	var start_index = _calculate_index(start_position + _offset)
+	var end_index = _calculate_index(end_position + _offset)
 	if !_aStar.has_point(start_index) or !_aStar.has_point(end_index):
 		return null
 	return _aStar.get_point_path(start_index, end_index)
