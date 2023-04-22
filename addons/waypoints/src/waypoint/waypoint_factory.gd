@@ -1,8 +1,8 @@
 class_name MUW_Waypoint_Factory
 
-var _packed_waypoint
+var _packed_waypoint : PackedScene
 
-func _init(packed_waypoint):
+func _init(packed_waypoint : PackedScene):
 	_packed_waypoint = packed_waypoint
 
 

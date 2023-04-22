@@ -39,7 +39,6 @@ func create(world_pos : Vector2, tile_data : Dictionary) -> Dictionary:
 func _add_position(pick_position : Vector3):
 	var picked_position = _pick_point(pick_position)
 	_data["world_positions"][Vector2(picked_position.x, picked_position.z)] = picked_position
-	return 
 
 
 func _pick_point(raycast_pos : Vector3) -> Vector3:

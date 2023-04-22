@@ -4,7 +4,7 @@ var _waypoint_factory : MUW_Waypoint_Factory
 var _pathing : MUP_Pathing
 var _world : MUW_World
 var _waypoints = []
-var _origin = Vector2(1, 1)
+var _origin = Vector2(0, 0)
 
 export (GDScript) var waypoint_override
 
