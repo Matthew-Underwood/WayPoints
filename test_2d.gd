@@ -25,14 +25,8 @@ func _ready():
 	var pathing_factory = MUP_Pathing_Factory.new(aStar, _world)
 	var pathing = pathing_factory.create()
 
-	var packed_waypoint = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
-	var waypoint_factory = MUW_Sprite_Waypoint_Factory.new(packed_waypoint)
-	_waypoints = MUW_Waypoints_Factory.new(
-		pathing,
-		_world,
-		self,
-		waypoint_factory
-	).create_2d(tilemap)
+	_waypoints = MUW_Waypoints_Factory.new(pathing, _world).create_2d()
+	add_child(_waypoints)
 
 	
 	

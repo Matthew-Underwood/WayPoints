@@ -609,16 +609,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/world/src/mesh_picker.gd"
 }, {
-"base": "Reference",
-"class": "MUW_Spatial_Waypoint_Factory",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/factories/spatial.gd"
-}, {
-"base": "Reference",
-"class": "MUW_Sprite_Waypoint_Factory",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/factories/sprite.gd"
-}, {
 "base": "GdUnitTestSuite",
 "class": "MUW_Test_World",
 "language": "GDScript",
@@ -658,6 +648,11 @@ _global_script_classes=[ {
 "class": "MUW_WayPoint_Line",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoint/line_node.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoint_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint/waypoint_factory.gd"
 }, {
 "base": "Spatial",
 "class": "MUW_Waypoint_Spatial",
@@ -900,8 +895,6 @@ _global_script_class_icons={
 "MUP_Test_Pathing": "",
 "MUU_Utilities_Vector": "",
 "MUW_Mesh_Picker": "",
-"MUW_Spatial_Waypoint_Factory": "",
-"MUW_Sprite_Waypoint_Factory": "",
 "MUW_Test_World": "",
 "MUW_Tiles": "",
 "MUW_Tiles_Factory": "",
@@ -910,6 +903,7 @@ _global_script_class_icons={
 "MUW_Transformers_Screen_Mesh": "",
 "MUW_Transformers_Screen_Tilemap": "",
 "MUW_WayPoint_Line": "",
+"MUW_Waypoint_Factory": "",
 "MUW_Waypoint_Spatial": "",
 "MUW_Waypoint_Sprite": "",
 "MUW_Waypoints_Factory": "",

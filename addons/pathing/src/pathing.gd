@@ -93,12 +93,13 @@ func connect_walkable_cells_diagonal(tile_positions : Array) -> void:
 				_aStar.connect_points(point_index, relative_point_index, false)
 
 
-func get_path(start_position : Vector2, end_position : Vector2):
+func get_path(start_position : Vector2, end_position : Vector2) -> PoolVector3Array:
 
 	var start_index = _calculate_index(start_position + _offset)
 	var end_index = _calculate_index(end_position + _offset)
-	if !_aStar.has_point(start_index) or !_aStar.has_point(end_index):
-		return null
+	#TODO get rid of this? We should never have a case where has_point is false
+	#if !_aStar.has_point(start_index) or !_aStar.has_point(end_index):
+	#	return null
 	return _aStar.get_point_path(start_index, end_index)
 
 
