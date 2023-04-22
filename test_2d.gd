@@ -10,9 +10,14 @@ func _ready():
 	#TODO create master factory
 	var tilemap = get_node("TileMap")
 	var world_size = Vector2(10, 10)
+	var tile_data = {}
+
+	for x in range(world_size.x):
+		for y in range(world_size.y):
+			tile_data[Vector2(x, y)] = {"type" : MUW_Tiles_Processor_2d.TILE_TYPE_FLAT}
 
 	var tiles_processor = MUW_Tiles_Processor_2d.new(tilemap)
-	var tiles_factory = MUW_Tiles_Factory.new(tiles_processor)
+	var tiles_factory = MUW_Tiles_Factory.new(tiles_processor, tile_data)
 
 	_world = MUW_World_Factory.new(tiles_factory, world_size , tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
 	var aStar = AStar.new()
