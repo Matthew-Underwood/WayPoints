@@ -1,32 +1,28 @@
 class_name MUW_Waypoints_Factory
 
 var _pathing : MUP_Pathing
-var _world : MUW_World
+var _waypoint_packed : PackedScene
+var _waypoints_packed : PackedScene
+var _transformer
 
 func _init(
 	pathing : MUP_Pathing,
-	world : MUW_World
+	waypoint_packed : PackedScene,
+	waypoints_packed : PackedScene,
+	transformer
 ):
-	_world = world
 	_pathing = pathing
+	_waypoint_packed = waypoint_packed
+	_waypoints_packed = waypoints_packed
+	_transformer = transformer
 
-func create_2d() -> Node2D:
+func create() -> Node:
 
-	var waypoint_packed = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
-	var waypoints_packed = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
-	return _create_waypoints(waypoint_packed, waypoints_packed)
-
-func create_spatial() -> Spatial:
-	
-	var waypoint_packed = preload("res://addons/waypoints/scenes/spatial/waypoint.tscn")
-	var waypoints_packed = preload("res://addons/waypoints/scenes/spatial/waypoints.tscn")
-	return _create_waypoints(waypoint_packed, waypoints_packed)
-
-func _create_waypoints(waypoint_packed : PackedScene, waypoints_packed : PackedScene):
-
-	var waypoint_factory = MUW_Waypoint_Factory.new(waypoint_packed)
-	var waypoints = waypoints_packed.instance()
+	var waypoint_factory = MUW_Waypoint_Factory.new(_waypoint_packed)
+	var waypoints = _waypoints_packed.instance()
 	waypoints.set_waypoint_factory(waypoint_factory)
-	waypoints.set_world(_world)
+	waypoints.set_transformer(_transformer)
 	waypoints.set_pathing(_pathing)
+	#TODO add child in the calling script
+	#_parent_node.add_child(waypoints)
 	return waypoints

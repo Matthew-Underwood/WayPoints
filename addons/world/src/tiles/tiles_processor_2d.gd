@@ -1,7 +1,6 @@
 class_name MUW_Tiles_Processor_2d
 
 var _tilemap : TileMap
-enum {TILE_TYPE_FLAT, TILE_TYPE_CORNER, TILE_TYPE_SLOPE, TILE_TYPE_L_JOIN}
 
 func _init(tilemap : TileMap):
 	_tilemap = tilemap
@@ -9,10 +8,14 @@ func _init(tilemap : TileMap):
 
 func create(world_pos : Vector2, tile_data : Dictionary) -> Dictionary:
 
+	var tile_type = tile_data["type"]
+	if tile_type == MUW_Tile_Types.INPASSABLE:
+		return  { "world_positions" : {}, "type" : tile_type }
+		
 	var tile_center_position = _get_tile_center(world_pos)
 	var tile = {
 		"world_positions" : { (world_pos + Vector2(0.5, 0.5)) : Vector3(tile_center_position.x, tile_center_position.y, 0) },
-		"type" : TILE_TYPE_FLAT 
+		"type" : MUW_Tile_Types.FLAT 
 	}
 	return tile
 

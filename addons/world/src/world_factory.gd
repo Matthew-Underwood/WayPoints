@@ -1,28 +1,67 @@
 class_name MUW_World_Factory
 
-var _size : Vector2
 var _unwalkable_points : Array
-var _tiles_factory : MUW_Tiles_Factory
+var _tiles : MUW_Tiles
 
-func _init(
-    tiles_factory : MUW_Tiles_Factory,
-    size : Vector2,
-    unwalkable_points = []
-):
-    _tiles_factory = tiles_factory
-    _size = size
-    _unwalkable_points = unwalkable_points
 
-func create_spatial(camera : Camera, world : World) -> MUW_World:
-    
-    var tiles = _tiles_factory.create(_size)
-    var mesh_picking = MUW_Mesh_Picker.new(camera, world)
-    var screen_mesh_transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
-    return MUW_World.new(_size, _unwalkable_points, screen_mesh_transformer, tiles)
+func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : World) -> MUW_World:
+	var tile_data = _tile_data_3d()
+
+	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
+	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
+
+	var tiles = MUW_Tiles_Factory.new(tile_data).create_3d(cast_to, parent_node)
+	var waypoint_packed = preload("res://addons/waypoints/scenes/spatial/waypoint.tscn")
+	var waypoints_packed = preload("res://addons/waypoints/scenes/spatial/waypoints.tscn")
+	var pathing = MUP_Pathing_Factory.new(tiles).create()
+	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_packed, waypoints_packed, transformer).create()
+	parent_node.add_child(waypoints)
+	return MUW_World.new(transformer, tiles, waypoints)
 
 
 func create_2d(tilemap : TileMap) -> MUW_World:
-    var tiles = _tiles_factory.create(_size)
-    var screen_tilemap_transformer = MUW_Transformers_Screen_Tilemap.new(tilemap)
-    return MUW_World.new(_size, _unwalkable_points, screen_tilemap_transformer, tiles)
+	var tile_data = _tile_data_2d()
+	var transformer = MUW_Transformers_Screen_Tilemap.new(tilemap)
+	var tiles = MUW_Tiles_Factory.new(tile_data).create_2d(tilemap)
+	var waypoint_packed = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
+	var waypoints_packed = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
+	var pathing = MUP_Pathing_Factory.new(tiles).create()
+	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_packed, waypoints_packed, transformer).create()
 
+	return MUW_World.new(transformer, tiles, waypoints)
+
+
+#TODO this is temp, implement loading from file or something
+func _tile_data_3d():
+	
+	var tile_data = {}
+	var world_size = Vector2(10, 10)
+	var slope_vectors = [
+		Vector2(3, 2), Vector2(4, 2), Vector2(5, 2), Vector2(6, 2),
+		Vector2(2, 3), Vector2(2, 4), Vector2(2, 5), Vector2(2, 6), 
+		Vector2(3, 7), Vector2(4, 7), Vector2(5, 7), Vector2(6, 7), 
+		Vector2(7, 3), Vector2(7, 4), Vector2(7, 5), Vector2(7, 6)
+	]
+	for x in range(world_size.x):
+		for y in range(world_size.y):
+			tile_data[Vector2(x, y)] = {"type" : MUW_Tile_Types.FLAT}
+
+	tile_data[Vector2(2, 2)] = {"type" : MUW_Tile_Types.CORNER}
+	tile_data[Vector2(7, 7)] = {"type" : MUW_Tile_Types.CORNER}
+	tile_data[Vector2(7, 2)] = {"type" : MUW_Tile_Types.CORNER}
+	tile_data[Vector2(2, 7)] = {"type" : MUW_Tile_Types.CORNER}
+
+	for slope_vector in slope_vectors:
+		tile_data[slope_vector] = {"type" : MUW_Tile_Types.SLOPE}
+
+	return tile_data
+
+
+func _tile_data_2d():
+
+	var tile_data = {}
+	var world_size = Vector2(10, 10)
+	for x in range(world_size.x):
+		for y in range(world_size.y):
+			tile_data[Vector2(x, y)] = {"type" : MUW_Tiles_Processor_2d.FLAT}
+	return tile_data

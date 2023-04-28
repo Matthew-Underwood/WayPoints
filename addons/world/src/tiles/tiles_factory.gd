@@ -1,17 +1,25 @@
 class_name MUW_Tiles_Factory
 
-var _tile_processor
 var _tile_data : Dictionary
 
-func _init(tile_processor, tile_data : Dictionary):
-	_tile_processor = tile_processor
+func _init(tile_data : Dictionary):
 	_tile_data = tile_data
 
 
-func create(world_size : Vector2) -> MUW_Tiles:
+func create_2d(tilemap : TileMap) -> MUW_Tiles:
+
+	var tile_processor = MUW_Tiles_Processor_Factory.new().create_2d(tilemap)
+	return _build_tiles(tile_processor)
+
+
+func create_3d(cast : Vector3, current_node : Node) -> MUW_Tiles:
+
+	var tile_processor = MUW_Tiles_Processor_Factory.new().create_3d(cast, current_node)
+	return _build_tiles(tile_processor)
+	
+
+func _build_tiles(tile_processor) -> MUW_Tiles:
 	var tiles = {}
-	for x in range(world_size.x):
-		for y in range(world_size.y):
-			var world_pos = Vector2(x, y)
-			tiles[world_pos] = _tile_processor.create(world_pos, _tile_data[world_pos])
+	for vec2 in _tile_data:
+		tiles[vec2] = tile_processor.create(vec2, _tile_data[vec2])
 	return MUW_Tiles.new(tiles)

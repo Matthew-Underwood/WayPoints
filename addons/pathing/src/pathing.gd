@@ -1,22 +1,22 @@
 class_name MUP_Pathing
 
 var _aStar : AStar
-var _world : MUW_World
 var _offset : Vector2
+var _tiles : MUW_Tiles
 
-func _init(aStar : AStar, world : MUW_World, offset : Vector2):
+func _init(aStar : AStar, tiles : MUW_Tiles, offset : Vector2):
 	_aStar = aStar
-	_world = world
 	_offset = offset
+	_tiles = tiles
 
 
 # Loops through all cells within the world's bounds and
 # adds all points to the _aStar, except the obstacles.
-func add_walkable_cells(obstacle_list = []) -> Array:
+func add_walkable_cells() -> Array:
 	var tile_positions = []
-	var tiles = _world.get_tiles().get_all()
+	var tiles = _tiles.get_all()
 	for tile_pos in tiles:
-		if tile_pos in obstacle_list:
+		if !_tiles.is_walkable(tile_pos):
 			continue
 		tile_positions.append(tile_pos)
 		# The AStar class references points with indices.
@@ -56,7 +56,7 @@ func connect_walkable_cells(points_array : Array) -> void:
 		])
 		for relative in points_relative:
 			var relative_index = _calculate_index(relative)
-			if _world.is_out_of_bounds(relative):
+			if !_tiles.has_tile(relative):
 				continue
 			if not _aStar.has_point(relative_index):
 				continue
@@ -83,7 +83,7 @@ func connect_walkable_cells_diagonal(tile_positions : Array) -> void:
 				var local_relative_point_position = tile_position + (relative_position_offset / 2)
 				var local_relative_point_index = _calculate_index(local_relative_point_position)
 				
-				if relative_position == tile_position or _world.is_out_of_bounds(relative_position):
+				if relative_position == tile_position or !_tiles.has_tile(relative_position):
 					continue
 				if !_aStar.has_point(relative_point_index):
 					continue

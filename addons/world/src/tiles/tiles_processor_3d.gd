@@ -2,7 +2,6 @@ class_name MUW_Tiles_Processor_3d
 
 var _raycast : RayCast
 var _data : Dictionary
-enum {TILE_TYPE_FLAT, TILE_TYPE_CORNER, TILE_TYPE_SLOPE, TILE_TYPE_L_JOIN}
 
 
 func _init(raycast : RayCast):
@@ -18,9 +17,12 @@ func create(world_pos : Vector2, tile_data : Dictionary) -> Dictionary:
 		"type" : tile_type 
 	}
 
+	if tile_type == MUW_Tile_Types.INPASSABLE:
+		return { "world_positions" : {}, "type" : tile_type }
+
 	_add_position(Vector3(pick_pos) + Vector3(0.5, 0, 0.5))
 
-	if tile_type in [TILE_TYPE_SLOPE, TILE_TYPE_CORNER]:
+	if tile_type in [MUW_Tile_Types.SLOPE, MUW_Tile_Types.CORNER]:
 		var relative_points = [
 			Vector3(0, 0, 0),
 			Vector3(0.5, 0, 0),
