@@ -14,7 +14,7 @@ func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : W
 	var waypoint_packed = preload("res://addons/waypoints/scenes/spatial/waypoint.tscn")
 	var waypoints_packed = preload("res://addons/waypoints/scenes/spatial/waypoints.tscn")
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_packed, waypoints_packed, transformer).create()
+	var waypoints = MUW_Waypoints_Factory.new(pathing).create_3d(waypoints_packed, waypoint_packed, transformer)
 	parent_node.add_child(waypoints)
 	return MUW_World.new(transformer, tiles, waypoints)
 
@@ -26,7 +26,7 @@ func create_2d(parent_node : Node, tilemap : TileMap) -> MUW_World:
 	var waypoint_packed = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
 	var waypoints_packed = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_packed, waypoints_packed, transformer).create()
+	var waypoints = MUW_Waypoints_Factory.new(pathing).create_2d(waypoints_packed, waypoint_packed, transformer)
 	parent_node.add_child(waypoints)
 	return MUW_World.new(transformer, tiles, waypoints)
 
