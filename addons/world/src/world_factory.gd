@@ -19,20 +19,20 @@ func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : W
 	return MUW_World.new(transformer, tiles, waypoints)
 
 
-func create_2d(tilemap : TileMap) -> MUW_World:
-	var tile_data = _tile_data_2d()
+func create_2d(parent_node : Node, tilemap : TileMap) -> MUW_World:
+	var tile_data = _tile_data_2d(tilemap)
 	var transformer = MUW_Transformers_Screen_Tilemap.new(tilemap)
 	var tiles = MUW_Tiles_Factory.new(tile_data).create_2d(tilemap)
 	var waypoint_packed = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
 	var waypoints_packed = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
 	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_packed, waypoints_packed, transformer).create()
-
+	parent_node.add_child(waypoints)
 	return MUW_World.new(transformer, tiles, waypoints)
 
 
 #TODO this is temp, implement loading from file or something
-func _tile_data_3d():
+func _tile_data_3d() -> Dictionary:
 	
 	var tile_data = {}
 	var world_size = Vector2(10, 10)
@@ -57,11 +57,17 @@ func _tile_data_3d():
 	return tile_data
 
 
-func _tile_data_2d():
+func _tile_data_2d(tilemap : TileMap) -> Dictionary:
 
 	var tile_data = {}
+	var inpassable_tile_points = tilemap.get_used_cells_by_id(0)
 	var world_size = Vector2(10, 10)
+	
 	for x in range(world_size.x):
 		for y in range(world_size.y):
-			tile_data[Vector2(x, y)] = {"type" : MUW_Tiles_Processor_2d.FLAT}
+			tile_data[Vector2(x, y)] = {"type" : MUW_Tile_Types.FLAT}
+	
+	for inpassable_tile_point in inpassable_tile_points:
+		tile_data[inpassable_tile_point] = {"type" : MUW_Tile_Types.INPASSABLE}
+
 	return tile_data

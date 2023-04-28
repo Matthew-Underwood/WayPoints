@@ -12,7 +12,8 @@ func _init(screen_to_world_transformer, tiles : MUW_Tiles, waypoints):
 	
 func is_walkable(pos : Vector2) -> bool:
 	var world_pos = _screen_to_world_transformer.transform(pos)
-	if !_tiles.is_walkable(world_pos) or !_tiles.has_tile(world_pos):
+	print(world_pos)
+	if !_tiles.has_tile(world_pos) or !_tiles.is_walkable(world_pos):
 		return false
 	return true
 

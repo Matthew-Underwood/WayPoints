@@ -9,32 +9,13 @@ func _ready():
 	
 	#TODO create master factory
 	var tilemap = get_node("TileMap")
-	var world_size = Vector2(10, 10)
-	var tile_data = {}
-
-	for x in range(world_size.x):
-		for y in range(world_size.y):
-			tile_data[Vector2(x, y)] = {"type" : MUW_Tiles_Processor_2d.TILE_TYPE_FLAT}
-
-	var tiles_processor = MUW_Tiles_Processor_2d.new(tilemap)
-	var tiles_factory = MUW_Tiles_Factory.new(tiles_processor, tile_data)
-
-	_world = MUW_World_Factory.new(tiles_factory, world_size , tilemap.get_used_cells_by_id(0)).create_2d(tilemap)
-	var aStar = AStar.new()
-
-	var pathing_factory = MUP_Pathing_Factory.new(aStar, _world)
-	var pathing = pathing_factory.create()
-
-	_waypoints = MUW_Waypoints_Factory.new(pathing, _world).create_2d()
-	add_child(_waypoints)
-
+	_world = MUW_World_Factory.new().create_2d(self, tilemap)
+	_waypoints = _world.get_waypoints()
 	
 	
 func _unhandled_input(event):
 	
 	if Input.is_action_just_pressed("confirm_click"):
-		
-		  
 		var mouse_click = get_global_mouse_position()
 		
 		if !valid_click(mouse_click):

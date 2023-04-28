@@ -10,4 +10,4 @@ func transform(pos : Vector2) -> Vector2:
 	var result = _mesh_picking.pick(pos)
 	if !result.empty():
 		return Vector2(result["position"].x, result["position"].z).floor()
-	return Vector2.ZERO
+	return Vector2(-1, -1)
