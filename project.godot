@@ -610,6 +610,11 @@ _global_script_classes=[ {
 "path": "res://addons/world/src/mesh_picker.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Points",
+"language": "GDScript",
+"path": "res://addons/world/src/points.gd"
+}, {
+"base": "Reference",
 "class": "MUW_RayCast_Factory",
 "language": "GDScript",
 "path": "res://addons/world/src/raycast_factory.gd"
@@ -910,6 +915,7 @@ _global_script_class_icons={
 "MUP_Test_Pathing": "",
 "MUU_Utilities_Vector": "",
 "MUW_Mesh_Picker": "",
+"MUW_Points": "",
 "MUW_RayCast_Factory": "",
 "MUW_Test_World": "",
 "MUW_Tile_Types": "",

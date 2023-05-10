@@ -12,9 +12,9 @@ func create_2d(tilemap : TileMap) -> MUW_Tiles:
 	return _build_tiles(tile_processor)
 
 
-func create_3d(cast : Vector3, current_node : Node) -> MUW_Tiles:
+func create_3d(cast : Vector3, current_node : Node, points) -> MUW_Tiles:
 
-	var tile_processor = MUW_Tiles_Processor_Factory.new().create_3d(cast, current_node)
+	var tile_processor = MUW_Tiles_Processor_Factory.new().create_3d(cast, current_node, points)
 	return _build_tiles(tile_processor)
 	
 

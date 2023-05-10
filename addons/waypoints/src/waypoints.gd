@@ -8,7 +8,6 @@ var _origin = Vector2(0, 0)
 
 export (GDScript) var waypoint_override
 
-
 func set_waypoint_factory(waypoint_factory : MUW_Waypoint_Factory) -> void:
 	_waypoint_factory = waypoint_factory
 
@@ -107,5 +106,5 @@ func _resolve_position_from_id(id : int, absolute = false):
 	
 func _process_path(waypoint, start : Vector2, end : Vector2) -> void:
 
-	var path = _pathing.get_path(start, end)
-	waypoint.set_path(path)
+	var path_points = _pathing.get_path(start, end)
+	waypoint.set_path(path_points)

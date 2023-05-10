@@ -55,6 +55,7 @@ func _draw():
 			
 	
 func set_path(path : Array) -> void:
+
 	var last_element = path[path.size() - 1]
 	transform.origin = MUU_Utilities_Vector.vec3_vec2(last_element)
 	_path = []

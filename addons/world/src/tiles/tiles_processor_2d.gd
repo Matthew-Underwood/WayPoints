@@ -21,6 +21,4 @@ func create(world_pos : Vector2, tile_data : Dictionary) -> Dictionary:
 
 
 func _get_tile_center(world_pos : Vector2) -> Vector2:
-	var global_pos = _tilemap.map_to_world(world_pos)
-	return global_pos + (_tilemap.cell_size / 2)
-
+	return _tilemap.map_to_world(world_pos) + (_tilemap.cell_size / 2)

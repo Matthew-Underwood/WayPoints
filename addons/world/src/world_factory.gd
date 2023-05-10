@@ -6,15 +6,15 @@ var _tiles : MUW_Tiles
 
 func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : World) -> MUW_World:
 	var tile_data = _tile_data_3d()
-
+	var points = MUW_Points.new()
 	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
 
-	var tiles = MUW_Tiles_Factory.new(tile_data).create_3d(cast_to, parent_node)
+	var tiles = MUW_Tiles_Factory.new(tile_data).create_3d(cast_to, parent_node, points)
 	var waypoint_packed = preload("res://addons/waypoints/scenes/spatial/waypoint.tscn")
 	var waypoints_packed = preload("res://addons/waypoints/scenes/spatial/waypoints.tscn")
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints = MUW_Waypoints_Factory.new(pathing).create_3d(waypoints_packed, waypoint_packed, transformer)
+	var waypoints = MUW_Waypoints_Factory.new(pathing).create_3d(waypoints_packed, waypoint_packed, transformer, points)
 	parent_node.add_child(waypoints)
 	return MUW_World.new(transformer, tiles, waypoints)
 

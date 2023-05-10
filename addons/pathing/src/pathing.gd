@@ -97,9 +97,6 @@ func get_path(start_position : Vector2, end_position : Vector2) -> PoolVector3Ar
 
 	var start_index = _calculate_index(start_position + _offset)
 	var end_index = _calculate_index(end_position + _offset)
-	#TODO get rid of this? We should never have a case where has_point is false
-	#if !_aStar.has_point(start_index) or !_aStar.has_point(end_index):
-	#	return null
 	return _aStar.get_point_path(start_index, end_index)
 
 

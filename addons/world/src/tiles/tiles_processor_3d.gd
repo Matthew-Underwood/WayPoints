@@ -2,10 +2,12 @@ class_name MUW_Tiles_Processor_3d
 
 var _raycast : RayCast
 var _data : Dictionary
+var _points
 
 
-func _init(raycast : RayCast):
+func _init(raycast : RayCast, points):
 	_raycast = raycast
+	_points = points
 
 
 func create(world_pos : Vector2, tile_data : Dictionary) -> Dictionary:
@@ -39,12 +41,16 @@ func create(world_pos : Vector2, tile_data : Dictionary) -> Dictionary:
 
 
 func _add_position(pick_position : Vector3):
-	var picked_position = _pick_point(pick_position)
+	var picked_position = _pick_point_data(pick_position)
 	_data["world_positions"][Vector2(picked_position.x, picked_position.z)] = picked_position
 
 
-func _pick_point(raycast_pos : Vector3) -> Vector3:
+func _pick_point_data(raycast_pos : Vector3) -> Vector3:
 	_raycast.transform.origin = raycast_pos
 	_raycast.force_raycast_update()
-	return _raycast.get_collision_point()
+	var picked_point = _raycast.get_collision_point() 
+	if !_points.has_point(picked_point):
+		_points.add_point(picked_point, {"point" : picked_point, "normal" : _raycast.get_collision_normal()})
+	return picked_point
+
 
