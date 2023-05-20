@@ -34,19 +34,25 @@ func create_line(points : Array, point_resolver : MUW_Points):
 		transform.origin = src
 		rotate_object_local(y_axis, angle_radians_y)
 		if direction.y != 0:
+			var angle1
 			print(direction_y)
-			if direction.z != 0 and direction.z < 0:
-				var angle1 = Vector3(0, 0, -1).signed_angle_to(direction_y, -x_axis)
-				rotate_object_local(x_axis, angle1)
-			if direction.z != 0 and direction.z > 0:
-				var angle1 = Vector3(0, 0, 1).signed_angle_to(direction_y, x_axis)
-				rotate_object_local(x_axis, angle1)
-			if direction.x != 0 and direction.x < 0:
-				var angle2 = Vector3(-1,0,0).signed_angle_to(direction_y, z_axis)
-				rotate_object_local(x_axis, angle2)
-			if direction.x != 0 and direction.x > 0:
-				var angle2 = Vector3(1,0,0).signed_angle_to(direction_y, -z_axis)
-				rotate_object_local(x_axis, angle2)
+			if direction.z != 0 and direction.z > 0 and direction.x != 0 and direction.x > 0:
+				angle1 = Vector3(1, 0, 1).signed_angle_to(direction_y, Vector3(1, 0, -1))
+			elif direction.z != 0 and direction.z < 0 and direction.x != 0 and direction.x < 0:
+				angle1 = Vector3(-1, 0, -1).signed_angle_to(direction_y, Vector3(-1, 0, 1))
+			elif direction.z != 0 and direction.z < 0 and direction.x != 0 and direction.x > 0:
+				angle1 = Vector3(1, 0, -1).signed_angle_to(direction_y, Vector3(-1, 0, -1))
+			elif direction.z != 0 and direction.z > 0 and direction.x != 0 and direction.x < 0:
+				angle1 = Vector3(-1, 0, 1).signed_angle_to(direction_y, Vector3(1, 0, 1))
+			elif direction.z != 0 and direction.z < 0:
+				angle1 = Vector3(0, 0, -1).signed_angle_to(direction_y, -x_axis)
+			elif direction.z != 0 and direction.z > 0:
+				angle1 = Vector3(0, 0, 1).signed_angle_to(direction_y, x_axis)
+			elif direction.x != 0 and direction.x < 0:
+				angle1 = Vector3(-1,0,0).signed_angle_to(direction_y, z_axis)
+			elif direction.x != 0 and direction.x > 0:
+				angle1 = Vector3(1,0,0).signed_angle_to(direction_y, -z_axis)
+			rotate_object_local(x_axis, angle1)
 		for l in line_points:
 			global_line_points.append(to_global(l))	
 
