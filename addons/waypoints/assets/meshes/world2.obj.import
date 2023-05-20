@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/world2.obj-666a05ebb74d188d88367b90a1690902.mesh"
+
+[deps]
+
+files=[ "res://.import/world2.obj-666a05ebb74d188d88367b90a1690902.mesh" ]
+
+source_file="res://addons/waypoints/assets/meshes/world2.obj"
+dest_files=[ "res://.import/world2.obj-666a05ebb74d188d88367b90a1690902.mesh", "res://.import/world2.obj-666a05ebb74d188d88367b90a1690902.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286
