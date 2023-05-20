@@ -1,33 +1,35 @@
 class_name MUP_Pathing
 
 var _aStar : AStar
-var _world : MUP_World
-var _pathing_dimension
+var _offset : Vector2
+var _tiles : MUW_Tiles
 
-func _init(aStar : AStar, world : MUP_World, pathing_dimension):
+func _init(aStar : AStar, tiles : MUW_Tiles, offset : Vector2):
 	_aStar = aStar
-	_world = world
-	_pathing_dimension = pathing_dimension
+	_offset = offset
+	_tiles = tiles
 
 
 # Loops through all cells within the world's bounds and
 # adds all points to the _aStar, except the obstacles.
-func add_walkable_cells(obstacle_list = []) -> Array:
-	var points_array = []
-	for y in range(_world.get_size().y):
-		for x in range(_world.get_size().x):
-			var point = Vector2(x, y)
-			if point in obstacle_list:
-				continue
-			points_array.append(point)
-			# The AStar class references points with indices.
-			# Using a function to calculate the index from a point's coordinates
-			# ensures we always get the same index with the same input point.
-			var point_index = _calculate_index(point)
-			# AStar works for both 2d and 3d, so we have to convert the point
-			# coordinates from and to Vector3s.
-			_aStar.add_point(point_index, _pathing_dimension.point_to_position(point))
-	return points_array
+func add_walkable_cells() -> Array:
+	var tile_positions = []
+	var tiles = _tiles.get_all()
+	for tile_pos in tiles:
+		if !_tiles.is_walkable(tile_pos):
+			continue
+		tile_positions.append(tile_pos)
+		# The AStar class references points with indices.
+		# Using a function to calculate the index from a point's coordinates
+		# ensures we always get the same index with the same input point.
+		# AStar works for both 2d and 3d, so we have to convert the point
+		# coordinates from and to Vector3s.
+		for tile_world_position in tiles[tile_pos]["world_positions"]:
+			var point_index = _calculate_index(tile_world_position)
+			if !_aStar.has_point(point_index):
+				var pathing_position = tiles[tile_pos]["world_positions"][tile_world_position]
+				_aStar.add_point(point_index, pathing_position)
+	return tile_positions
 
 
 func is_walkable(point : Vector2) -> bool:
@@ -54,7 +56,7 @@ func connect_walkable_cells(points_array : Array) -> void:
 		])
 		for relative in points_relative:
 			var relative_index = _calculate_index(relative)
-			if _world.is_out_of_bounds(relative):
+			if !_tiles.has_tile(relative):
 				continue
 			if not _aStar.has_point(relative_index):
 				continue
@@ -67,29 +69,36 @@ func connect_walkable_cells(points_array : Array) -> void:
 
 # This is a variation of the method above.
 # It connects cells horizontally, vertically AND diagonally.
-func connect_walkable_cells_diagonal(points_array : Array) -> void:
-	for point in points_array:
-		var point_index = _calculate_index(point)
+func connect_walkable_cells_diagonal(tile_positions : Array) -> void:
+
+	for tile_position in tile_positions:
+		tile_position = tile_position + _offset
 		for local_y in range(3):
 			for local_x in range(3):
-				var relative = Vector2(point.x + local_x - 1, point.y + local_y - 1)
-				var relative_index = _calculate_index(relative)
-				if relative == point or _world.is_out_of_bounds(relative):
+				var point_index = _calculate_index(tile_position)
+				var relative_position_offset = Vector2(local_x - 1, local_y - 1)
+				var relative_position = tile_position + relative_position_offset
+				var relative_point_index = _calculate_index(relative_position)
+
+				var local_relative_point_position = tile_position + (relative_position_offset / 2)
+				var local_relative_point_index = _calculate_index(local_relative_point_position)
+				
+				if relative_position == tile_position or !_tiles.has_tile(relative_position):
 					continue
-				if not _aStar.has_point(relative_index):
+				if !_aStar.has_point(relative_point_index):
 					continue
-				_aStar.connect_points(point_index, relative_index, false)
+				if _aStar.has_point(local_relative_point_index):
+					_aStar.connect_points(point_index, local_relative_point_index, false)
+					point_index = local_relative_point_index
+				_aStar.connect_points(point_index, relative_point_index, false)
 
 
-func get_path(start_position : Vector3, end_position : Vector3):
+func get_path(start_position : Vector2, end_position : Vector2) -> PoolVector3Array:
 
-
-	var start_index = _calculate_index(_pathing_dimension.position_to_point(start_position))
-	var end_index = _calculate_index(_pathing_dimension.position_to_point(end_position))
-	if !_aStar.has_point(start_index) or !_aStar.has_point(end_index):
-		return null
+	var start_index = _calculate_index(start_position + _offset)
+	var end_index = _calculate_index(end_position + _offset)
 	return _aStar.get_point_path(start_index, end_index)
 
 
 func _calculate_index(point : Vector2) -> float:
-	return point.x * _world.get_size().x + point.y
+	return point.x * pow(8, 2) + point.y * pow(128, 2)

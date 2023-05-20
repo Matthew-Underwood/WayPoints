@@ -1,40 +1,28 @@
 extends Spatial
 
-var _waypoints : Spatial
 var _waypoint_id
-var _world : MUP_World
+var _world : MUW_World
+var _waypoints : Spatial
 var _viewport : Viewport
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_viewport = get_viewport()
-	#TODO create master factory
-	var world = get_world()
-	_world = MUP_World_Factory.new(Vector2(10, 10)).create_spatial(_viewport.get_camera(), world)
-	var aStar = AStar.new()
-	var pathing_dimension = MUP_DIMENSION_3D_PROCESSOR.new()
-	var waypoint_transformer_factory = MUW_Waypoint_Transformer_Factory.new()
-	var pathing_factory = MUP_Pathing_Factory.new(aStar, pathing_dimension)
-	var pathing = pathing_factory.create(_world)
-	_waypoints = (MUW_Waypoints_Factory.new(pathing, _world, waypoint_transformer_factory, self)).create_spatial()
-
+	_world = MUW_World_Factory.new().create_3d(Vector3(0, -10, 0), self, _viewport.get_camera(), get_world())
+	_waypoints = _world.get_waypoints()
 	
 	
 func _unhandled_input(event):
 
-	
-
 	if Input.is_action_just_pressed("confirm_click"):
 		
-		  
 		var mouse_click = _viewport.get_mouse_position()
-		
 		if !valid_click(mouse_click):
 			return
 		
 		_waypoint_id = _waypoints.get_waypoint_id_from_pos(mouse_click)
-			
 		if _waypoint_id == null:
+
 			_waypoints.create_waypoint(mouse_click)
 			return
 			

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/waypoints/assets/sprites/obstacle.png" type="Texture" id=2]
+
+[node name="Spatial2" type="Spatial"]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform( 1.8, 0, 0, 0, 1, 0, 0, 0, 1.8, 0, 0.01, 0 )
+modulate = Color( 0, 0, 0, 1 )
+pixel_size = 0.001
+axis = 1
+render_priority = 1
+texture = ExtResource( 2 )
