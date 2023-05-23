@@ -35,7 +35,6 @@ func create_line(points : Array, point_resolver : MUW_Points):
 		rotate_object_local(y_axis, angle_radians_y)
 		if direction.y != 0:
 			var angle1
-			print(direction_y)
 			if direction.z != 0 and direction.z > 0 and direction.x != 0 and direction.x > 0:
 				angle1 = Vector3(1, 0, 1).signed_angle_to(direction_y, Vector3(1, 0, -1))
 			elif direction.z != 0 and direction.z < 0 and direction.x != 0 and direction.x < 0:
