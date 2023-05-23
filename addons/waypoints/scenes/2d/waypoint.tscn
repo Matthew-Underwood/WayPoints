@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/waypoints/src/waypoint/sprite.gd" type="Script" id=1]
-[ext_resource path="res://addons/waypoints/assets/sprites/path_end.png" type="Texture" id=2]
-[ext_resource path="res://addons/waypoints/assets/sprites/path_selected.png" type="Texture" id=3]
-[ext_resource path="res://addons/waypoints/assets/sprites/path_confirm.png" type="Texture" id=4]
+[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/path_end.png" type="Texture" id=2]
+[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/path_selected.png" type="Texture" id=3]
+[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/path_confirm.png" type="Texture" id=4]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {

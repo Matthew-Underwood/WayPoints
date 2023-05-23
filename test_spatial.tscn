@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://test_spatial.gd" type="Script" id=1]
+[ext_resource path="res://addons/waypoints/scenes/3d/obstacle.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Spatial.gd" type="Script" id=3]
 [ext_resource path="res://addons/waypoints/assets/meshes/world.obj" type="ArrayMesh" id=4]
 
@@ -37,3 +38,15 @@ material/0 = SubResource( 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="MeshInstance/StaticBody"]
 shape = SubResource( 2 )
+
+[node name="Obstacle" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.650851, 4.5 )
+
+[node name="Obstacle2" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.650851, 5.51227 )
+
+[node name="Obstacle3" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.650851, 6.4789 )
+
+[node name="Obstacle4" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.650851, 3.53132 )
