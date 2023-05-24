@@ -614,11 +614,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/world/src/points.gd"
 }, {
-"base": "Reference",
-"class": "MUW_RayCast_Factory",
-"language": "GDScript",
-"path": "res://addons/world/src/raycast_factory.gd"
-}, {
 "base": "GdUnitTestSuite",
 "class": "MUW_Test_World",
 "language": "GDScript",
@@ -916,7 +911,6 @@ _global_script_class_icons={
 "MUU_Utilities_Vector": "",
 "MUW_Mesh_Picker": "",
 "MUW_Points": "",
-"MUW_RayCast_Factory": "",
 "MUW_Test_World": "",
 "MUW_Tile_Types": "",
 "MUW_Tiles": "",
@@ -957,7 +951,7 @@ _global_script_class_icons={
 [application]
 
 config/name="WayPoints"
-run/main_scene="res://test_2d.tscn"
+run/main_scene="res://addons/waypoints/scenes/2d/2d_example.tscn"
 
 [editor_plugins]
 
