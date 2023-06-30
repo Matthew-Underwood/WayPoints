@@ -42,6 +42,7 @@ func _tile_data_3d() -> Dictionary:
 		Vector2(3, 7), Vector2(4, 7), Vector2(5, 7), Vector2(6, 7), 
 		Vector2(7, 3), Vector2(7, 4), Vector2(7, 5), Vector2(7, 6)
 	]
+
 	for x in range(world_size.x):
 		for y in range(world_size.y):
 			tile_data[Vector2(x, y)] = {"type" : MUW_Tile_Types.FLAT}
@@ -53,6 +54,11 @@ func _tile_data_3d() -> Dictionary:
 
 	for slope_vector in slope_vectors:
 		tile_data[slope_vector] = {"type" : MUW_Tile_Types.SLOPE}
+
+	# Obstacles
+	#tile_data[Vector2(4, 4)] = {"type" : MUW_Tile_Types.INPASSABLE}
+	#tile_data[Vector2(5, 4)] = {"type" : MUW_Tile_Types.INPASSABLE}
+	#tile_data[Vector2(6, 4)] = {"type" : MUW_Tile_Types.INPASSABLE}
 
 	return tile_data
 
