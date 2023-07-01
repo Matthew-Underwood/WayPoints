@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://addons/waypoints/assets/sprites/obstacle.png" type="Texture" id=2]
+[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/waypoint.png" type="Texture" id=2]
 
 [node name="Spatial2" type="Spatial"]
 

@@ -11,8 +11,8 @@ func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : W
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
 
 	var tiles = MUW_Tiles_Factory.new(tile_data).create_3d(cast_to, parent_node, points)
-	var waypoint_packed = preload("res://addons/waypoints/scenes/spatial/waypoint.tscn")
-	var waypoints_packed = preload("res://addons/waypoints/scenes/spatial/waypoints.tscn")
+	var waypoint_packed = preload("res://addons/waypoints/scenes/3d/waypoint.tscn")
+	var waypoints_packed = preload("res://addons/waypoints/scenes/3d/waypoints.tscn")
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
 	var waypoints = MUW_Waypoints_Factory.new(pathing).create_3d(waypoints_packed, waypoint_packed, transformer, points)
 	parent_node.add_child(waypoints)
@@ -35,6 +35,7 @@ func create_2d(parent_node : Node, tilemap : TileMap) -> MUW_World:
 func _tile_data_3d() -> Dictionary:
 	
 	var tile_data = {}
+	var inpassable_tile_points = [Vector2(4, 3), Vector2(4, 4), Vector2(4, 5), Vector2(4, 6)]
 	var world_size = Vector2(10, 10)
 	var slope_vectors = [
 		Vector2(3, 2), Vector2(4, 2), Vector2(5, 2), Vector2(6, 2),
@@ -56,9 +57,10 @@ func _tile_data_3d() -> Dictionary:
 		tile_data[slope_vector] = {"type" : MUW_Tile_Types.SLOPE}
 
 	# Obstacles
-	#tile_data[Vector2(4, 4)] = {"type" : MUW_Tile_Types.INPASSABLE}
-	#tile_data[Vector2(5, 4)] = {"type" : MUW_Tile_Types.INPASSABLE}
-	#tile_data[Vector2(6, 4)] = {"type" : MUW_Tile_Types.INPASSABLE}
+	tile_data[Vector2(4, 3)] = {"type" : MUW_Tile_Types.INPASSABLE}
+	tile_data[Vector2(4, 4)] = {"type" : MUW_Tile_Types.INPASSABLE}
+	tile_data[Vector2(4, 5)] = {"type" : MUW_Tile_Types.INPASSABLE}
+	tile_data[Vector2(4, 6)] = {"type" : MUW_Tile_Types.INPASSABLE}
 
 	return tile_data
 

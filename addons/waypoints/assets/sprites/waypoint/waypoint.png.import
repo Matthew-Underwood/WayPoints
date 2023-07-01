@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/obstacle.png-4fde04dd6934dd1ca4b2c359efb37fd9.s3tc.stex"
-path.etc2="res://.import/obstacle.png-4fde04dd6934dd1ca4b2c359efb37fd9.etc2.stex"
+path.s3tc="res://.import/waypoint.png-a2d8482a917b526e25dc4a8a7f327801.s3tc.stex"
+path.etc2="res://.import/waypoint.png-a2d8482a917b526e25dc4a8a7f327801.etc2.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc2" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/waypoints/assets/sprites/obstacle.png"
-dest_files=[ "res://.import/obstacle.png-4fde04dd6934dd1ca4b2c359efb37fd9.s3tc.stex", "res://.import/obstacle.png-4fde04dd6934dd1ca4b2c359efb37fd9.etc2.stex" ]
+source_file="res://addons/waypoints/assets/sprites/waypoint/waypoint.png"
+dest_files=[ "res://.import/waypoint.png-a2d8482a917b526e25dc4a8a7f327801.s3tc.stex", "res://.import/waypoint.png-a2d8482a917b526e25dc4a8a7f327801.etc2.stex" ]
 
 [params]
 

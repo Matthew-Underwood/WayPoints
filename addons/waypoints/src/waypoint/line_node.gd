@@ -10,7 +10,7 @@ func create_line(points : Array, point_resolver : MUW_Points):
 	var y_axis = transform.basis.y
 	var x_axis = transform.basis.x
 	var global_line_points = PoolVector3Array()
-	var y_offset = 0.04
+	var y_offset = 0.01
 
 	for p in range(1, len(points)):
 		var src = point_resolver.get_point(points[p - 1])["point"] - org
@@ -63,5 +63,5 @@ func create_line(points : Array, point_resolver : MUW_Points):
 	arrays[ArrayMesh.ARRAY_VERTEX] = global_line_points
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	mesh = array_mesh
-	var line_material = load("res://line.tres")
+	var line_material = load("res://addons/waypoints/assets/materials/line.tres")
 	set_surface_material(0, line_material)
