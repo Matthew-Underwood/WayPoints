@@ -27,6 +27,7 @@ func set_meta_data(meta_data : Dictionary):
 
 
 func set_path(path : Array) -> void:
-	yield(self, "ready")
+	if get_parent() == null:
+		yield(self, "ready")
 	transform.origin = path[len(path) - 1]
 	$Line.create_line(path, _points)
