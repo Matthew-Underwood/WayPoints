@@ -10,6 +10,7 @@ var _points : MUW_Points
 func set_points(points : MUW_Points):
 	_points = points
 
+
 func get_world_position() -> Vector2:
 	return _world_position
 

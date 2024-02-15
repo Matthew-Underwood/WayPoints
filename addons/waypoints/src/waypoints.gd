@@ -1,4 +1,4 @@
-extends Node
+class_name MUW_WayPoints
 
 var _waypoint_factory : MUW_Waypoint_Factory
 var _pathing : MUP_Pathing
@@ -6,23 +6,21 @@ var _transformer
 var _waypoints = []
 var _origin = Vector2(0, 0)
 
-export (GDScript) var waypoint_override
 
-func set_waypoint_factory(waypoint_factory : MUW_Waypoint_Factory) -> void:
+func _init(waypoint_factory : MUW_Waypoint_Factory, pathing : MUP_Pathing, transformer):
 	_waypoint_factory = waypoint_factory
+	_pathing = pathing
+	_transformer = transformer
 
 
 func create_waypoint(pos : Vector2) -> void:
-	var waypoint = _waypoint_factory.create(waypoint_override)
 
 	var world_start = _resolve_position_from_id(-1)
 	var world_end = _transformer.transform(pos)
-	waypoint.set_world_position(world_end)
-	_process_path(waypoint, world_start, world_end)
-	
-	waypoint.set_id(str(_waypoints.size() + 1))
+	var path_points = _pathing.get_path(world_start, world_end)
+	var id = _waypoints.size() + 1
+	var waypoint = _waypoint_factory.create(id, path_points, world_end)
 	_waypoints.append(waypoint)
-	add_child(waypoint)
 
 
 func get_all() -> Array:
@@ -44,16 +42,18 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 	var next_id = id + 1
 	var world_start = _resolve_position_from_id(previous_id, true)
 	var world_end = _transformer.transform(pos)
-	_waypoints[id].set_world_position(world_end)
-	_process_path(_waypoints[id], world_start, world_end)
+	var path_points = _pathing.get_path(world_start, world_end)
 
+	_waypoints[id].set_world_position(world_end)
+	_waypoints[id].set_points(path_points)
 	
 	var position_next_waypoint = _resolve_position_from_id(next_id , true)
 	
 	if position_next_waypoint != null:
 		world_start = _transformer.transform(pos)
 		world_end = position_next_waypoint
-		_process_path(_waypoints[next_id], world_start, world_end)
+		path_points = _pathing.get_path(world_start, world_end)
+		_waypoints[next_id].set_points(path_points)
 
 
 func remove_waypoint(id : int) -> void:
@@ -63,28 +63,16 @@ func remove_waypoint(id : int) -> void:
 	var end = _resolve_position_from_id(next_id , true)
 		
 	if end != null:
-		_process_path(_waypoints[next_id], start, end)
-	_waypoints[id].queue_free()
+		var points_path = _pathing.get_path(start, end)
+		_waypoints[next_id].set_points(points_path)
 	_waypoints.remove(id)
 
 	for update_id in range(id, _waypoints.size()):
-		_waypoints[update_id].set_id(str(update_id + 1))
+		_waypoints[update_id].set_id(update_id + 1)
 
 
 func empty() -> bool:
 	return _waypoints.empty()
-
-
-func set_origin(origin : Vector2):
-	_origin = origin
-
-
-func set_pathing(pathing : MUP_Pathing) -> void:
-	_pathing = pathing
-
-
-func set_transformer(transformer) -> void:
-	_transformer = transformer
 
 
 func _resolve_position_from_id(id : int, absolute = false):
@@ -102,9 +90,3 @@ func _resolve_position_from_id(id : int, absolute = false):
 			return null
 	
 	return _waypoints[id].get_world_position()
-	
-	
-func _process_path(waypoint, start : Vector2, end : Vector2) -> void:
-
-	var path_points = _pathing.get_path(start, end)
-	waypoint.set_path(path_points)
