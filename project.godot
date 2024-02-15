@@ -610,6 +610,11 @@ _global_script_classes=[ {
 "path": "res://addons/world/src/mesh_picker.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Multi_Node",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/multi_node.gd"
+}, {
+"base": "Reference",
 "class": "MUW_Points",
 "language": "GDScript",
 "path": "res://addons/world/src/points.gd"
@@ -668,6 +673,11 @@ _global_script_classes=[ {
 "class": "MUW_WayPoint_Line",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoint/line_node.gd"
+}, {
+"base": "Reference",
+"class": "MUW_WayPoint_Node_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint_node_factory.gd"
 }, {
 "base": "Reference",
 "class": "MUW_WayPoints",
@@ -920,6 +930,7 @@ _global_script_class_icons={
 "MUP_Test_Pathing": "",
 "MUU_Utilities_Vector": "",
 "MUW_Mesh_Picker": "",
+"MUW_Multi_Node": "",
 "MUW_Points": "",
 "MUW_Test_World": "",
 "MUW_Tile_Types": "",
@@ -932,6 +943,7 @@ _global_script_class_icons={
 "MUW_Transformers_Screen_Tilemap": "",
 "MUW_WayPoint": "",
 "MUW_WayPoint_Line": "",
+"MUW_WayPoint_Node_Factory": "",
 "MUW_WayPoints": "",
 "MUW_Waypoint_Factory": "",
 "MUW_Waypoint_Spatial": "",
@@ -963,7 +975,7 @@ _global_script_class_icons={
 [application]
 
 config/name="WayPoints"
-run/main_scene="res://test_2d.tscn"
+run/main_scene="res://addons/waypoints/scenes/2d/2d_example.tscn"
 
 [editor_plugins]
 

@@ -13,14 +13,13 @@ func _init(waypoint_factory : MUW_Waypoint_Factory, pathing : MUP_Pathing, trans
 	_transformer = transformer
 
 
-func create_waypoint(pos : Vector2) -> void:
+func create_waypoint(pos : Vector2) -> MUW_WayPoint: 
 
 	var world_start = _resolve_position_from_id(-1)
 	var world_end = _transformer.transform(pos)
 	var path_points = _pathing.get_path(world_start, world_end)
 	var id = _waypoints.size() + 1
-	var waypoint = _waypoint_factory.create(id, path_points, world_end)
-	_waypoints.append(waypoint)
+	return _waypoint_factory.create(id, path_points, world_end)
 
 
 func get_all() -> Array:
@@ -57,6 +56,7 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 
 
 func remove_waypoint(id : int) -> void:
+
 	var previous_id = id - 1
 	var next_id = id + 1
 	var start = _resolve_position_from_id(previous_id , true)
