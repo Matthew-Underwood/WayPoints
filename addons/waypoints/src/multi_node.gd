@@ -18,8 +18,8 @@ func create(pos : Vector2):
 
     var waypoint_id = self.get(pos)
     if waypoint_id == null:  
-        _waypoints.create_waypoint(pos)
-        _waypoint_nodes.append(_waypoint_node_factory.create())
+        var waypoint_data = _waypoints.create_waypoint(pos)
+        _waypoint_nodes.append(_waypoint_node_factory.create(waypoint_data))
 
 
 func get(pos):
@@ -28,7 +28,7 @@ func get(pos):
 
 func update(id, pos):
     var waypoint_id = self.get(pos)
-    if !_world.is_walkable(pos) || id != null:
+    if !_world.is_walkable(pos) || waypoint_id != null:
         return
     _waypoints.update_waypoints_from_pos(id, pos)
 

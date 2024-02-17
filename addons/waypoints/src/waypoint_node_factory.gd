@@ -12,12 +12,13 @@ func _init(waypoints_packed_scene : PackedScene, waypoint_packed_scene : PackedS
     _master_node = master_node
 
 
-func create() -> Node:
+func create(waypoint_data : MUW_WayPoint) -> Node:
     if !_master_node.has_node("WayPoints"):
         _waypoints = _waypoints_packed_scene.instance()
         _master_node.add_child(_waypoints)
     
     var waypoint = _waypoint_packed_scene.instance()
+    waypoint.set_points(waypoint_data.get_points())
     _waypoints.add_child(waypoint)
     return waypoint
 

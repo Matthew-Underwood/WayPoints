@@ -975,7 +975,7 @@ _global_script_class_icons={
 [application]
 
 config/name="WayPoints"
-run/main_scene="res://addons/waypoints/scenes/2d/2d_example.tscn"
+run/main_scene="res://test_2d.tscn"
 
 [editor_plugins]
 
