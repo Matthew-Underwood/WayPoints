@@ -695,6 +695,11 @@ _global_script_classes=[ {
 "path": "res://addons/waypoints/src/waypoint/sprite.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Waypoints",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoints.gd"
+}, {
+"base": "Reference",
 "class": "MUW_Waypoints_Factory",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/waypoints_factory.gd"
@@ -942,6 +947,7 @@ _global_script_class_icons={
 "MUW_Waypoint_Factory": "",
 "MUW_Waypoint_Spatial": "",
 "MUW_Waypoint_Sprite": "",
+"MUW_Waypoints": "",
 "MUW_Waypoints_Factory": "",
 "MUW_World": "",
 "MUW_World_Factory": "",

@@ -5,14 +5,22 @@ var _world_position : Vector2
 
 
 func _init(path : PoolVector3Array, world_position : Vector2):
-    _path = path
-    _world_position = world_position
+	_path = path
+	_world_position = world_position
 
 
 func get_path() -> PoolVector3Array:
-    return _path
+	return _path
 
 
 func get_world_position() -> Vector2:
-    return _world_position
+	return _world_position
+
+
+func set_path(path : PoolVector3Array):
+	_path = path
+
+
+func set_world_position(pos : Vector2):
+	_world_position = pos
 

@@ -2,7 +2,7 @@ extends Spatial
 
 var _waypoint_id
 var _world : MUW_World
-var _waypoints : Spatial
+var _waypoints : MUW_Waypoints
 var _viewport : Viewport
 
 # Called when the node enters the scene tree for the first time.

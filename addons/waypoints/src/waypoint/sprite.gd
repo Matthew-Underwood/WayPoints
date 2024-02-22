@@ -6,21 +6,27 @@ var _path = []
 var _world_position : Vector2
 var _previous_frame : int setget set_previous_frame
 var _meta_data : Dictionary
-
-func get_world_position() -> Vector2:
-	return _world_position
+var _waypoint_data : MUW_Waypoint_Data
 
 
-func set_world_position(world_pos : Vector2):
-	_world_position = world_pos
+func set_waypoint_data(waypoint_data : MUW_Waypoint_Data):
+	_waypoint_data = waypoint_data
+	_update_path()
+
+
+func _update_path():
+	var path = _waypoint_data.get_path()
+	var last_element = path[path.size() - 1]
+	transform.origin = MUU_Utilities_Vector.vec3_vec2(last_element)
+	_path = []
+	for item in path:
+		item = MUU_Utilities_Vector.vec3_vec2(item)
+		_path.append(item - transform.origin)
+	update()
 
 
 func set_id(id : String):
 	$Label.text = id
-
-
-func set_meta_data(meta_data : Dictionary):
-	_meta_data = meta_data
 
 
 func _input(event):
@@ -52,14 +58,3 @@ func _draw():
 			var end_world_position = _path[point]
 			draw_line(start_world_position, end_world_position, Color.green, 1, true)
 			draw_circle(end_world_position, 2, Color.green)
-			
-	
-func set_path(path : Array) -> void:
-
-	var last_element = path[path.size() - 1]
-	transform.origin = MUU_Utilities_Vector.vec3_vec2(last_element)
-	_path = []
-	for item in path:
-		item = MUU_Utilities_Vector.vec3_vec2(item)
-		_path.append(item - transform.origin)
-	update()

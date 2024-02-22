@@ -11,11 +11,15 @@ func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : W
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
 
 	var tiles = MUW_Tiles_Factory.new(tile_data).create_3d(cast_to, parent_node, points)
-	var waypoint_packed = preload("res://addons/waypoints/scenes/3d/waypoint.tscn")
 	var waypoints_packed = preload("res://addons/waypoints/scenes/3d/waypoints.tscn")
+	var waypoint_packed = preload("res://addons/waypoints/scenes/3d/waypoint.tscn")
+
+	var waypoint_data_factory = MUW_Waypoint_Data_Factory.new()
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints = MUW_Waypoints_Factory.new(pathing).create_3d(waypoints_packed, waypoint_packed, transformer, points)
-	parent_node.add_child(waypoints)
+	#TODO need to abstract MUW_Points so it can be used across 2D and 3D
+	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed, points)
+	var structure = MUW_Node_Structure.new(waypoint_factory)
+	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_data_factory, structure).create(transformer)
 	return MUW_World.new(transformer, tiles, waypoints)
 
 
@@ -25,9 +29,13 @@ func create_2d(parent_node : Node, tilemap : TileMap) -> MUW_World:
 	var tiles = MUW_Tiles_Factory.new(tile_data).create_2d(tilemap)
 	var waypoint_packed = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
 	var waypoints_packed = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
+
+	var waypoint_data_factory = MUW_Waypoint_Data_Factory.new()
+	#TODO need to abstract MUW_Points so it can be used across 2D and 3D
+	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed)
+	var structure = MUW_Node_Structure.new(waypoint_factory)
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints = MUW_Waypoints_Factory.new(pathing).create_2d(waypoints_packed, waypoint_packed, transformer)
-	parent_node.add_child(waypoints)
+	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_data_factory, structure).create(transformer)
 	return MUW_World.new(transformer, tiles, waypoints)
 
 

@@ -1,3 +1,4 @@
+class_name MUW_Waypoints
 
 var _pathing : MUP_Pathing
 var _transformer
@@ -6,14 +7,12 @@ var _origin = Vector2(0, 0)
 var _waypoint_data_factory : MUW_Waypoint_Data_Factory
 var _structure
 
-#TODO may get rid of this
-export (GDScript) var waypoint_override
 
-func _init(pathing : MUP_Pathing, transformer, structure, waypoint_data_factory : MUW_Waypoint_Data_Factory):
+func _init(pathing : MUP_Pathing, waypoint_data_factory : MUW_Waypoint_Data_Factory, transformer, structure):
 	_pathing = pathing
+	_waypoint_data_factory = waypoint_data_factory
 	_transformer = transformer
 	_structure = structure
-	_waypoint_data_factory = waypoint_data_factory
 
 
 func create_waypoint(pos : Vector2) -> void:
@@ -44,10 +43,11 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 	var world_end = _transformer.transform(pos)
 	var path_points = _pathing.get_path(world_start, world_end)
 
-	_waypoints[id].set_world_position(world_end)
-	_waypoints[id].set_path(path_points)
-	_structure.update(id, _waypoints[id])
-
+	var waypoint = _waypoints[id]
+	waypoint.set_world_position(world_end)
+	waypoint.set_path(path_points)
+	
+	_structure.update(id, waypoint)
 	
 	var position_next_waypoint = _resolve_position_from_id(next_id, true)
 	
@@ -55,8 +55,9 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 		world_start = _transformer.transform(pos)
 		world_end = position_next_waypoint
 		path_points = _pathing.get_path(world_start, world_end)
-		_waypoints[next_id].set_path(path_points)
-		_structure.update(next_id, _waypoints[next_id])
+		waypoint = _waypoints[next_id]
+		waypoint.set_path(path_points)
+		_structure.update(next_id, waypoint)
 
 
 func remove_waypoint(id : int) -> void:
@@ -67,8 +68,10 @@ func remove_waypoint(id : int) -> void:
 	var end = _resolve_position_from_id(next_id, true)
 		
 	if end != null:
+		var waypoint = _waypoints[next_id]
 		var path_points = _pathing.get_path(start, end)
-		_waypoints[next_id].set_path(path_points)
+		waypoint.set_path(path_points)
+		_structure.update(next_id, waypoint)
 
 	_structure.remove(id)
 	_waypoints.remove(id)
