@@ -1,0 +1,36 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode unshaded;
+
+float box(vec2 pos, vec2 size, vec2 offset, float angle) {
+	pos = pos + offset;
+	
+	mat2 rot = mat2(vec2(cos(angle), -sin(angle)), vec2(sin(angle), cos(angle)));
+	pos *= rot;
+	//rot = transpose(rot);
+	vec2 edge = vec2(0.5) - size * 0.5;
+    vec2 uv = smoothstep(edge, edge + vec2(0.001), pos);
+    uv *= smoothstep(edge, edge + vec2(0.001), vec2(1.0) - pos);
+    return uv.x * uv.y;
+}
+
+void fragment() {
+	
+	vec2 uv = UV;
+	float col = 0.0;
+	
+	col += box(uv, vec2(0.2, 0.5), vec2(0.0, 0.25), 0.5);
+	//col += box(uv, vec2(0.2, 0.5), vec2(0.0, -0.25));
+	//col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0.0));
+	//col += box(uv, vec2(0.5, 0.2), vec2(-0.25, 0.0));
+	
+	//col += box(uv, vec2(0.2, 0.5), vec2(0.0, 0.25));
+	//col += box(uv, vec2(0.2, 0.5), vec2(0.0, 0.25));
+	//col += box(uv, vec2(0.2, 0.5), vec2(0.0, 0.25));
+	//col += box(uv, vec2(0.2, 0.5), vec2(0.0, 0.25));
+	
+	ALBEDO = vec3(col);
+	
+}"
