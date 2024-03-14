@@ -13,7 +13,7 @@ vec2 rotate_space(vec2 uv, float angle) {
 	return uv;
 }
 
-float box(vec2 pos, vec2 size, vec2 offset, float angle) {
+float box(vec2 pos, vec2 size, vec2 offset) {
 	pos = pos + offset;
 	vec2 edge = vec2(0.5) - size * 0.5;
     vec2 uv = smoothstep(edge, edge + vec2(0.001), pos);
@@ -25,18 +25,51 @@ void fragment() {
 	
 	vec2 uv = UV;
 	float col = 0.0;
+	//TODO this is debugging, remove this
+	int id = 42;
+	const int ids[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 	
-	col += box(uv, vec2(0.2, 0.5), vec2(0, 0.25), 0);
-	col += box(uv, vec2(0.2, 0.5), vec2(0.0, -0.25), 0);
-	col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0.0), 0);
-	col += box(uv, vec2(0.5, 0.2), vec2(-0.25, 0.0), 0);
-	
-	uv = rotate_space(uv, 45);
-	
-	col += box(uv, vec2(0.2, 1.0), vec2(0, 0.25), 0);
-	col += box(uv, vec2(0.2, 1.0), vec2(0.0, -0.25), 0);
-	col += box(uv, vec2(1.0, 0.2), vec2(0.25, 0.0), 0);
-	col += box(uv, vec2(1.0, 0.2), vec2(-0.25, 0.0), 0);
+	for (int i = 0; i < ids.length(); i++) {
+		
+		if (id >= ids[i]) {
+			switch(ids[i]) {
+			    case 1:
+					col += box(uv, vec2(0.2, 0.5), vec2(0, 0.25));
+			        break;
+			    case 2:
+					uv = rotate_space(uv, 45);
+					col += box(uv, vec2(1.0, 0.2), vec2(-0.25, 0.0));
+					uv = rotate_space(uv, 135);
+					
+					break;
+			    case 4:
+					col += box(uv, vec2(0.5, 0.2), vec2(-0.25, 0.0));
+					break;
+			    case 8:
+					uv = rotate_space(uv, 45);
+					col += box(uv, vec2(0.2, 1.0), vec2(0.0, -0.25));
+					uv = rotate_space(uv, 135);
+			        break;
+				case 16:
+					col += box(uv, vec2(0.2, 0.5), vec2(0.0, -0.25));
+			        break;
+				case 32:
+					uv = rotate_space(uv, 45);
+					col += box(uv, vec2(1.0, 0.2), vec2(0.25, 0.0));
+					uv = rotate_space(uv, 135);
+					break;
+			    case 64:
+					col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0.0));
+					break;
+			    case 128:
+					uv = rotate_space(uv, 45);
+					col += box(uv, vec2(0.2, 1.0), vec2(0, 0.25));
+					uv = rotate_space(uv, 135);
+			        break;
+			}
+			id -= ids[i];
+		}
+	}
 		
 	ALBEDO = vec3(col);
 	

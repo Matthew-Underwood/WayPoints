@@ -1,0 +1,16 @@
+
+path system
+
+for each waypoint path node 
+
+traverse each point 
+
+get next point 
+
+work out direction between current and next
+
+assign id based on direction keyed by map position
+assign id to next point based on reverse direction keyed by map position
+
+add id to existing id if map position exists 
+
