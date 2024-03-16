@@ -600,6 +600,16 @@ _global_script_classes=[ {
 "path": "res://addons/pathing/test/pathing.gd"
 }, {
 "base": "Reference",
+"class": "MUT_Texture_Map",
+"language": "GDScript",
+"path": "res://addons/terrian/src/texture_map.gd"
+}, {
+"base": "Reference",
+"class": "MUT_Texture_Map_Factory",
+"language": "GDScript",
+"path": "res://addons/terrian/src/texture_map_factory.gd"
+}, {
+"base": "Reference",
 "class": "MUU_Utilities_Vector",
 "language": "GDScript",
 "path": "res://addons/utilities/src/vector.gd"
@@ -933,6 +943,8 @@ _global_script_class_icons={
 "MUP_Pathing": "",
 "MUP_Pathing_Factory": "",
 "MUP_Test_Pathing": "",
+"MUT_Texture_Map": "",
+"MUT_Texture_Map_Factory": "",
 "MUU_Utilities_Vector": "",
 "MUW_Mesh_Picker": "",
 "MUW_Node_Structure": "",
