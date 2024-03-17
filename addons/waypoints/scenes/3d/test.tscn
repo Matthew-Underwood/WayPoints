@@ -1,12 +1,19 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://addons/waypoints/assets/shaders/paths.tres" type="Shader" id=1]
+[ext_resource path="res://addons/waypoints/scenes/3d/scratch.gd" type="Script" id=2]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
+shader_param/map_size = Vector2( 0, 0 )
 
-[sub_resource type="QuadMesh" id=2]
-material = SubResource( 1 )
+[sub_resource type="PlaneMesh" id=2]
+size = Vector2( 10, 10 )
+subdivide_width = 9
+subdivide_depth = 9
+center_offset = Vector3( 5, 0, 5 )
 
 [node name="Spatial" type="MeshInstance"]
+material_override = SubResource( 1 )
 mesh = SubResource( 2 )
+script = ExtResource( 2 )

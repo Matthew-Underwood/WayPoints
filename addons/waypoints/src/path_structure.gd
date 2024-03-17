@@ -2,10 +2,11 @@ class_name MUW_Path_Structure
 
 var _waypoint_data: Array
 var _map: MUT_Texture_Map
+var _mask
 
-func _init(map : MUT_Texture_Map):
+func _init(map : MUT_Texture_Map, mask):
 	_map = map
-
+	_mask = mask
 
 func create(waypoint_data: MUW_Waypoint_Data):
 	_waypoint_data.append(waypoint_data)
@@ -30,12 +31,12 @@ func _set_path():
 		for waypoint_data in _waypoint_data:
 
 			var points = waypoint_data.get_path()
-			for id in range(points.size()):
+			for id in range(points.size() - 1):
 
 				var current_pos = points[id]
 				var next_pos = points[id + 1]
-				current_pos = Vector2(current_pos.x, current_pos.y)
-				next_pos = Vector2(next_pos.x, next_pos.y)
+				current_pos = Vector2(current_pos.x, current_pos.z)
+				next_pos = Vector2(next_pos.x, next_pos.z)
 				
 				var colour_id = self._get_id(current_pos, next_pos)
 				var colour_id2 = self._get_id(next_pos, current_pos)
@@ -52,20 +53,25 @@ func _set_path():
 		
 		for pos in all_points:
 			_map.update(pos, all_points[pos])
+		_mask.set_shader_param("map", _map.get_map())
 				
 
 
 func _get_id(pos_from : Vector2, pos_to : Vector2):
 
 	var directions = {
-			Vector2(0, 1) : 1,
-			Vector2(1, 1) : 2,
-			Vector2(1, 0) : 4,
-			Vector2(1, -1) : 8,
-			Vector2(0, -1) : 16,
-			Vector2(-1, -1) : 32,
-			Vector2(-1, 0) : 64,
-			Vector2(-1, 1): 128
+			0 : 1,
+			45 : 2,
+			90 : 4,
+			135 : 8,
+			-180 : 16,
+			-45 : 32,
+			-90 : 64,
+			-135 : 128
 	}
-	return directions[pos_from - pos_to]
+
+	var direction = pos_from.direction_to(pos_to)
+	var direction_deg = rad2deg(direction.angle_to(Vector2.UP)) as int
+
+	return directions[direction_deg]
 	

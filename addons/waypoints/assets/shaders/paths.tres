@@ -2,7 +2,10 @@
 
 [resource]
 code = "shader_type spatial;
-render_mode unshaded;
+render_mode unshaded, world_vertex_coords;
+
+uniform sampler2D map;
+uniform vec2 map_size;
 
 vec2 rotate_space(vec2 uv, float angle) {
 	angle = radians(angle);
@@ -23,10 +26,10 @@ float box(vec2 pos, vec2 size, vec2 offset) {
 
 void fragment() {
 	
-	vec2 uv = UV;
+	vec2 uv = fract(UV * map_size);
+	vec4 textuv = texture(map, uv);
+	int id = int(textuv.r) * 255;
 	float col = 0.0;
-	//TODO this is debugging, remove this
-	int id = 42;
 	const int ids[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 	
 	for (int i = 0; i < ids.length(); i++) {
@@ -40,7 +43,6 @@ void fragment() {
 					uv = rotate_space(uv, 45);
 					col += box(uv, vec2(1.0, 0.2), vec2(-0.25, 0.0));
 					uv = rotate_space(uv, 135);
-					
 					break;
 			    case 4:
 					col += box(uv, vec2(0.5, 0.2), vec2(-0.25, 0.0));

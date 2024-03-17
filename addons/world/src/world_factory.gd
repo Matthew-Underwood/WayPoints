@@ -2,6 +2,7 @@ class_name MUW_World_Factory
 
 var _unwalkable_points : Array
 var _tiles : MUW_Tiles
+var _world_size := Vector2(10, 10)
 
 
 func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : World) -> MUW_World:
@@ -18,7 +19,15 @@ func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : W
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
 	#TODO need to abstract MUW_Points so it can be used across 2D and 3D
 	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed, points)
-	var structure = MUW_Node_Structure.new(waypoint_factory)
+
+
+	#var structure = MUW_Node_Structure.new(waypoint_factory)
+	var roads = parent_node.find_node("RoadsMask")
+	var mask_shader = roads.get_active_material(0)
+	var texture_map = MUT_Texture_Map_Factory.new().create(_world_size)
+	mask_shader.set_shader_param("map_size", _world_size)
+	mask_shader.set_shader_param("map", texture_map.get_map())
+	var structure = MUW_Path_Structure.new(texture_map, mask_shader)
 	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_data_factory, structure).create(transformer)
 	return MUW_World.new(transformer, tiles, waypoints)
 
@@ -44,7 +53,6 @@ func _tile_data_3d() -> Dictionary:
 	
 	var tile_data = {}
 	var inpassable_tile_points = [Vector2(4, 3), Vector2(4, 4), Vector2(4, 5), Vector2(4, 6)]
-	var world_size = Vector2(10, 10)
 	var slope_vectors = [
 		Vector2(3, 2), Vector2(4, 2), Vector2(5, 2), Vector2(6, 2),
 		Vector2(2, 3), Vector2(2, 4), Vector2(2, 5), Vector2(2, 6), 
@@ -52,8 +60,8 @@ func _tile_data_3d() -> Dictionary:
 		Vector2(7, 3), Vector2(7, 4), Vector2(7, 5), Vector2(7, 6)
 	]
 
-	for x in range(world_size.x):
-		for y in range(world_size.y):
+	for x in range(_world_size.x):
+		for y in range(_world_size.y):
 			tile_data[Vector2(x, y)] = {"type" : MUW_Tile_Types.FLAT}
 
 	tile_data[Vector2(2, 2)] = {"type" : MUW_Tile_Types.CORNER}
@@ -77,10 +85,9 @@ func _tile_data_2d(tilemap : TileMap) -> Dictionary:
 
 	var tile_data = {}
 	var inpassable_tile_points = tilemap.get_used_cells_by_id(0)
-	var world_size = Vector2(10, 10)
 	
-	for x in range(world_size.x):
-		for y in range(world_size.y):
+	for x in range(_world_size.x):
+		for y in range(_world_size.y):
 			tile_data[Vector2(x, y)] = {"type" : MUW_Tile_Types.FLAT}
 	
 	for inpassable_tile_point in inpassable_tile_points:

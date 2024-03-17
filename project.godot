@@ -627,7 +627,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "MUW_Path_Structure",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/test.gd"
+"path": "res://addons/waypoints/src/path_structure.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Points",
