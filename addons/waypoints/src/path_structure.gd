@@ -35,8 +35,6 @@ func _set_path():
 
 				var current_pos = points[id]
 				var next_pos = points[id + 1]
-				current_pos = Vector2(current_pos.x, current_pos.z)
-				next_pos = Vector2(next_pos.x, next_pos.z)
 				
 				var colour_id = self._get_id(current_pos, next_pos)
 				var colour_id2 = self._get_id(next_pos, current_pos)
@@ -57,21 +55,20 @@ func _set_path():
 				
 
 
-func _get_id(pos_from : Vector2, pos_to : Vector2):
+func _get_id(pos_from : Vector3, pos_to : Vector3):
 
+	var direction = pos_from - pos_to
+	direction = Vector2(direction.x, direction.z)
 	var directions = {
-			0 : 1,
-			45 : 2,
-			90 : 4,
-			135 : 8,
-			-180 : 16,
-			-45 : 32,
-			-90 : 64,
-			-135 : 128
+			Vector2(0.5, 0) : 1,
+			Vector2(0.5, 0.5) : 2,
+			Vector2(0, 0.5) : 4,
+			Vector2(-0.5, -0.5) : 8,
+			Vector2(0, -0.5) : 16,
+			Vector2(-0.5, -0.5) : 32,
+			Vector2(-0.5, 0) : 64,
+			Vector2(-0.5, 0.5) : 128
 	}
 
-	var direction = pos_from.direction_to(pos_to)
-	var direction_deg = rad2deg(direction.angle_to(Vector2.UP)) as int
-
-	return directions[direction_deg]
+	return directions[direction]
 	
