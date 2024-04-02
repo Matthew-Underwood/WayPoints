@@ -2,6 +2,7 @@ class_name MUW_Path_Structure
 
 var _waypoint_data: Array
 var _map: MUT_Texture_Map
+var _directions : Dictionary
 var _mask
 
 func _init(map : MUT_Texture_Map, mask):
@@ -25,50 +26,47 @@ func remove(id: int):
 
 func _set_path():
 	
-	var all_points = {}
+	_directions = {}
+
 	if !_waypoint_data.empty():
-
 		for waypoint_data in _waypoint_data:
-
 			var points = waypoint_data.get_path()
 			for id in range(points.size() - 1):
 
 				var current_pos = points[id]
 				var next_pos = points[id + 1]
-				
-				var colour_id = self._get_id(current_pos, next_pos)
-				var colour_id2 = self._get_id(next_pos, current_pos)
-
-				if all_points.has(next_pos):
-					all_points[next_pos] = colour_id2 + all_points[next_pos]
-				else:
-					all_points[next_pos] = colour_id2
-				
-				if all_points.has(current_pos):
-					all_points[current_pos] = colour_id + all_points[current_pos]
-				else:
-					all_points[current_pos] = colour_id
+				_set_directions(current_pos, next_pos)
+				_set_directions(next_pos, current_pos)
 		
-		for pos in all_points:
-			_map.update(pos, all_points[pos])
+		for direction in _directions:
+			var total = 0
+			for key in _directions[direction]:
+				total += _directions[direction][key]
+			_map.update(direction, total)
 		_mask.set_shader_param("map", _map.get_map())
 				
 
 
-func _get_id(pos_from : Vector3, pos_to : Vector3):
+func _set_directions(pos : Vector3, next_pos : Vector3):
 
-	var direction = pos_from - pos_to
-	direction = Vector2(direction.x, direction.z)
+	var direction = pos - next_pos
+	var pos_id = Vector2(pos.x, pos.z)
+	var angle = Vector3(0, 0, 1).signed_angle_to(direction, Vector3(0, 1, 0))
+	var id = str(angle).sha1_text().left(4)
+	# print("Direction : " + str(direction))
+	# print("Radians : " + str(angle))
+	# print("SHA1 : " + str(id))
 	var directions = {
-			Vector2(0.5, 0) : 1,
-			Vector2(0.5, 0.5) : 2,
-			Vector2(0, 0.5) : 4,
-			Vector2(-0.5, -0.5) : 8,
-			Vector2(0, -0.5) : 16,
-			Vector2(-0.5, -0.5) : 32,
-			Vector2(-0.5, 0) : 64,
-			Vector2(-0.5, 0.5) : 128
+		"9912" : 1,
+		"dffa" : 2,
+		"6be4" : 4,
+		"b658" : 8,
+		"47e2" : 16,
+		"4ffb" : 32,
+		"340d" : 64,
+		"4786" : 128
 	}
 
-	return directions[direction]
-	
+	if !_directions.has(pos_id):
+		_directions[pos_id] = {}
+	_directions[pos_id][id] = directions[id]

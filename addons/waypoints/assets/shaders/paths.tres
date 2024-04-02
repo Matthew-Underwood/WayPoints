@@ -26,28 +26,30 @@ float box(vec2 pos, vec2 size, vec2 offset) {
 
 void fragment() {
 	
-	vec2 uv = fract(UV * map_size);
-	vec4 textuv = texture(map, uv);
-	int id = int(textuv.r) * 255;
+	vec2 a_uv = UV * map_size;
+	vec2 uv = fract(a_uv);
+	vec2 fluv = (floor(a_uv) / map_size) + (1.0 / map_size * 0.5);
+	vec4 textuv = texture(map, fluv);
+	int id = int(textuv.r * 255.0);
 	float col = 0.0;
 	const int ids[8] = {128, 64, 32, 16, 8, 4, 2, 1};
-	
+
 	for (int i = 0; i < ids.length(); i++) {
-		
+
 		if (id >= ids[i]) {
 			switch(ids[i]) {
-			    case 1:
+			    case 8:
 					col += box(uv, vec2(0.2, 0.5), vec2(0, 0.25));
 			        break;
-			    case 2:
+			    case 32:
 					uv = rotate_space(uv, 45);
 					col += box(uv, vec2(1.0, 0.2), vec2(-0.25, 0.0));
 					uv = rotate_space(uv, 135);
 					break;
-			    case 4:
+			    case 64:
 					col += box(uv, vec2(0.5, 0.2), vec2(-0.25, 0.0));
 					break;
-			    case 8:
+			    case 128:
 					uv = rotate_space(uv, 45);
 					col += box(uv, vec2(0.2, 1.0), vec2(0.0, -0.25));
 					uv = rotate_space(uv, 135);
@@ -55,15 +57,15 @@ void fragment() {
 				case 16:
 					col += box(uv, vec2(0.2, 0.5), vec2(0.0, -0.25));
 			        break;
-				case 32:
+				case 4:
 					uv = rotate_space(uv, 45);
 					col += box(uv, vec2(1.0, 0.2), vec2(0.25, 0.0));
 					uv = rotate_space(uv, 135);
 					break;
-			    case 64:
+			    case 2:
 					col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0.0));
 					break;
-			    case 128:
+			    case 1:
 					uv = rotate_space(uv, 45);
 					col += box(uv, vec2(0.2, 1.0), vec2(0, 0.25));
 					uv = rotate_space(uv, 135);
@@ -72,7 +74,7 @@ void fragment() {
 			id -= ids[i];
 		}
 	}
-		
+
 	ALBEDO = vec3(col);
 	
 }"
