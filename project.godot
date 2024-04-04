@@ -622,12 +622,17 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "MUW_Node_Structure",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/node_structure.gd"
+"path": "res://addons/waypoints/src/structure/node_structure.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Node_Waypoints_Operations",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/operations/node_waypoint_operations.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Path_Structure",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/path_structure.gd"
+"path": "res://addons/waypoints/src/structure/path_structure.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Points",
@@ -722,7 +727,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "MUW_Waypoints_Operations",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/waypoints_operations.gd"
+"path": "res://addons/waypoints/src/operations/waypoints_operations.gd"
 }, {
 "base": "Reference",
 "class": "MUW_World",
@@ -953,6 +958,7 @@ _global_script_class_icons={
 "MUU_Utilities_Vector": "",
 "MUW_Mesh_Picker": "",
 "MUW_Node_Structure": "",
+"MUW_Node_Waypoints_Operations": "",
 "MUW_Path_Structure": "",
 "MUW_Points": "",
 "MUW_Test_World": "",

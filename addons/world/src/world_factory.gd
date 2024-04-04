@@ -54,26 +54,25 @@ func _tile_data_3d() -> Dictionary:
 	
 	var tile_data = {}
 	var inpassable_tile_points = [Vector2(4, 3), Vector2(4, 4), Vector2(4, 5), Vector2(4, 6)]
-	# var slope_vectors = [
-	# 	Vector2(3, 2), Vector2(4, 2), Vector2(5, 2), Vector2(6, 2),
-	# 	Vector2(2, 3), Vector2(2, 4), Vector2(2, 5), Vector2(2, 6), 
-	# 	Vector2(3, 7), Vector2(4, 7), Vector2(5, 7), Vector2(6, 7), 
-	# 	Vector2(7, 3), Vector2(7, 4), Vector2(7, 5), Vector2(7, 6)
-	# ]
+	var slope_vectors = [
+		Vector2(3, 2), Vector2(4, 2), Vector2(5, 2), Vector2(6, 2),
+		Vector2(2, 3), Vector2(2, 4), Vector2(2, 5), Vector2(2, 6), 
+		Vector2(3, 7), Vector2(4, 7), Vector2(5, 7), Vector2(6, 7), 
+		Vector2(7, 3), Vector2(7, 4), Vector2(7, 5), Vector2(7, 6)
+	]
 
 	for x in range(_world_size.x):
 		for y in range(_world_size.y):
 			tile_data[Vector2(x, y)] = {"type" : MUW_Tile_Types.FLAT}
 
-	# tile_data[Vector2(2, 2)] = {"type" : MUW_Tile_Types.CORNER}
-	# tile_data[Vector2(7, 7)] = {"type" : MUW_Tile_Types.CORNER}
-	# tile_data[Vector2(7, 2)] = {"type" : MUW_Tile_Types.CORNER}
-	# tile_data[Vector2(2, 7)] = {"type" : MUW_Tile_Types.CORNER}
+	tile_data[Vector2(2, 2)] = {"type" : MUW_Tile_Types.CORNER}
+	tile_data[Vector2(7, 7)] = {"type" : MUW_Tile_Types.CORNER}
+	tile_data[Vector2(7, 2)] = {"type" : MUW_Tile_Types.CORNER}
+	tile_data[Vector2(2, 7)] = {"type" : MUW_Tile_Types.CORNER}
 
-	# for slope_vector in slope_vectors:
-	# 	tile_data[slope_vector] = {"type" : MUW_Tile_Types.SLOPE}
+	for slope_vector in slope_vectors:
+		tile_data[slope_vector] = {"type" : MUW_Tile_Types.SLOPE}
 
-	# Obstacles
 	# tile_data[Vector2(4, 3)] = {"type" : MUW_Tile_Types.INPASSABLE}
 	# tile_data[Vector2(4, 4)] = {"type" : MUW_Tile_Types.INPASSABLE}
 	# tile_data[Vector2(4, 5)] = {"type" : MUW_Tile_Types.INPASSABLE}

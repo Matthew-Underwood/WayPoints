@@ -49,13 +49,13 @@ func _set_path():
 
 func _set_directions(pos : Vector3, next_pos : Vector3):
 
-	var direction = pos - next_pos
+	var direction = Vector3(pos.x - next_pos.x, 0, pos.z - next_pos.z)
 	var pos_id = Vector2(pos.x, pos.z)
 	var angle = Vector3(0, 0, 1).signed_angle_to(direction, Vector3(0, 1, 0))
 	var id = str(angle).sha1_text().left(4)
-	# print("Direction : " + str(direction))
-	# print("Radians : " + str(angle))
-	# print("SHA1 : " + str(id))
+	print("Direction : " + str(direction))
+	print("Radians : " + str(angle))
+	print("SHA1 : " + str(id))
 	var directions = {
 		"9912" : 1,
 		"dffa" : 2,
