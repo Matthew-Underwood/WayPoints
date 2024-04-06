@@ -5,48 +5,21 @@ var _tiles : MUW_Tiles
 var _world_size := Vector2(10, 10)
 
 
-func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : World) -> MUW_World:
-	var tile_data = _tile_data_3d()
+func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : World) -> MUW_World_3d:
+	var waypoint_data_factory = MUW_Waypoint_Data_Factory.new()
 	var points = MUW_Points.new()
-	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
-	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
-
-	var tiles = MUW_Tiles_Factory.new(tile_data).create_3d(cast_to, parent_node, points)
-	var waypoints_packed = preload("res://addons/waypoints/scenes/3d/waypoints.tscn")
-	var waypoint_packed = preload("res://addons/waypoints/scenes/3d/waypoint.tscn")
-
-	var waypoint_data_factory = MUW_Waypoint_Data_Factory.new()
+	var tiles = MUW_Tiles_Factory.new(_tile_data_3d(), points).create_3d(cast_to, parent_node)
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	#TODO need to abstract MUW_Points so it can be used across 2D and 3D
-	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed, points)
+	var waypoints_factory = MUW_Waypoints_Factory.new(pathing, waypoint_data_factory, points)
+	var mesh_picker = MUW_Mesh_Picker.new(camera, world)
+	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picker)
 
+	var map_world = MUW_World.new(transformer, tiles)
+	var waypoint_node_operations_factory = MUW_Node_Waypoints_Operations_Factory.new(waypoints_factory, map_world)
+	var waypoint_operations_factory = MUW_Waypoints_Operations_Factory.new(waypoints_factory, map_world)
+	return MUW_World_3d.new(waypoint_operations_factory, waypoint_node_operations_factory)
 
-	#var structure = MUW_Node_Structure.new(waypoint_factory)
-	var roads = parent_node.find_node("RoadsMask")
-	var mask_shader = roads.get_active_material(0)
-
-	var texture_map = MUT_Texture_Map_Factory.new().create(_world_size)
-	mask_shader.set_shader_param("map_size", _world_size)
-	mask_shader.set_shader_param("map", texture_map.get_map())
-	var structure = MUW_Path_Structure.new(texture_map, mask_shader)
-	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_data_factory, structure).create(transformer)
-	return MUW_World.new(transformer, tiles, waypoints)
-
-
-func create_2d(parent_node : Node, tilemap : TileMap) -> MUW_World:
-	var tile_data = _tile_data_2d(tilemap)
-	var transformer = MUW_Transformers_Screen_Tilemap.new(tilemap)
-	var tiles = MUW_Tiles_Factory.new(tile_data).create_2d(tilemap)
-	var waypoint_packed = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
-	var waypoints_packed = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
-
-	var waypoint_data_factory = MUW_Waypoint_Data_Factory.new()
-	#TODO need to abstract MUW_Points so it can be used across 2D and 3D
-	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed)
-	var structure = MUW_Node_Structure.new(waypoint_factory)
-	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints = MUW_Waypoints_Factory.new(pathing, waypoint_data_factory, structure).create(transformer)
-	return MUW_World.new(transformer, tiles, waypoints)
+#func create_2d(tilemap : TileMap) -> MUW_World_2d:
 
 
 #TODO this is temp, implement loading from file or something

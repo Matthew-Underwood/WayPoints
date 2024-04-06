@@ -745,6 +745,16 @@ _global_script_classes=[ {
 "path": "res://addons/world/src/world.gd"
 }, {
 "base": "Reference",
+"class": "MUW_World_2d",
+"language": "GDScript",
+"path": "res://addons/world/src/world_2d.gd"
+}, {
+"base": "Reference",
+"class": "MUW_World_3d",
+"language": "GDScript",
+"path": "res://addons/world/src/world_3d.gd"
+}, {
+"base": "Reference",
 "class": "MUW_World_Factory",
 "language": "GDScript",
 "path": "res://addons/world/src/world_factory.gd"
@@ -992,6 +1002,8 @@ _global_script_class_icons={
 "MUW_Waypoints_Operations": "",
 "MUW_Waypoints_Operations_Factory": "",
 "MUW_World": "",
+"MUW_World_2d": "",
+"MUW_World_3d": "",
 "MUW_World_Factory": "",
 "RPC": "",
 "RPCClientConnect": "",

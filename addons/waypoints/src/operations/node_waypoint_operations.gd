@@ -5,7 +5,7 @@ var _world : MUW_World
 var _id
 
 
-func _init(waypoints, world):
+func _init(waypoints : MUW_Waypoints, world : MUW_World):
 	_waypoints = waypoints
 	_world = world
 

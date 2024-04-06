@@ -1,9 +1,11 @@
 class_name MUW_Tiles_Factory
 
 var _tile_data : Dictionary
+var _points : MUW_Points
 
-func _init(tile_data : Dictionary):
+func _init(tile_data : Dictionary, points : MUW_Points):
 	_tile_data = tile_data
+	_points = points
 
 
 func create_2d(tilemap : TileMap) -> MUW_Tiles:
@@ -12,9 +14,9 @@ func create_2d(tilemap : TileMap) -> MUW_Tiles:
 	return _build_tiles(tile_processor)
 
 
-func create_3d(cast : Vector3, current_node : Node, points) -> MUW_Tiles:
+func create_3d(cast : Vector3, current_node : Node) -> MUW_Tiles:
 
-	var tile_processor = MUW_Tiles_Processor_Factory.new().create_3d(cast, current_node, points)
+	var tile_processor = MUW_Tiles_Processor_Factory.new().create_3d(cast, current_node, _points)
 	return _build_tiles(tile_processor)
 	
 
