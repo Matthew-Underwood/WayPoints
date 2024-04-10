@@ -11,7 +11,7 @@ func update(pos : Vector2, id : int):
 	image.lock()
 	image.set_pixelv(pos, Color8(id, id, id))
 	image.unlock()
-	# image.save_png("test.png")
+	#image.save_png("test.png")
 	_texture.create_from_image(image, 0)
 
 

@@ -31,26 +31,38 @@ func _set_path():
 	if !_waypoint_data.empty():
 		for waypoint_data in _waypoint_data:
 			var points = waypoint_data.get_path()
-			for id in range(points.size() - 1):
+			for id in range(points.size()):
 
 				var current_pos = points[id]
-				var next_pos = points[id + 1]
-				_set_directions(current_pos, next_pos)
-				_set_directions(next_pos, current_pos)
-		
-		for direction in _directions:
-			var total = 0
-			for key in _directions[direction]:
-				total += _directions[direction][key]
-			_map.update(direction, total)
-		_mask.set_shader_param("map", _map.get_map())
+				var current_pos_vec2 = Vector2(current_pos.x, current_pos.z)
+				if current_pos_vec2 - current_pos_vec2.floor() != Vector2(0.5, 0.5):
+					continue
 				
+				if id - 1 >= 0:
+					var previous_pos = points[id - 1]
+					var previous_direction = _get_direction(current_pos, previous_pos)
+					if !_directions.has(current_pos_vec2.floor()):
+						_directions[current_pos_vec2.floor()] = {}
+					_directions[current_pos_vec2.floor()][previous_direction] = true
+
+				if id + 1 < points.size():
+					var next_pos = points[id + 1]
+					var next_direction = _get_direction(current_pos, next_pos)
+					if !_directions.has(current_pos_vec2.floor()):
+						_directions[current_pos_vec2.floor()] = {}
+					_directions[current_pos_vec2.floor()][next_direction] = true
+		
+		for pos in _directions:
+			var total = 0
+			for direction_id in _directions[pos]:
+				total += direction_id
+			_map.update(pos, total)
+		_mask.set_shader_param("map", _map.get_map())
 
 
-func _set_directions(pos : Vector3, next_pos : Vector3):
+func _get_direction(pos : Vector3, pos2 : Vector3) -> int:
 
-	var direction = Vector3(pos.x - next_pos.x, 0, pos.z - next_pos.z)
-	var pos_id = Vector2(pos.x, pos.z)
+	var direction = Vector3(pos.x - pos2.x, 0, pos.z - pos2.z)
 	var angle = Vector3(0, 0, 1).signed_angle_to(direction, Vector3(0, 1, 0))
 	var id = str(angle).sha1_text().left(4)
 	print("Direction : " + str(direction))
@@ -66,7 +78,4 @@ func _set_directions(pos : Vector3, next_pos : Vector3):
 		"340d" : 64,
 		"4786" : 128
 	}
-
-	if !_directions.has(pos_id):
-		_directions[pos_id] = {}
-	_directions[pos_id][id] = directions[id]
+	return directions[id]
