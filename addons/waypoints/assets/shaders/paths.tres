@@ -31,8 +31,11 @@ void fragment() {
 	vec2 fluv = (floor(a_uv) / map_size) + (1.0 / map_size * 0.5);
 	vec4 textuv = texture(map, fluv);
 	int id = int(textuv.r * 255.0);
+	int part_path_id = int(textuv.g * 255.0);
 	float col = 0.0;
 	const int ids[8] = {128, 64, 32, 16, 8, 4, 2, 1};
+	const int part_path_ids[4] = {8, 4, 2, 1};
+	
 
 	for (int i = 0; i < ids.length(); i++) {
 
@@ -72,6 +75,34 @@ void fragment() {
 			        break;
 			}
 			id -= ids[i];
+		}
+	}
+	
+	for (int pi = 0; pi < part_path_ids.length(); pi++) {
+		if (part_path_id >= part_path_ids[pi]) {
+			switch(part_path_ids[pi]) {
+				case 1:
+					uv = rotate_space(uv, 135);
+					col += box(uv - vec2(-0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
+					uv = rotate_space(uv, 45);
+			        break;
+				case 2:
+					uv = rotate_space(uv, 135);
+					col += box(uv - vec2(0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
+					uv = rotate_space(uv, 45);
+			        break;
+				case 4:
+					uv = rotate_space(uv, 45);
+					col += box(uv - vec2(-0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
+					uv = rotate_space(uv, 135);
+			        break;
+			    case 8:
+					uv = rotate_space(uv, 45);
+					col += box(uv - vec2(0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
+					uv = rotate_space(uv, 135);
+			        break;
+			}
+			part_path_id -= part_path_ids[pi];
 		}
 	}
 
