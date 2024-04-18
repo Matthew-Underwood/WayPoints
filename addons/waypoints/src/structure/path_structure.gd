@@ -41,23 +41,41 @@ func _set_path():
 				if id - 1 >= 0:
 					var previous_pos = points[id - 1]
 					var previous_direction = _get_direction(current_pos, previous_pos)
-					if !_directions.has(current_pos_vec2.floor()):
-						_directions[current_pos_vec2.floor()] = {}
-					_directions[current_pos_vec2.floor()][previous_direction] = true
+					_set_direction(current_pos_vec2, previous_direction)
 
 				if id + 1 < points.size():
 					var next_pos = points[id + 1]
 					var next_direction = _get_direction(current_pos, next_pos)
-					if !_directions.has(current_pos_vec2.floor()):
-						_directions[current_pos_vec2.floor()] = {}
-					_directions[current_pos_vec2.floor()][next_direction] = true
+					_set_direction(current_pos_vec2, next_direction)
 		
 		for pos in _directions:
-			var total = 0
-			for direction_id in _directions[pos]:
-				total += direction_id
+			var total = Vector3(0, 0, 0)
+			for direction in _directions[pos]["directions"]:
+				total.x += direction
+			for corner in _directions[pos]["corners"]:
+				total.y += corner
+			print(pos)
+			print(total)
 			_map.update(pos, total)
 		_mask.set_shader_param("map", _map.get_map())
+
+
+func _set_direction(pos : Vector2, direction : int):
+	pos = pos.floor()
+	if !_directions.has(pos):
+		_directions[pos] = {"directions" : [], "corners" : []}
+	_directions[pos]["directions"].append(direction)
+
+	var corners = self._map_direction_to_corners(direction)
+
+	for corner in corners:
+		var offset = corners[corner]
+		self._set_corners(offset + pos, corner)
+
+func _set_corners(pos : Vector2, corner : int):
+	if !_directions.has(pos):
+		_directions[pos] = {"directions" : [], "corners" : []}
+	_directions[pos]["corners"].append(corner)
 
 
 func _get_direction(pos : Vector3, pos2 : Vector3) -> int:
@@ -65,9 +83,9 @@ func _get_direction(pos : Vector3, pos2 : Vector3) -> int:
 	var direction = Vector3(pos.x - pos2.x, 0, pos.z - pos2.z)
 	var angle = Vector3(0, 0, 1).signed_angle_to(direction, Vector3(0, 1, 0))
 	var id = str(angle).sha1_text().left(4)
-	print("Direction : " + str(direction))
-	print("Radians : " + str(angle))
-	print("SHA1 : " + str(id))
+	#print("Direction : " + str(direction))
+	#print("Radians : " + str(angle))
+	#print("SHA1 : " + str(id))
 	var directions = {
 		"9912" : 1,
 		"dffa" : 2,
@@ -78,4 +96,18 @@ func _get_direction(pos : Vector3, pos2 : Vector3) -> int:
 		"340d" : 64,
 		"4786" : 128
 	}
+	print("Direction id : " + str(directions[id]))
 	return directions[id]
+
+
+func _map_direction_to_corners(direction : int) -> Dictionary:
+	
+	var offset = {}
+	match direction:
+		128:
+			offset = {2 : Vector2(1, 0), 1: Vector2(0, 1)}
+		#1:
+		#	offset = {2 : Vector2(0, -1), 4 : Vector2(-1, 0)}
+		#4, 8:
+		#	offset = {4 : Vector2(0, 0), 8 : Vector2(0, 0)}
+	return offset
