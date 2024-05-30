@@ -16,8 +16,11 @@ vec2 rotate_space(vec2 uv, float angle) {
 	return uv;
 }
 
-float box(vec2 pos, vec2 size, vec2 offset) {
-	pos = pos + offset;
+float box(vec2 pos, vec2 size, vec2 offset, float angle) {
+	float angle_rad = radians(-angle);
+	mat2 rot = mat2(vec2(-cos(angle_rad), sin(angle_rad)), vec2(sin(angle_rad), cos(angle_rad)));
+	offset *= rot;
+	pos += offset;
 	vec2 edge = vec2(0.5) - size * 0.5;
     vec2 uv = smoothstep(edge, edge + vec2(0.001), pos);
     uv *= smoothstep(edge, edge + vec2(0.001), vec2(1.0) - pos);
@@ -41,70 +44,69 @@ void fragment() {
 
 		if (id >= ids[i]) {
 			switch(ids[i]) {
-			    case 8:
-					col += box(uv, vec2(0.2, 0.5), vec2(0, 0.25));
-			        break;
-			    case 32:
-					uv = rotate_space(uv, 45);
-					col += box(uv, vec2(1.0, 0.2), vec2(-0.25, 0.0));
-					uv = rotate_space(uv, 135);
-					break;
-			    case 64:
-					col += box(uv, vec2(0.5, 0.2), vec2(-0.25, 0.0));
-					break;
+//			    case 8:
+//					col += box(uv, vec2(0.2, 0.5), vec2(0, 0.25));
+//			        break;
+//			    case 32:
+//					uv = rotate_space(uv, 45);
+//					col += box(uv, vec2(1.0, 0.2), vec2(-0.25, 0.0));
+//					uv = rotate_space(uv, 135);
+//					break;
+//			    case 64:
+//					col += box(uv, vec2(0.5, 0.2), vec2(-0.25, 0.0));
+//					break;
 			    case 128:
 					uv = rotate_space(uv, 45);
-					col += box(uv, vec2(0.2, 1.0), vec2(0.0, -0.25));
-					uv = rotate_space(uv, 135);
+					col += box(uv, vec2(0.2, 0.6), vec2(0.0, 0.0), 45);
 			        break;
-				case 16:
-					col += box(uv, vec2(0.2, 0.5), vec2(0.0, -0.25));
-			        break;
-				case 4:
-					uv = rotate_space(uv, 45);
-					col += box(uv, vec2(1.0, 0.2), vec2(0.25, 0.0));
-					uv = rotate_space(uv, 135);
-					break;
-			    case 2:
-					col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0.0));
-					break;
-			    case 1:
-					uv = rotate_space(uv, 45);
-					col += box(uv, vec2(0.2, 1.0), vec2(0, 0.25));
-					uv = rotate_space(uv, 135);
-			        break;
+//				case 16:
+//					col += box(uv, vec2(0.2, 0.5), vec2(0.0, -0.25));
+//			        break;
+//				case 4:
+//					uv = rotate_space(uv, 45);
+//					col += box(uv, vec2(1.0, 0.2), vec2(0.25, 0.0));
+//					uv = rotate_space(uv, 135);
+//					break;
+//			    case 2:
+//					col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0.0));
+//					break;
+//			    case 1:
+//					uv = rotate_space(uv, 45);
+//					col += box(uv, vec2(0.2, 1.0), vec2(0, 0.25));
+//					uv = rotate_space(uv, 135);
+//			        break;
 			}
 			id -= ids[i];
 		}
 	}
 	
-	for (int pi = 0; pi < part_path_ids.length(); pi++) {
-		if (part_path_id >= part_path_ids[pi]) {
-			switch(part_path_ids[pi]) {
-				case 1:
-					uv = rotate_space(uv, 135);
-					col += box(uv - vec2(-0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
-					uv = rotate_space(uv, 45);
-			        break;
-				case 2:
-					uv = rotate_space(uv, 135);
-					col += box(uv - vec2(0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
-					uv = rotate_space(uv, 45);
-			        break;
-				case 4:
-					uv = rotate_space(uv, 45);
-					col += box(uv - vec2(-0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
-					uv = rotate_space(uv, 135);
-			        break;
-			    case 8:
-					uv = rotate_space(uv, 45);
-					col += box(uv - vec2(0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
-					uv = rotate_space(uv, 135);
-			        break;
-			}
-			part_path_id -= part_path_ids[pi];
-		}
-	}
+//	for (int pi = 0; pi < part_path_ids.length(); pi++) {
+//		if (part_path_id >= part_path_ids[pi]) {
+//			switch(part_path_ids[pi]) {
+//				case 1:
+//					uv = rotate_space(uv, 135);
+//					col += box(uv - vec2(-0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
+//					uv = rotate_space(uv, 45);
+//			        break;
+//				case 2:
+//					uv = rotate_space(uv, 135);
+//					col += box(uv - vec2(0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
+//					uv = rotate_space(uv, 45);
+//			        break;
+//				case 4:
+//					uv = rotate_space(uv, 45);
+//					col += box(uv - vec2(-0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
+//					uv = rotate_space(uv, 135);
+//			        break;
+//			    case 8:
+//					uv = rotate_space(uv, 45);
+//					col += box(uv - vec2(0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
+//					uv = rotate_space(uv, 135);
+//			        break;
+//			}
+//			part_path_id -= part_path_ids[pi];
+//		}
+//	}
 
 	ALBEDO = vec3(col);
 	
