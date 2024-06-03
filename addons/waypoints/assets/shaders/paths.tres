@@ -7,19 +7,18 @@ render_mode unshaded, world_vertex_coords;
 uniform sampler2D map;
 uniform vec2 map_size;
 
-vec2 rotate_space(vec2 uv, float angle) {
-	angle = radians(angle);
-	uv = uv - vec2(0.5);
-	mat2 rot = mat2(vec2(sin(angle), -cos(angle)), vec2(cos(angle), sin(angle)));
+vec2 rotate_space(vec2 uv, float deg, vec2 offset) {
+	float rad = radians(deg);
+	uv = uv - offset;
+	mat2 rot = mat2(vec2(cos(rad), sin(rad)), vec2(-sin(rad), cos(rad)));
 	uv *= rot;
-	uv = uv + vec2(0.5);
+	uv = uv + offset;
 	return uv;
 }
 
-float box(vec2 pos, vec2 size, vec2 offset, float angle) {
-	float angle_rad = radians(-angle);
-	mat2 rot = mat2(vec2(-cos(angle_rad), sin(angle_rad)), vec2(sin(angle_rad), cos(angle_rad)));
-	offset *= rot;
+float box(vec2 pos, vec2 size, vec2 offset, float deg) {
+	pos = rotate_space(pos, deg, vec2(0.5));
+	offset = rotate_space(offset, deg, vec2(0.0));
 	pos += offset;
 	vec2 edge = vec2(0.5) - size * 0.5;
     vec2 uv = smoothstep(edge, edge + vec2(0.001), pos);
@@ -44,37 +43,30 @@ void fragment() {
 
 		if (id >= ids[i]) {
 			switch(ids[i]) {
-//			    case 8:
-//					col += box(uv, vec2(0.2, 0.5), vec2(0, 0.25));
-//			        break;
-//			    case 32:
-//					uv = rotate_space(uv, 45);
-//					col += box(uv, vec2(1.0, 0.2), vec2(-0.25, 0.0));
-//					uv = rotate_space(uv, 135);
-//					break;
-//			    case 64:
-//					col += box(uv, vec2(0.5, 0.2), vec2(-0.25, 0.0));
-//					break;
-			    case 128:
-					uv = rotate_space(uv, 45);
-					col += box(uv, vec2(0.2, 0.6), vec2(0.0, 0.0), 45);
+			    case 1: //1
+					col += box(uv, vec2(0.2, 0.5), vec2(0, 0.25), 0);
+					break;
+			    case 2: //2
+					col += box(uv, vec2(0.7, 0.2), vec2(-0.25, 0.25), 135);
 			        break;
-//				case 16:
-//					col += box(uv, vec2(0.2, 0.5), vec2(0.0, -0.25));
-//			        break;
-//				case 4:
-//					uv = rotate_space(uv, 45);
-//					col += box(uv, vec2(1.0, 0.2), vec2(0.25, 0.0));
-//					uv = rotate_space(uv, 135);
-//					break;
-//			    case 2:
-//					col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0.0));
-//					break;
-//			    case 1:
-//					uv = rotate_space(uv, 45);
-//					col += box(uv, vec2(0.2, 1.0), vec2(0, 0.25));
-//					uv = rotate_space(uv, 135);
-//			        break;
+				case 4: //4
+					col += box(uv, vec2(0.2, 0.5), vec2(-0.25, 0), 90);
+			        break;
+				case 8: //8
+					col += box(uv, vec2(0.7, 0.2), vec2(-0.25), 45);
+					break;
+			    case 16: //16
+					col += box(uv, vec2(0.5, 0.2), vec2(0, -0.25), 90);
+					break;
+			    case 32: //32
+					col += box(uv, vec2(0.7, 0.2), vec2(0.25, -0.25), 135);
+			        break;
+			    case 64: //64
+					col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0), 0);
+			        break;
+			    case 128: //128
+					col += box(uv, vec2(0.7, 0.2), vec2(0.25), 45);
+					break;
 			}
 			id -= ids[i];
 		}
