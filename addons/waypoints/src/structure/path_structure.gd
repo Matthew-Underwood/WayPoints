@@ -41,11 +41,13 @@ func _set_path():
 				if id - 1 >= 0:
 					var previous_pos = points[id - 1]
 					var previous_direction = _get_direction(current_pos, previous_pos)
+					print(current_pos_vec2)
 					_set_direction(current_pos_vec2, previous_direction)
 
 				if id + 1 < points.size():
 					var next_pos = points[id + 1]
 					var next_direction = _get_direction(current_pos, next_pos)
+					print(current_pos_vec2)
 					_set_direction(current_pos_vec2, next_direction)
 		
 		for pos in _directions:
@@ -54,8 +56,6 @@ func _set_path():
 				total.x += direction
 			for corner in _directions[pos]["corners"]:
 				total.y += corner
-			print(pos)
-			print(total)
 			_map.update(pos, total)
 		_mask.set_shader_param("map", _map.get_map())
 
@@ -65,6 +65,7 @@ func _set_direction(pos : Vector2, direction : int):
 	if !_directions.has(pos):
 		_directions[pos] = {"directions" : [], "corners" : []}
 	_directions[pos]["directions"].append(direction)
+	print("Adding " + str(pos) + " with direction " + str(direction))
 
 	var corners = self._map_direction_to_corners(direction)
 
@@ -77,6 +78,7 @@ func _set_corners(pos : Vector2, corner : int):
 	if !_directions.has(pos):
 		_directions[pos] = {"directions" : [], "corners" : []}
 	_directions[pos]["corners"].append(corner)
+	print("Adding " + str(pos) + " with corner " + str(corner))
 
 
 func _get_direction(pos : Vector3, pos2 : Vector3) -> int:
