@@ -61,23 +61,31 @@ func _set_path():
 
 
 func _set_direction(pos : Vector2, direction : int):
+
 	pos = pos.floor()
+
 	if !_directions.has(pos):
-		_directions[pos] = {"directions" : [], "corners" : []}
-	_directions[pos]["directions"].append(direction)
+		_directions[pos] = {"directions" : {}, "corners" : {}}
+	
+	if !_directions[pos]["directions"].has(direction):
+		_directions[pos]["directions"][direction] = direction
+
 	print("Adding " + str(pos) + " with direction " + str(direction))
 
 	var corners = self._map_direction_to_corners(direction)
-
 	for corner in corners:
 		var offset = corners[corner]
 		self._set_corners(offset + pos, corner)
 
 
 func _set_corners(pos : Vector2, corner : int):
+
 	if !_directions.has(pos):
-		_directions[pos] = {"directions" : [], "corners" : []}
-	_directions[pos]["corners"].append(corner)
+		_directions[pos] = {"directions" : {}, "corners" : {}}
+
+	if !_directions[pos]["corners"].has(corner):
+		_directions[pos]["corners"][corner] = corner
+
 	print("Adding " + str(pos) + " with corner " + str(corner))
 
 
@@ -113,8 +121,12 @@ func _map_direction_to_corners(direction : int) -> Dictionary:
 	
 	var offset = {}
 	match direction:
-		8, 128:
-			offset = {1 : Vector2(1, 0), 2: Vector2(0, 1)}
-		# 2, 8:
-		# 	offset = {1 : Vector2(1, 0), 2: Vector2(0, 1)}
+		8:
+			offset = {2 : Vector2(0, 1), 1: Vector2(1, 0)}
+		128:
+			offset = {2 : Vector2(-1, 0), 1: Vector2(0, -1)}
+		2:
+			offset = {8 : Vector2(0, -1), 4: Vector2(1, 0)}
+		32:
+			offset = {8 : Vector2(-1, 0), 4: Vector2(0, 1)}
 	return offset

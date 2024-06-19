@@ -1,4 +1,9 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://addons/waypoints/assets/shaders/borders.tres" type="Shader" id=1]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
 
 [sub_resource type="Shader" id=1]
 code = "shader_type spatial;
@@ -33,9 +38,7 @@ void fragment() {
 	vec2 fluv = (floor(a_uv) / map_size) + (1.0 / map_size * 0.5);
 	vec4 textuv = texture(map, fluv);
 	int id = int(textuv.r * 255.0);
-	//int id = 8;
 	int part_path_id = int(textuv.g * 255.0);
-	//int part_path_id = 2;
 	float col = 0.0;
 	const int ids[8] = {128, 64, 32, 16, 8, 4, 2, 1};
 	const int part_path_ids[4] = {8, 4, 2, 1};
@@ -83,16 +86,12 @@ void fragment() {
 				case 2:
 					col += box(uv, vec2(0.5, 0.2), vec2(-0.5, 0.5), 45);
 			        break;
-//				case 4:
-//					uv = rotate_space(uv, 45);
-//					col += box(uv - vec2(-0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
-//					uv = rotate_space(uv, 135);
-//			        break;
-//			    case 8:
-//					uv = rotate_space(uv, 45);
-//					col += box(uv - vec2(0.75, 0), vec2(0.2, 0.5), vec2(0, 0));
-//					uv = rotate_space(uv, 135);
-//			        break;
+				case 4:
+					col += box(uv, vec2(0.5, 0.2), vec2(0.5, 0.5), -45);
+			        break;
+			    case 8:
+					col += box(uv, vec2(0.5, 0.2), vec2(-0.5, -0.5), -45);
+			        break;
 			}
 			part_path_id -= part_path_ids[pi];
 		}
@@ -104,5 +103,6 @@ void fragment() {
 
 [resource]
 render_priority = 1
+next_pass = SubResource( 2 )
 shader = SubResource( 1 )
 shader_param/map_size = Vector2( 10, 10 )

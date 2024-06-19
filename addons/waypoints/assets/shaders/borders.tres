@@ -9,7 +9,7 @@ void fragment() {
 	
 	vec2 uv = UV * 10.0;
 	vec2 fruv = fract(uv);
-	vec2 col = step(vec2(0.1), fruv);
+	vec2 col = step(vec2(0.02), fruv);
 	float a = 1.0 - (col.x * col.y);
 	ALBEDO = vec3(a - 0.5,0,0);
 	ALPHA = a;
