@@ -1,13 +1,13 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://addons/waypoints/src/waypoint/sprite.gd" type="Script" id=1]
-[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/path_end.png" type="Texture" id=2]
+[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/path_confirm.png" type="Texture" id=1]
+[ext_resource path="res://addons/waypoints/src/waypoint/sprite.gd" type="Script" id=2]
 [ext_resource path="res://addons/waypoints/assets/sprites/waypoint/path_selected.png" type="Texture" id=3]
-[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/path_confirm.png" type="Texture" id=4]
+[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/path_end.png" type="Texture" id=4]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ],
+"frames": [ ExtResource( 4 ), ExtResource( 3 ), ExtResource( 1 ) ],
 "loop": false,
 "name": "default",
 "speed": 5.0
@@ -18,7 +18,7 @@ extents = Vector2( 16.1225, 16.0847 )
 
 [node name="WayPoint" type="AnimatedSprite" groups=["waypoint"]]
 frames = SubResource( 1 )
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 
 [node name="Label" type="Label" parent="."]
 visible = false

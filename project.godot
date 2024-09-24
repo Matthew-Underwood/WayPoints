@@ -689,11 +689,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/world/src/transformers/screen_tilemap.gd"
 }, {
-"base": "MeshInstance",
-"class": "MUW_WayPoint_Line",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/waypoint/line_node.gd"
-}, {
 "base": "Reference",
 "class": "MUW_Waypoint_Data",
 "language": "GDScript",
@@ -991,7 +986,6 @@ _global_script_class_icons={
 "MUW_Tiles_Processor_Factory": "",
 "MUW_Transformers_Screen_Mesh": "",
 "MUW_Transformers_Screen_Tilemap": "",
-"MUW_WayPoint_Line": "",
 "MUW_Waypoint_Data": "",
 "MUW_Waypoint_Data_Factory": "",
 "MUW_Waypoint_Factory": "",
@@ -1029,7 +1023,7 @@ _global_script_class_icons={
 [application]
 
 config/name="WayPoints"
-run/main_scene="res://addons/waypoints/scenes/2d/2d_example.tscn"
+run/main_scene="res://2d_example.tscn"
 
 [editor_plugins]
 
