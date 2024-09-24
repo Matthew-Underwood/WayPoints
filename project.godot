@@ -1029,7 +1029,7 @@ _global_script_class_icons={
 [application]
 
 config/name="WayPoints"
-run/main_scene="res://addons/waypoints/scenes/2d/2d_example.tscn"
+run/main_scene="res://2d_example.tscn"
 
 [editor_plugins]
 

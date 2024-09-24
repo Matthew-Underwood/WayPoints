@@ -12,8 +12,8 @@ func _init(pathing : MUP_Pathing, waypoint_data_factory : MUW_Waypoint_Data_Fact
 
 func create_2d_nodes(parent_node : Node, tilemap : TileMap) -> MUW_Waypoints:
 	var transformer = MUW_Transformers_Screen_Tilemap.new(tilemap)
-	var waypoint_packed = preload("res://addons/waypoints/scenes/2d/waypoint.tscn")
-	var waypoints_packed = preload("res://addons/waypoints/scenes/2d/waypoints.tscn")
+	var waypoint_packed = preload("res://addons/waypoints/assets/scenes/2d/waypoint.tscn")
+	var waypoints_packed = preload("res://addons/waypoints/assets/scenes/2d/waypoints.tscn")
 	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed)
 	var structure = MUW_Node_Structure.new(waypoint_factory)
 	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure)
@@ -23,8 +23,8 @@ func create_3d_nodes(parent_node : Node, camera : Camera, world : World) -> MUW_
 	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
 
-	var waypoint_packed = preload("res://addons/waypoints/scenes/3d/waypoint.tscn")
-	var waypoints_packed = preload("res://addons/waypoints/scenes/3d/waypoints.tscn")
+	var waypoint_packed = preload("res://addons/waypoints/assets/scenes/3d/waypoint.tscn")
+	var waypoints_packed = preload("res://addons/waypoints/assets/scenes/3d/waypoints.tscn")
 	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed, _points)
 	var structure = MUW_Node_Structure.new(waypoint_factory)
 	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure)
