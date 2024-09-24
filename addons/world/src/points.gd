@@ -1,5 +1,8 @@
 class_name MUW_Points
 
+
+# key1 world_point vec3
+
 var _points = {}
 
 func has_point(point : Vector3) -> bool:

@@ -6,28 +6,28 @@ var _world_position : Vector2
 var _line_nodes = []
 var _meta_data : Dictionary
 var _points : MUW_Points
+var _waypoint_data : MUW_Waypoint_Data
 
 func set_points(points : MUW_Points):
 	_points = points
 
-func get_world_position() -> Vector2:
-	return _world_position
+func set_waypoint_data(waypoint_data : MUW_Waypoint_Data):
+	_waypoint_data = waypoint_data
+	_update_path()
 
 
-func set_world_position(world_pos : Vector2):
-	_world_position = world_pos
-
-
-func set_id(id : String):
-	$Label3D.text = id
-
-
-func set_meta_data(meta_data : Dictionary):
-	_meta_data = meta_data
-
-
-func set_path(path : Array) -> void:
+func _update_path():
+	var path = _waypoint_data.get_path()
 	if get_parent() == null:
 		yield(self, "ready")
 	transform.origin = path[len(path) - 1]
 	$Line.create_line(path, _points)
+
+
+func get_world_position() -> Vector2:
+	return _waypoint_data.get_world_position()
+
+
+#TODO what are we doing with this?
+func set_id(id : String):
+	$Label3D.text = id

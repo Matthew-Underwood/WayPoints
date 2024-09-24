@@ -1,6 +1,6 @@
 extends Node2D
 
-var _waypoints : Node2D
+var _waypoints : MUW_Waypoints
 var _waypoint_id
 var _world : MUW_World
 
