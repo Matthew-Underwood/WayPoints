@@ -1,6 +1,6 @@
 [gd_resource type="PlaneMesh" load_steps=5 format=2]
 
-[ext_resource path="res://addons/waypoints/assets/shaders/borders.tres" type="Shader" id=1]
+[ext_resource path="res://assets/scenes/shaders/borders.tres" type="Shader" id=1]
 [ext_resource path="res://addons/waypoints/assets/shaders/paths.tres" type="Shader" id=2]
 
 [sub_resource type="ShaderMaterial" id=4]

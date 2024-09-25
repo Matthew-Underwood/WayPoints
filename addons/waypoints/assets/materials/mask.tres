@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=2]
 
-[ext_resource path="res://addons/waypoints/assets/shaders/borders.tres" type="Shader" id=1]
+[ext_resource path="res://assets/scenes/shaders/borders.tres" type="Shader" id=1]
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 1 )
