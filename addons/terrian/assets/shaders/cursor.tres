@@ -1,0 +1,48 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode unshaded, world_vertex_coords;
+
+uniform vec2 cursor_pos;
+uniform vec2 selection_area;
+uniform vec2 map_size;
+uniform sampler2D access_texture_map;
+
+const vec3 valid = vec3(0.0, 1.0, 0.0);
+const vec3 invalid = vec3(1.0, 0.0, 0.0);
+const vec3 tex = vec3(0.0, 0.0, 1.0);
+
+ivec4 halfWidth(vec2 width_size) {
+	
+    vec2 e = floor(width_size * 0.5);
+    vec2 st = vec2(0.0) - e;
+    return ivec4(ivec2(st), ivec2(e));
+} 
+
+
+void fragment() {
+	vec2 uv = UV * map_size;
+	vec2 fluv = floor(uv);
+	vec3 col = tex;
+	ivec4 hw = halfWidth(selection_area); 
+    
+    for(int i = hw.x; i <= hw.z; i++) {
+        for(int j = hw.y; j <= hw.a; j++) {
+			vec2 relative_cursor = cursor_pos + vec2(float(i), float(j));
+			vec2 ruv = (relative_cursor / map_size) + (vec2(1.0) / map_size * 0.5);
+			
+           if (relative_cursor == fluv) {
+				vec3 obstacle = texture(access_texture_map, ruv).rgb;
+                 col = valid;
+				if (obstacle == vec3(1.0)) {
+					col = invalid;
+				}
+            }
+        }
+    }
+	ALPHA = 1.0 - col.b;
+	ALBEDO = col;
+}
+
+"

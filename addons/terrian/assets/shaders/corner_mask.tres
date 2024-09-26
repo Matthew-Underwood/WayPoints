@@ -1,0 +1,28 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode unshaded, world_vertex_coords;
+
+vec2 rotate_space(vec2 uv, float deg, vec2 offset) {
+	float rad = radians(deg);
+	uv = uv - offset;
+	mat2 rot = mat2(vec2(cos(rad), sin(rad)), vec2(-sin(rad), cos(rad)));
+	uv *= rot;
+	uv = uv + offset;
+	return uv;
+}
+
+void fragment() {
+
+    vec2 uva = UV;
+    //corner
+    //float a = smoothstep(0.1, 0.9, uva);
+    //float b = smoothstep(0.1, 0.9, uva);
+
+    //side
+    vec2 pos = rotate_space(uva, 0, vec2(0));
+    float a = smoothstep(0.1, 0.9, pos.x);
+    ALBEDO = vec3(a);
+}
+"
