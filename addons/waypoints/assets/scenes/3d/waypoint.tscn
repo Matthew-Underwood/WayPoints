@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://addons/waypoints/assets/sprites/waypoint/waypoint.png" type="Texture" id=1]
+[ext_resource path="res://assets/sprites/waypoint/waypoint.png" type="Texture" id=1]
 [ext_resource path="res://addons/waypoints/src/waypoint/spatial.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/kenny_rocket_square.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://addons/waypoints/src/waypoint/line_node.gd" type="Script" id=4]

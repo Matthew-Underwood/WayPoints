@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/obstacle.png-39c3f9841f5d6fb67f990adb0260cd04.stex"
+path="res://.import/obstacle.png-cff635b4ba2f762be34868ce32e94b6a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/waypoints/assets/sprites/tileset/obstacle.png"
-dest_files=[ "res://.import/obstacle.png-39c3f9841f5d6fb67f990adb0260cd04.stex" ]
+source_file="res://assets/sprites/tileset/obstacle.png"
+dest_files=[ "res://.import/obstacle.png-cff635b4ba2f762be34868ce32e94b6a.stex" ]
 
 [params]
 
