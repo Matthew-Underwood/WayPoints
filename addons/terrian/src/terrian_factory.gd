@@ -12,7 +12,7 @@ func create(size : Vector2, terrian_texture, inaccessable_positions = []):
 	if !inaccessable_positions.empty():
 		_map_processor.update(inaccessable_positions, 1);
 
-	var terrian = load("res://addons/terrian/assets/scene/terrian.tscn")
+	var terrian = load("res://assets/scene/terrian.tscn")
 	terrian = terrian.instance()
 	terrian.set_size(size)
 	terrian.set_selection_pos(size * 0.5)
