@@ -1,10 +1,18 @@
-class_name MUT_Basic_Texture_Map
+class_name MUT_Texture_Map
 
-const DEFAULT_LEVEL = Color(0, 0, 0, 1)
+var _texture : ImageTexture
 
-var _levels = [DEFAULT_LEVEL, Color(1, 1, 1, 1)]
+func _init(texture : ImageTexture):
+	_texture = texture
 
-func apply(level : int) -> Color:
-	if level == 0 || level == 1:
-		return _levels[level]
-	return _levels[0]
+func update(pos : Vector2, colour : Vector3):
+
+	var image = _texture.get_data()
+	image.lock()
+	image.set_pixelv(pos, Color8(colour.x, colour.y, colour.z))
+	image.unlock()
+	_texture.create_from_image(image, 0)
+
+
+func get_map() -> ImageTexture:
+	return _texture
