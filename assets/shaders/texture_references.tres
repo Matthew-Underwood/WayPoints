@@ -1,0 +1,98 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode unshaded, world_vertex_coords;
+
+
+uniform vec2 map_size;
+uniform vec2 ref_size;
+uniform sampler2D terrian1:hint_albedo;
+uniform sampler2D terrian2:hint_albedo;
+uniform sampler2D terrianRef;
+
+vec4 hash4 (vec2 p) {
+	 return fract(
+		sin(
+			vec4(1.0 + dot(p, vec2(37.0,17.0)),
+			     2.0 + dot(p, vec2(11.0,47.0)),
+				 3.0 + dot(p, vec2(41.0,29.0)),
+				 4.0 + dot(p, vec2(23.0,31.0))
+				)
+		) * 103.0
+	);
+}
+
+vec3 no_repeat(vec2 uv, sampler2D terrian) {
+
+    vec2 fluv = floor(uv);
+    vec2 fruv = fract(uv);
+
+    vec4 offseta = hash4(fluv + vec2(0.0, 0.0));
+    vec4 offsetb = hash4(fluv + vec2(1.0, 0.0));
+    vec4 offsetc = hash4(fluv + vec2(0.0, 1.0));
+    vec4 offsetd = hash4(fluv + vec2(1.0, 1.0));
+
+    vec2 ddx = dFdx(uv);
+    vec2 ddy = dFdy(uv);
+
+    offseta.zw = sign(offseta.zw - 0.5);
+    offsetb.zw = sign(offsetb.zw - 0.5);
+    offsetc.zw = sign(offsetc.zw - 0.5);
+    offsetd.zw = sign(offsetd.zw - 0.5);
+
+    vec2 uva = uv*offseta.zw + offseta.xy; vec2 ddxa = ddx*offseta.zw; vec2 ddya = ddy*offseta.zw;
+    vec2 uvb = uv*offsetb.zw + offsetb.xy; vec2 ddxb = ddx*offsetb.zw; vec2 ddyb = ddy*offsetb.zw;
+    vec2 uvc = uv*offsetc.zw + offsetc.xy; vec2 ddxc = ddx*offsetc.zw; vec2 ddyc = ddy*offsetc.zw;
+    vec2 uvd = uv*offsetd.zw + offsetd.xy; vec2 ddxd = ddx*offsetd.zw; vec2 ddyd = ddy*offsetd.zw;
+
+    vec2 b = smoothstep(0.25, 0.75, fruv);
+
+     return mix(
+        mix(textureGrad(terrian, uva, ddxa, ddya), textureGrad(terrian, uvb, ddxb, ddyb ), b.x), 
+        mix(textureGrad(terrian, uvc, ddxc, ddyc), textureGrad(terrian, uvd, ddxd, ddyd ), b.x), b.y
+    ).xyz;
+}
+
+vec3 determine_terrian(vec3 refcol, vec2 uv) {
+
+    vec3 tex;
+    if (refcol.r == 0.20) {
+        tex = no_repeat(uv, terrian1);
+    } else {
+        tex = no_repeat(uv, terrian2);
+    }
+
+    return tex;
+
+}
+
+void fragment () {
+
+    vec2 muv = UV * map_size;
+    vec2 fruv = fract(muv);
+    vec2 suv = smoothstep(0.1, 0.9, fruv);
+    vec2 ref = vec2(1.0, 1.0) / ref_size;
+    vec2 origin_ref_uv = ref * (ref_size / map_size * floor(muv)) + fruv * ref;  
+    
+    vec2 ruv1 = origin_ref_uv;
+	vec2 ruv2 = vec2(origin_ref_uv.x + ref.x, origin_ref_uv.y);
+    vec2 ruv3 = vec2(origin_ref_uv.x, origin_ref_uv.y + ref.y);
+	vec2 ruv4 = origin_ref_uv + ref; 
+
+    vec3 ref_tex1 = texture(terrianRef, ruv1).rgb;
+    vec3 ref_tex2 = texture(terrianRef, ruv2).rgb;
+    vec3 ref_tex3 = texture(terrianRef, ruv3).rgb;
+    vec3 ref_tex4 = texture(terrianRef, ruv4).rgb;
+
+    vec3 tex1 = determine_terrian(ref_tex1, muv);
+    vec3 tex2 = determine_terrian(ref_tex2, muv);
+    vec3 tex3 = determine_terrian(ref_tex3, muv);
+    vec3 tex4 = determine_terrian(ref_tex4, muv);
+
+    vec3 mix1 = mix(tex1, tex2, suv.x);
+    vec3 mix2 = mix(tex3, tex4, suv.x);
+    vec3 mix3 = mix(mix1, mix2, suv.y);
+    ALBEDO = mix3;
+}
+"
