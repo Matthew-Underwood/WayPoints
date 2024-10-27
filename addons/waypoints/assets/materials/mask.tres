@@ -1,28 +1,26 @@
 [gd_resource type="ShaderMaterial" load_steps=7 format=2]
 
 [ext_resource path="res://assets/shaders/texture_references.tres" type="Shader" id=1]
-[ext_resource path="res://addons/waypoints/assets/shaders/paths.tres" type="Shader" id=2]
-[ext_resource path="res://assets/textures/green_test.png" type="Texture" id=3]
-[ext_resource path="res://assets/textures/pink_test.png" type="Texture" id=4]
+[ext_resource path="res://assets/textures/green_test.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/pink_test.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/references/terrian_reference.png" type="Texture" id=4]
+[ext_resource path="res://assets/textures/blue_test.png" type="Texture" id=5]
 
-[sub_resource type="ShaderMaterial" id=3]
-render_priority = 2
-shader = ExtResource( 2 )
-shader_param/map_size = Vector2( 10, 10 )
-
-[sub_resource type="ShaderMaterial" id=2]
-render_priority = 1
-next_pass = SubResource( 3 )
+[sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
 shader_param/map_size = Vector2( 10, 10 )
-shader_param/ref_size = Vector2( 20, 20 )
-shader_param/terrian1 = ExtResource( 3 )
-shader_param/terrian2 = ExtResource( 3 )
+shader_param/terrian_ref_size = Vector2( 20, 20 )
+shader_param/path_on = 0
+shader_param/terrian1 = ExtResource( 2 )
+shader_param/terrian2 = ExtResource( 5 )
+shader_param/terrian_ref = ExtResource( 4 )
 
 [resource]
-next_pass = SubResource( 2 )
+render_priority = 1
+next_pass = SubResource( 1 )
 shader = ExtResource( 1 )
 shader_param/map_size = Vector2( 10, 10 )
-shader_param/ref_size = Vector2( 20, 20 )
-shader_param/terrian1 = ExtResource( 4 )
-shader_param/terrian2 = ExtResource( 4 )
+shader_param/terrian_ref_size = Vector2( 20, 20 )
+shader_param/path_on = 1
+shader_param/terrian1 = ExtResource( 5 )
+shader_param/terrian2 = ExtResource( 3 )
