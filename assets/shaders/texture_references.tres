@@ -12,6 +12,23 @@ uniform sampler2D terrian_ref;
 uniform sampler2D path_ref;
 uniform int path_on;
 
+float circle(vec2 uvc, vec2 pos, float rad) {
+    vec2 dist = uvc - pos;
+    return 1.0-smoothstep(rad-(rad*0.01), rad+(rad*0.01), dot(dist, dist)*10.0);
+}
+
+vec2 createLinearBezier(int i, vec2 p0, vec2 p1) {
+    float t = float(i) * 0.01;
+    return mix(p0, p1, t);
+}
+
+vec2 createBezier(int i, vec2 p0, vec2 p1, vec2 p2) {
+    float t = float(i) * 0.01;
+    vec2 q0 = mix(p0, p1, t);
+    vec2 q1 = mix(p1, p2, t);
+    vec2 b = mix(q0, q1, t);
+    return b;
+}
 
 vec2 rotate_space(vec2 uv, float deg, vec2 offset) {
 	float rad = radians(deg);
@@ -21,7 +38,6 @@ vec2 rotate_space(vec2 uv, float deg, vec2 offset) {
 	uv = uv + offset;
 	return uv;
 }
-
 
 float box(vec2 pos, vec2 size, vec2 offset, float deg) {
 	pos = rotate_space(pos, deg, vec2(0.5));
@@ -33,75 +49,137 @@ float box(vec2 pos, vec2 size, vec2 offset, float deg) {
     return uv.x * uv.y;
 }
 
+float createBezierCurve(vec2 fuv, vec2 a, vec2 b, vec2 c) {
+    
+    float col = 0.0;
+    for (int i = 0; i < 100; i++) {
+        vec2 bez = createBezier(i, a, b, c);
+        col += circle(fuv, bez, 0.2);
+    }
+    return col;
+}
+
+float createLinearBezierCurve(vec2 fuv, vec2 a, vec2 b) {
+
+    float col = 0.0;
+    for (int i = 0; i < 100; i++) {
+        vec2 bez = createLinearBezier(i, a, b); 
+        col += circle(fuv, bez, 0.2);
+    }
+    return col;
+}
 
 float path(vec2 uv, sampler2D ref_tex) {
 
     vec2 fuv = fract(uv);
     vec2 path_ref_uv = (floor(uv) / map_size) + (1.0 / map_size * 0.5); 
-    vec4 id = texture(ref_tex, path_ref_uv);
-    int path_id = int(id.r * 255.0);
-    int part_path_id = int(id.g * 255.0);
+    vec4 path_ids = texture(ref_tex, path_ref_uv);
+    int path_id = int(path_ids.r * 255.0);
+    int path_id2 = int(path_ids.g * 255.0);
+    int path_id3 = int(path_ids.b * 255.0);
+
     float col = 0.0;
 	const int ids[8] = {128, 64, 32, 16, 8, 4, 2, 1};
-	const int part_path_ids[4] = {8, 4, 2, 1};
-	
-    for (int i = 0; i < ids.length(); i++) {
-		if (path_id >= ids[i]) {
-			switch(ids[i]) {
-			    case 1: //1
-					col += box(fuv, vec2(0.2, 0.5), vec2(0, 0.25), 0);
-					break;
-			    case 2: //2
-					col += box(fuv, vec2(0.7, 0.2), vec2(-0.25, 0.25), 135);
-			        break;
-				case 4: //4
-					col += box(fuv, vec2(0.2, 0.5), vec2(-0.25, 0), 90);
-			        break;
-				case 8: //8
-					col += box(fuv, vec2(0.7, 0.2), vec2(-0.25), 45);
-					break;
-			    case 16: //16
-					col += box(fuv, vec2(0.5, 0.2), vec2(0, -0.25), 90);
-					break;
-			    case 32: //32
-					col += box(fuv, vec2(0.7, 0.2), vec2(0.25, -0.25), 135);
-			        break;
-			    case 64: //64
-					col += box(fuv, vec2(0.5, 0.2), vec2(0.25, 0), 0);
-			        break;
-			    case 128: //128
-					col += box(fuv, vec2(0.7, 0.2), vec2(0.25), 45);
-					break;
-			}
-			path_id -= ids[i];
-		}
-	}
-	
-	for (int pi = 0; pi < part_path_ids.length(); pi++) {
-		if (part_path_id >= part_path_ids[pi]) {
-			switch(part_path_ids[pi]) {
-				case 1:
-					col += box(fuv, vec2(0.5, 0.2), vec2(0.5, -0.5), 45);
-			        break;
-				case 2:
-					col += box(fuv, vec2(0.5, 0.2), vec2(-0.5, 0.5), 45);
-			        break;
-				case 4:
-					col += box(fuv, vec2(0.5, 0.2), vec2(0.5, 0.5), -45);
-			        break;
-			    case 8:
-					col += box(fuv, vec2(0.5, 0.2), vec2(-0.5, -0.5), -45);
-			        break;
-			}
-			part_path_id -= part_path_ids[pi];
-		}
-	}
 
+    for (int id = 0; id < ids.length(); id++) {
+
+        if (path_id >= ids[id]) {
+            //R line
+            switch(ids[id]) {
+                case 1:
+                    col += createBezierCurve(fuv, vec2(0.5, 0.0), vec2(0.5), vec2(1.0, 0.5));
+                    break;
+                case 2:
+                    col += createBezierCurve(fuv, vec2(1.0, 0.0), vec2(0.5), vec2(1.0));
+                    break;
+                case 4:
+                    col += createBezierCurve(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.5, 1.0));
+                    break;
+                case 8:
+                    col += createBezierCurve(fuv, vec2(1.0), vec2(0.5), vec2(0.0, 1.0));
+                    break;
+                case 16:
+                    col += createBezierCurve(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(0.0, 0.5));
+                    break;
+                case 32:
+                    col += createBezierCurve(fuv, vec2(0.0, 1.0), vec2(0.5), vec2(0.0));
+                    break;
+                case 64:
+                    col += createBezierCurve(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(0.5, 0.0));
+                    break;
+                case 128:
+                    col += createBezierCurve(fuv, vec2(0.0), vec2(0.5), vec2(1.0, 0.0));
+                    break;
+            }
+            path_id -= ids[id];
+        }
+
+        if (path_id2 >= ids[id]) {
+            //j line
+            switch(ids[id]) {
+                case 1:
+                    col += createBezierCurve(fuv, vec2(0.5, 0.0), vec2(0.5), vec2(1.0));
+                    break;
+                case 2:
+                    col += createBezierCurve(fuv, vec2(0.5, 0.0), vec2(0.5), vec2(0.0, 1.0));
+                    break;
+                case 4:
+                    col += createBezierCurve(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(1.0, 0.0));
+                    break;
+                case 8:
+                    col += createBezierCurve(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(0.0));
+                    break;
+                case 16:
+                    col += createBezierCurve(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.0, 1.0));
+                    break;
+                case 32:
+                    col += createBezierCurve(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.0));
+                    break;
+                case 64:
+                    col += createBezierCurve(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(1.0, 0.0));
+                    break;
+                case 128:
+                    col += createBezierCurve(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(1.0));
+                    break;
+            }
+            path_id2 -= ids[id];
+        }
+
+        if (path_id3 >= ids[id]) {
+            // linear lines
+            switch(ids[id])  {
+                case 1:
+                    col += createLinearBezierCurve(fuv, vec2(0.5, 0.0), vec2(0.5));
+                    break;
+                case 2:
+                    col += createLinearBezierCurve(fuv, vec2(1.0, 0.0), vec2(0.5, 0.5));
+                    break;
+                case 4:
+                    col += createLinearBezierCurve(fuv, vec2(1.0, 0.5), vec2(0.5));
+                    break;
+                case 8:
+                    col += createLinearBezierCurve(fuv, vec2(1.0), vec2(0.5));
+                    break;
+                case 16:
+                    col += createLinearBezierCurve(fuv, vec2(0.5, 1.0), vec2(0.5));
+                    break;
+                case 32:
+                    col += createLinearBezierCurve(fuv, vec2(0.0, 1.0), vec2(0.5));
+                    break;
+                case 64:
+                    col += createLinearBezierCurve(fuv, vec2(0.0, 0.5), vec2(0.5));
+                    break;
+                case 128:
+                    col += createLinearBezierCurve(fuv, vec2(0.0), vec2(0.5));
+                    break;
+            }
+            path_id3 -= ids[id];
+        }
+    }
     return col;
 }
 
-
-vec4 hash4 (vec2 p) {
+vec4 hash4(vec2 p) {
 	 return fract(
 		sin(
 			vec4(1.0 + dot(p, vec2(37.0,17.0)),
@@ -112,7 +190,6 @@ vec4 hash4 (vec2 p) {
 		) * 103.0
 	);
 }
-
 
 vec3 no_repeat(vec2 uv, sampler2D terrian) {
 
@@ -155,7 +232,6 @@ vec3 determine_terrian(vec3 refcol, vec2 uv) {
     }
 
     return tex;
-
 }
 
 void fragment () {
