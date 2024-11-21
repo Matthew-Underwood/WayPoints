@@ -5,6 +5,7 @@ var _texture : ImageTexture
 func _init(texture : ImageTexture):
 	_texture = texture
 
+
 func update(pos : Vector2, colour : Vector3):
 
 	var image = _texture.get_data()

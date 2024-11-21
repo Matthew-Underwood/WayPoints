@@ -1,14 +1,15 @@
 class_name MUW_Path_Structure
 
 var _waypoint_data: Array
-var _map: MUT_Texture_Map
+var _map: MUT_Multi_Texture_Map
 var _directions : Dictionary
 var _mask
 
-#TODO make a multiple texture map
-func _init(map : MUT_Texture_Map, mask):
+
+func _init(map : MUT_Multi_Texture_Map, mask):
 	_map = map
 	_mask = mask
+
 
 func create(waypoint_data: MUW_Waypoint_Data):
 	_waypoint_data.append(waypoint_data)
@@ -46,10 +47,8 @@ func _set_path():
                 _set_direction(current_position, relative_directions)
         
         for pos in _directions:
-            _map.update(pos, _directions[pos]["linear_ids"])
-            _map.update(pos, _directions[pos]["bezier_ids"])
-            _map.update(pos, rgb_code)
-    _mask.set_shader_param("map", _map.get_map())
+            _map.update("bezier_ids", pos, _directions[pos]["bezier_ids"])
+    _mask.set_shader_param("bezier_path_map", _map.get_map("bezier_ids"))
    
 
 func _normalise_position(pos : Vector3):
@@ -60,17 +59,16 @@ func _normalise_position(pos : Vector3):
 func _set_direction(pos : Vector2, relative_positions : Dictionary):
 
     if !_directions.has(pos):
-        _directions[pos] = {"linear_ids" : Vector3(0, 0, 0), "bezier_ids" : Vector3(0, 0, 0)}
+        _directions[pos] = {"bezier_ids" : Vector3(0, 0, 0)}
 
     var linear_half_id = _get_id_linear_half_line(relative_positions)
     var linear_id = _get_id_linear_line(relative_positions)
     var bezier_obtuse_id = _get_id_bezier_obtuse(relative_positions)
     var bezier_right_angle_id = _get_id_bezier_right_angle(relative_positions)
 
-    _directions[pos]["linear_ids"].x += linear_half_id
-    _directions[pos]["linear_ids"].y += linear_id
     _directions[pos]["bezier_ids"].x += bezier_obtuse_id
     _directions[pos]["bezier_ids"].y += bezier_right_angle_id
+    _directions[pos]["bezier_ids"].z += linear_half_id + linear_id 
 
 
 func _get_id_linear_half_line(relative_pos : Dictionary):
@@ -102,13 +100,13 @@ func _get_id_linear_line(relative_pos : Dictionary):
     match relative_pos
         # linear full line
         {"previous" : Vector2(-1, 0), "next" : Vector2(1, 0)}, {"next" : Vector2(-1, 0), "previous" : Vector2(1, 0)}:
-            id = 1
+            id = 17
         {"previous" : Vector2(-1, -1), "next" : Vector2(1, 1)}, {"next" : Vector2(-1, -1), "previous" : Vector2(1, 1)}:
-            id = 2
+            id = 34
         {"previous" : Vector2(0, -1), "next" : Vector2(0, 1)}, {"next" : Vector2(0, -1), "previous" : Vector2(0, 1)}:
-            id = 4
+            id = 68
         {"previous" : Vector2(1, -1), "next" : Vector2(-1, 1)}, {"next" : Vector2(1, -1), "previous" : Vector2(-1, 1)}:
-            id = 8
+            id = 136
 
      return id
 
