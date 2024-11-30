@@ -1,0 +1,277 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode unshaded, world_vertex_coords;
+
+uniform vec2 map_size;
+uniform vec2 terrian_ref_size;
+uniform sampler2D terrian1:hint_albedo;
+uniform sampler2D terrian2:hint_albedo;
+uniform sampler2D terrian_ref;
+uniform sampler2D bezier_path_map;
+uniform int path_on;
+
+float circle(vec2 uvc, vec2 pos, float rad) {
+    vec2 dist = uvc - pos;
+    return 1.0-smoothstep(rad-(rad*0.01), rad+(rad*0.01), dot(dist, dist)*10.0);
+}
+
+vec2 getPointFromLinearLine(int i, vec2 p0, vec2 p1) {
+    float t = float(i) * 0.01;
+    return mix(p0, p1, t);
+}
+
+vec2 getPointFromBezierLine(int i, vec2 p0, vec2 p1, vec2 p2) {
+    float t = float(i) * 0.01;
+    vec2 q0 = mix(p0, p1, t);
+    vec2 q1 = mix(p1, p2, t);
+    vec2 b = mix(q0, q1, t);
+    return b;
+}
+
+vec2 rotate_space(vec2 uv, float deg, vec2 offset) {
+	float rad = radians(deg);
+	uv = uv - offset;
+	mat2 rot = mat2(vec2(cos(rad), sin(rad)), vec2(-sin(rad), cos(rad)));
+	uv *= rot;
+	uv = uv + offset;
+	return uv;
+}
+
+float box(vec2 pos, vec2 size, vec2 offset, float deg) {
+	pos = rotate_space(pos, deg, vec2(0.5));
+	offset = rotate_space(offset, deg, vec2(0.0));
+	pos += offset;
+	vec2 edge = vec2(0.5) - size * 0.5;
+    vec2 uv = smoothstep(edge, edge + vec2(0.001), pos);
+    uv *= smoothstep(edge, edge + vec2(0.001), vec2(1.0) - pos);
+    return uv.x * uv.y;
+}
+
+float createBezier(vec2 fuv, vec2 a, vec2 b, vec2 c) {
+    
+    float col = 0.0;
+    for (int i = 0; i < 100; i++) {
+        vec2 bez = getPointFromBezierLine(i, a, b, c);
+        col += circle(fuv, bez, 0.2);
+    }
+    return col;
+}
+
+float createLinearLine(vec2 fuv, vec2 a, vec2 b) {
+
+    float col = 0.0;
+    for (int i = 0; i < 100; i++) {
+        vec2 bez = getPointFromLinearLine(i, a, b); 
+        col += circle(fuv, bez, 0.2);
+    }
+    return col;
+}
+
+float path(vec2 uv, sampler2D ref_tex) {
+
+    vec2 fuv = fract(uv);
+    vec2 path_ref_uv = (floor(uv) / map_size) + (1.0 / map_size * 0.5); 
+    vec4 bezier_path_id = texture(ref_tex, path_ref_uv) * 255.0;
+
+    int linear_half_line = int(bezier_path_id.x);
+    int bezier_right_angle_curve = int(bezier_path_id.y);
+    int bezier_obtuse_curve = int(bezier_path_id.z);
+
+    float col = 0.0;
+	const int ids[8] = {128, 64, 32, 16, 8, 4, 2, 1};
+
+    for (int id = 0; id < ids.length(); id++) {
+
+        if (bezier_right_angle_curve >= ids[id]) {
+            //R line
+            switch(ids[id]) {
+                case 1:
+                    col += createBezier(fuv, vec2(0.5, 0.0), vec2(0.5), vec2(1.0, 0.5));
+                    break;
+                case 2:
+                    col += createBezier(fuv, vec2(1.0, 0.0), vec2(0.5), vec2(1.0));
+                    break;
+                case 4:
+                    col += createBezier(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.5, 1.0));
+                    break;
+                case 8:
+                    col += createBezier(fuv, vec2(1.0), vec2(0.5), vec2(0.0, 1.0));
+                    break;
+                case 16:
+                    col += createBezier(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(0.0, 0.5));
+                    break;
+                case 32:
+                    col += createBezier(fuv, vec2(0.0, 1.0), vec2(0.5), vec2(0.0));
+                    break;
+                case 64:
+                    col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(0.5, 0.0));
+                    break;
+                case 128:
+                    col += createBezier(fuv, vec2(0.0), vec2(0.5), vec2(1.0, 0.0));
+                    break;
+            }
+            bezier_right_angle_curve -= ids[id];
+        }
+
+        if (bezier_obtuse_curve >= ids[id]) {
+            //j line
+            switch(ids[id]) {
+                case 1:
+                    col += createBezier(fuv, vec2(0.5, 0.0), vec2(0.5), vec2(1.0));
+                    break;
+                case 2:
+                    col += createBezier(fuv, vec2(0.5, 0.0), vec2(0.5), vec2(0.0, 1.0));
+                    break;
+                case 4:
+                    col += createBezier(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(1.0, 0.0));
+                    break;
+                case 8:
+                    col += createBezier(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(0.0));
+                    break;
+                case 16:
+                    col += createBezier(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.0, 1.0));
+                    break;
+                case 32:
+                    col += createBezier(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.0));
+                    break;
+                case 64:
+                    col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(1.0, 0.0));
+                    break;
+                case 128:
+                    col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(1.0));
+                    break;
+            }
+            bezier_obtuse_curve -= ids[id];
+        }
+
+        if (linear_half_line >= ids[id]) {
+            // linear lines
+            switch(ids[id])  {
+                case 1:
+                    col += createLinearLine(fuv, vec2(0.5, 0.0), vec2(0.5));
+                    break;
+                case 2:
+                    col += createLinearLine(fuv, vec2(1.0), vec2(0.5));
+                    break;
+                case 4:
+                    col += createLinearLine(fuv, vec2(1.0, 0.5), vec2(0.5));
+                    break;
+                case 8:
+                    col += createLinearLine(fuv, vec2(0.0, 1.0), vec2(0.5));
+                    break;
+                case 16:
+                    col += createLinearLine(fuv, vec2(0.5, 1.0), vec2(0.5));
+                    break;
+                case 32:
+                    col += createLinearLine(fuv, vec2(0.0), vec2(0.5));
+                    break;
+                case 64:
+                    col += createLinearLine(fuv, vec2(0.0, 0.5), vec2(0.5));
+                    break;
+                case 128:
+                    col += createLinearLine(fuv, vec2(1.0, 0.0), vec2(0.5));
+                    break;
+            }
+            linear_half_line -= ids[id];
+        }
+    }
+    return col;
+}
+
+vec4 hash4(vec2 p) {
+	 return fract(
+		sin(
+			vec4(1.0 + dot(p, vec2(37.0,17.0)),
+			     2.0 + dot(p, vec2(11.0,47.0)),
+				 3.0 + dot(p, vec2(41.0,29.0)),
+				 4.0 + dot(p, vec2(23.0,31.0))
+				)
+		) * 103.0
+	);
+}
+
+vec3 no_repeat(vec2 uv, sampler2D terrian) {
+
+    vec2 fluv = floor(uv);
+    vec2 fruv = fract(uv);
+
+    vec4 offseta = hash4(fluv + vec2(0.0, 0.0));
+    vec4 offsetb = hash4(fluv + vec2(1.0, 0.0));
+    vec4 offsetc = hash4(fluv + vec2(0.0, 1.0));
+    vec4 offsetd = hash4(fluv + vec2(1.0, 1.0));
+
+    vec2 ddx = dFdx(uv);
+    vec2 ddy = dFdy(uv);
+
+    offseta.zw = sign(offseta.zw - 0.5);
+    offsetb.zw = sign(offsetb.zw - 0.5);
+    offsetc.zw = sign(offsetc.zw - 0.5);
+    offsetd.zw = sign(offsetd.zw - 0.5);
+
+    vec2 uva = uv*offseta.zw + offseta.xy; vec2 ddxa = ddx*offseta.zw; vec2 ddya = ddy*offseta.zw;
+    vec2 uvb = uv*offsetb.zw + offsetb.xy; vec2 ddxb = ddx*offsetb.zw; vec2 ddyb = ddy*offsetb.zw;
+    vec2 uvc = uv*offsetc.zw + offsetc.xy; vec2 ddxc = ddx*offsetc.zw; vec2 ddyc = ddy*offsetc.zw;
+    vec2 uvd = uv*offsetd.zw + offsetd.xy; vec2 ddxd = ddx*offsetd.zw; vec2 ddyd = ddy*offsetd.zw;
+
+    vec2 b = smoothstep(0.25, 0.75, fruv);
+
+     return mix(
+        mix(textureGrad(terrian, uva, ddxa, ddya), textureGrad(terrian, uvb, ddxb, ddyb ), b.x), 
+        mix(textureGrad(terrian, uvc, ddxc, ddyc), textureGrad(terrian, uvd, ddxd, ddyd ), b.x), b.y
+    ).xyz;
+}
+
+vec3 determine_terrian(vec3 refcol, vec2 uv) {
+
+    vec3 tex;
+    if (refcol.r == 0.20) {
+        tex = no_repeat(uv, terrian1);
+    } else {
+        tex = no_repeat(uv, terrian2);
+    }
+
+    return tex;
+}
+
+void fragment () {
+
+    vec2 muv = UV * map_size;
+    vec2 fruv = fract(muv);
+    vec2 suv = smoothstep(0.1, 0.9, fruv);
+    vec2 terrian_ref_unit = vec2(1.0, 1.0) / terrian_ref_size;
+    vec2 origin_ref_uv = terrian_ref_unit * (terrian_ref_size / map_size * floor(muv)) + fruv * terrian_ref_unit;
+    
+
+    float path = path(muv, bezier_path_map); 
+    vec2 ruv1 = origin_ref_uv;
+	vec2 ruv2 = vec2(origin_ref_uv.x + terrian_ref_unit.x, origin_ref_uv.y);
+    vec2 ruv3 = vec2(origin_ref_uv.x, origin_ref_uv.y + terrian_ref_unit.y);
+	vec2 ruv4 = origin_ref_uv + terrian_ref_unit; 
+
+    vec3 ref_tex1 = texture(terrian_ref, ruv1).rgb;
+    vec3 ref_tex2 = texture(terrian_ref, ruv2).rgb;
+    vec3 ref_tex3 = texture(terrian_ref, ruv3).rgb;
+    vec3 ref_tex4 = texture(terrian_ref, ruv4).rgb;
+
+    vec3 tex1 = determine_terrian(ref_tex1, muv);
+    vec3 tex2 = determine_terrian(ref_tex2, muv);
+    vec3 tex3 = determine_terrian(ref_tex3, muv);
+    vec3 tex4 = determine_terrian(ref_tex4, muv);
+
+    vec3 mix1 = mix(tex1, tex2, suv.x);
+    vec3 mix2 = mix(tex3, tex4, suv.x);
+    vec3 mix3 = mix(mix1, mix2, suv.y);
+    
+    //Debugging
+    //ALBEDO = mix3;
+    ALBEDO = vec3(path);
+
+    if (path_on == 1) {
+        ALPHA = path;
+    } else {
+        ALPHA = 1.0;
+    }
+}
+"

@@ -39,7 +39,7 @@ func create_3d_paths(parent_node : Node, size : Vector2, camera : Camera, world 
 	var roads = parent_node.find_node("RoadsMask")
 	var mask_shader = roads.get_active_material(0)
 	mask_shader.set_shader_param("map_size", size)
-	mask_shader.set_shader_param("map", texture_map.get_map())
+	mask_shader.set_shader_param("bezier_path_map", texture_map.get_map())
 	var structure = MUW_Path_Structure.new(texture_map, mask_shader)
 
 	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure)

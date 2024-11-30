@@ -615,6 +615,16 @@ _global_script_classes=[ {
 "path": "res://addons/terrian/src/mesh_transformer.gd"
 }, {
 "base": "Reference",
+"class": "MUT_Multi_Texture_Map",
+"language": "GDScript",
+"path": "res://addons/terrian/src/multi_texture_map.gd"
+}, {
+"base": "Reference",
+"class": "MUT_Multi_Texture_Map_Factory",
+"language": "GDScript",
+"path": "res://addons/terrian/src/multi_texture_map_factory.gd"
+}, {
+"base": "Reference",
 "class": "MUT_Terrian_Factory",
 "language": "GDScript",
 "path": "res://addons/terrian/src/terrian_factory.gd"
@@ -996,6 +1006,8 @@ _global_script_class_icons={
 "MUT_Basic_Texture_Map_Processor": "",
 "MUT_Cursor_Area": "",
 "MUT_Mesh_Transformer": "",
+"MUT_Multi_Texture_Map": "",
+"MUT_Multi_Texture_Map_Factory": "",
 "MUT_Terrian_Factory": "",
 "MUT_Texture_Map": "",
 "MUT_Texture_Map_Factory": "",

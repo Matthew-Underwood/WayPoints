@@ -1,0 +1,108 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode unshaded, world_vertex_coords;
+
+float circle(vec2 uvc, vec2 pos, float rad) {
+    vec2 dist = uvc - pos;
+    return 1.0-smoothstep(rad-(rad*0.01), rad+(rad*0.01), dot(dist, dist)*10.0);
+}
+
+vec2 createLinearBezier(int i, vec2 p0, vec2 p1) {
+    float t = float(i) * 0.01;
+    return mix(p0, p1, t);
+}
+
+vec2 createBezier(int i, vec2 p0, vec2 p1, vec2 p2) {
+    float t = float(i) * 0.01;
+    vec2 q0 = mix(p0, p1, t);
+    vec2 q1 = mix(p1, p2, t);
+    vec2 b = mix(q0, q1, t);
+    return b;
+}
+
+void fragment() {
+    
+    vec2 uvc = UV;
+    vec3 col = vec3(0.0);
+
+    for (int i = 0; i < 100; i++) {
+        
+        vec2 b = createBezier(i, vec2(0.5, 0.0), vec2(0.5), vec2(1.0, 0.5));
+        col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(1.0, 0.0), vec2(0.5), vec2(1.0));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(1.0, 0.5), vec2(0.5), vec2(0.5, 1.0));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(1.0, 1.0), vec2(0.5), vec2(0.0, 1.0));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(0.5, 1.0), vec2(0.5), vec2(0.0, 0.5));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(0.0, 1.0), vec2(0.5), vec2(0.0));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(0.0, 0.5), vec2(0.5), vec2(0.5, 0.0));
+        //col += circle(uvc, b, 0.2);
+        
+        b = createBezier(i, vec2(0.0), vec2(0.5), vec2(1.0, 0.0));
+        //col += circle(uvc, b, 0.2);
+
+        // j line
+        b = createBezier(i, vec2(0.5, 0.0), vec2(0.5), vec2(1.0));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(0.5, 0.0), vec2(0.5), vec2(0.0, 1.0));
+        //col += circle(uvc, b, 0.2);
+        
+        b = createBezier(i, vec2(0.5, 1.0), vec2(0.5), vec2(1.0, 0.0));
+        //col += circle(uvc, b, 0.2);
+        
+        b = createBezier(i, vec2(0.5, 1.0), vec2(0.5), vec2(0.0, 0.0));
+        //col += circle(uvc, b, 0.2);
+        
+        b = createBezier(i, vec2(1.0, 0.5), vec2(0.5), vec2(0.0, 1.0));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(1.0, 0.5), vec2(0.5), vec2(0.0, 0.0));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(0.0, 0.5), vec2(0.5), vec2(1.0, 0.0));
+        //col += circle(uvc, b, 0.2);
+
+        b = createBezier(i, vec2(0.0, 0.5), vec2(0.5), vec2(1.0));
+        //col += circle(uvc, b, 0.2);
+
+        // linear half line
+        b = createLinearBezier(i, vec2(0.5, 0.0), vec2(0.5));
+        //col += circle(uvc, b, 0.2);
+
+        b = createLinearBezier(i, vec2(1.0, 0.0), vec2(0.5));
+        //col += circle(uvc, b, 0.2);
+
+        b = createLinearBezier(i, vec2(1.0, 0.5), vec2(0.5));
+        //col += circle(uvc, b, 0.2);
+
+        b = createLinearBezier(i, vec2(1.0), vec2(0.5));
+        //col += circle(uvc, b, 0.2);
+
+        b = createLinearBezier(i, vec2(0.5, 1.0), vec2(0.5));
+        //col += circle(uvc, b, 0.2);
+
+        b = createLinearBezier(i, vec2(0.0, 1.0), vec2(0.5));
+        //col += circle(uvc, b, 0.2);
+
+        b = createLinearBezier(i, vec2(0.0, 0.5), vec2(0.5));
+        //col += circle(uvc, b, 0.2);
+
+        b = createLinearBezier(i, vec2(0.0), vec2(0.5));
+        //col += circle(uvc, b, 0.2);
+}
+    ALBEDO = col;
+}
+"

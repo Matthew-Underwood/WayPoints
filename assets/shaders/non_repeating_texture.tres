@@ -1,0 +1,56 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode unshaded, world_vertex_coords;
+
+uniform vec2 map_size;
+uniform sampler2D terrian:hint_albedo;
+
+vec4 hash4 (vec2 p) {
+	 return fract(
+		sin(
+			vec4(1.0 + dot(p, vec2(37.0,17.0)),
+			     2.0 + dot(p, vec2(11.0,47.0)),
+				 3.0 + dot(p, vec2(41.0,29.0)),
+				 4.0 + dot(p, vec2(23.0,31.0))
+				)
+		) * 103.0
+	);
+}
+
+void fragment () {
+	
+	vec2 uv = UV * map_size;
+	vec2 fluv = floor(uv);
+	vec2 fruv = fract(uv);
+	
+	vec4 offseta = hash4(fluv + vec2(0.0, 0.0));
+	vec4 offsetb = hash4(fluv + vec2(1.0, 0.0));
+	vec4 offsetc = hash4(fluv + vec2(0.0, 1.0));
+	vec4 offsetd = hash4(fluv + vec2(1.0, 1.0));
+	
+	vec2 ddx = dFdx(uv);
+	vec2 ddy = dFdy(uv);
+	
+	offseta.zw = sign(offseta.zw - 0.5);
+	offsetb.zw = sign(offsetb.zw - 0.5);
+	offsetc.zw = sign(offsetc.zw - 0.5);
+	offsetd.zw = sign(offsetd.zw - 0.5);
+	
+    vec2 uva = uv*offseta.zw + offseta.xy; vec2 ddxa = ddx*offseta.zw; vec2 ddya = ddy*offseta.zw;
+    vec2 uvb = uv*offsetb.zw + offsetb.xy; vec2 ddxb = ddx*offsetb.zw; vec2 ddyb = ddy*offsetb.zw;
+    vec2 uvc = uv*offsetc.zw + offsetc.xy; vec2 ddxc = ddx*offsetc.zw; vec2 ddyc = ddy*offsetc.zw;
+    vec2 uvd = uv*offsetd.zw + offsetd.xy; vec2 ddxd = ddx*offsetd.zw; vec2 ddyd = ddy*offsetd.zw;
+   	
+	vec2 b = smoothstep(0.25, 0.75, fruv);
+    
+     ALBEDO = mix(
+		mix( textureGrad( terrian, uva, ddxa, ddya ), textureGrad( terrian, uvb, ddxb, ddyb ), b.x ), 
+        mix( textureGrad( terrian, uvc, ddxc, ddyc ), textureGrad( terrian, uvd, ddxd, ddyd ), b.x), b.y
+	).xyz;
+	
+	//Repeat
+	//ALBEDO = texture(terrian, uv).xyz;
+}
+"

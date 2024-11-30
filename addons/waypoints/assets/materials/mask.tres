@@ -1,108 +1,26 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+[gd_resource type="ShaderMaterial" load_steps=7 format=2]
 
-[ext_resource path="res://assets/scenes/shaders/borders.tres" type="Shader" id=1]
+[ext_resource path="res://assets/shaders/texture_references.tres" type="Shader" id=1]
+[ext_resource path="res://assets/textures/green_test.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/pink_test.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/references/terrian_reference.png" type="Texture" id=4]
+[ext_resource path="res://assets/textures/blue_test.png" type="Texture" id=5]
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
-
-[sub_resource type="Shader" id=1]
-code = "shader_type spatial;
-render_mode unshaded, world_vertex_coords;
-
-uniform sampler2D map;
-uniform vec2 map_size;
-
-vec2 rotate_space(vec2 uv, float deg, vec2 offset) {
-	float rad = radians(deg);
-	uv = uv - offset;
-	mat2 rot = mat2(vec2(cos(rad), sin(rad)), vec2(-sin(rad), cos(rad)));
-	uv *= rot;
-	uv = uv + offset;
-	return uv;
-}
-
-float box(vec2 pos, vec2 size, vec2 offset, float deg) {
-	pos = rotate_space(pos, deg, vec2(0.5));
-	offset = rotate_space(offset, deg, vec2(0.0));
-	pos += offset;
-	vec2 edge = vec2(0.5) - size * 0.5;
-    vec2 uv = smoothstep(edge, edge + vec2(0.001), pos);
-    uv *= smoothstep(edge, edge + vec2(0.001), vec2(1.0) - pos);
-    return uv.x * uv.y;
-}
-
-void fragment() {
-	
-	vec2 a_uv = UV * map_size;
-	vec2 uv = fract(a_uv);
-	vec2 fluv = (floor(a_uv) / map_size) + (1.0 / map_size * 0.5);
-	vec4 textuv = texture(map, fluv);
-	int id = int(textuv.r * 255.0);
-	int part_path_id = int(textuv.g * 255.0);
-	float col = 0.0;
-	const int ids[8] = {128, 64, 32, 16, 8, 4, 2, 1};
-	const int part_path_ids[4] = {8, 4, 2, 1};
-	
-
-	for (int i = 0; i < ids.length(); i++) {
-
-		if (id >= ids[i]) {
-			switch(ids[i]) {
-			    case 1: //1
-					col += box(uv, vec2(0.2, 0.5), vec2(0, 0.25), 0);
-					break;
-			    case 2: //2
-					col += box(uv, vec2(0.7, 0.2), vec2(-0.25, 0.25), 135);
-			        break;
-				case 4: //4
-					col += box(uv, vec2(0.2, 0.5), vec2(-0.25, 0), 90);
-			        break;
-				case 8: //8
-					col += box(uv, vec2(0.7, 0.2), vec2(-0.25), 45);
-					break;
-			    case 16: //16
-					col += box(uv, vec2(0.5, 0.2), vec2(0, -0.25), 90);
-					break;
-			    case 32: //32
-					col += box(uv, vec2(0.7, 0.2), vec2(0.25, -0.25), 135);
-			        break;
-			    case 64: //64
-					col += box(uv, vec2(0.5, 0.2), vec2(0.25, 0), 0);
-			        break;
-			    case 128: //128
-					col += box(uv, vec2(0.7, 0.2), vec2(0.25), 45);
-					break;
-			}
-			id -= ids[i];
-		}
-	}
-	
-	for (int pi = 0; pi < part_path_ids.length(); pi++) {
-		if (part_path_id >= part_path_ids[pi]) {
-			switch(part_path_ids[pi]) {
-				case 1:
-					col += box(uv, vec2(0.5, 0.2), vec2(0.5, -0.5), 45);
-			        break;
-				case 2:
-					col += box(uv, vec2(0.5, 0.2), vec2(-0.5, 0.5), 45);
-			        break;
-				case 4:
-					col += box(uv, vec2(0.5, 0.2), vec2(0.5, 0.5), -45);
-			        break;
-			    case 8:
-					col += box(uv, vec2(0.5, 0.2), vec2(-0.5, -0.5), -45);
-			        break;
-			}
-			part_path_id -= part_path_ids[pi];
-		}
-	}
-
-	ALBEDO = vec3(col);
-	
-}"
+shader_param/map_size = Vector2( 10, 10 )
+shader_param/terrian_ref_size = Vector2( 20, 20 )
+shader_param/path_on = 0
+shader_param/terrian1 = ExtResource( 2 )
+shader_param/terrian2 = ExtResource( 5 )
+shader_param/terrian_ref = ExtResource( 4 )
 
 [resource]
 render_priority = 1
-next_pass = SubResource( 2 )
-shader = SubResource( 1 )
+next_pass = SubResource( 1 )
+shader = ExtResource( 1 )
 shader_param/map_size = Vector2( 10, 10 )
+shader_param/terrian_ref_size = Vector2( 20, 20 )
+shader_param/path_on = 1
+shader_param/terrian1 = ExtResource( 5 )
+shader_param/terrian2 = ExtResource( 3 )
