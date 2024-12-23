@@ -91,19 +91,19 @@ float path(vec2 uv, sampler2D ref_tex) {
                     col += createBezier(fuv, vec2(0.5, 0.0), vec2(0.5), vec2(1.0, 0.5));
                     break;
                 case 2:
-                    col += createBezier(fuv, vec2(1.0, 0.0), vec2(0.5), vec2(1.0));
+                    col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(0.5, 1.0));
                     break;
                 case 4:
                     col += createBezier(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.5, 1.0));
                     break;
                 case 8:
-                    col += createBezier(fuv, vec2(1.0), vec2(0.5), vec2(0.0, 1.0));
+                    col += createBezier(fuv, vec2(0.0), vec2(0.5), vec2(0.0, 1.0));
                     break;
                 case 16:
-                    col += createBezier(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(0.0, 0.5));
+                    col += createBezier(fuv, vec2(1.0, 0.0), vec2(0.5), vec2(1.0));
                     break;
                 case 32:
-                    col += createBezier(fuv, vec2(0.0, 1.0), vec2(0.5), vec2(0.0));
+                    col += createBezier(fuv, vec2(0.0, 1.0), vec2(0.5), vec2(1.0));
                     break;
                 case 64:
                     col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(0.5, 0.0));
@@ -125,19 +125,19 @@ float path(vec2 uv, sampler2D ref_tex) {
                     col += createBezier(fuv, vec2(0.5, 0.0), vec2(0.5), vec2(0.0, 1.0));
                     break;
                 case 4:
-                    col += createBezier(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(1.0, 0.0));
+                    col += createBezier(fuv, vec2(0.0), vec2(0.5), vec2(1.0, 0.5));
                     break;
                 case 8:
-                    col += createBezier(fuv, vec2(0.5, 1.0), vec2(0.5), vec2(0.0));
+                    col += createBezier(fuv, vec2(1.0, 0.0), vec2(0.5), vec2(0.5, 1.0));
                     break;
                 case 16:
-                    col += createBezier(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.0, 1.0));
+                    col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(1.0, 0.0));
                     break;
                 case 32:
-                    col += createBezier(fuv, vec2(1.0, 0.5), vec2(0.5), vec2(0.0));
+                    col += createBezier(fuv, vec2(0.0), vec2(0.5), vec2(0.5, 1.0));
                     break;
                 case 64:
-                    col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(1.0, 0.0));
+                    col += createBezier(fuv, vec2(0.0, 1.0), vec2(0.5), vec2(1.0, 0.5));
                     break;
                 case 128:
                     col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(1.0));
@@ -146,6 +146,31 @@ float path(vec2 uv, sampler2D ref_tex) {
             bezier_obtuse_curve -= ids[id];
         }
 
+        if (linear_acute_curve >= ids[id]) {
+            switch(ids[id])  {
+                case 1:
+                    col += createBezier(fuv, vec2(0.0), vec2(0.5), vec2(0.5, 0.0));
+                    break;
+                case 2:
+                    col += createBezier(fuv, vec2(0.0, 0.5), vec2(0.5), vec2(1.0));
+                    break;
+                case 4:
+                    col += createBezier(fuv, vec2(1.0), vec2(0.5), vec2(1.0, 0.5));
+                    break;
+                case 8:
+                    break;
+                case 16:
+                    break;
+                case 32:
+                    break;
+                case 64:
+                    break;
+                case 128:
+                    break;
+            }
+            linear_acute_curve -= ids[id];
+        }
+ 
         if (linear_half_line >= ids[id]) {
             // linear lines
             switch(ids[id])  {

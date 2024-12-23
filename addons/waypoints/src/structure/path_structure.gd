@@ -26,40 +26,41 @@ func remove(id: int):
 	_set_path()
 
 
+
+func _flatten(waypoint_data : Array):
+	var flattened_data = []
+	for waypoint_id in range(waypoint_data.size()):
+		var waypoint_path_data = waypoint_data[waypoint_id].get_path()
+		var points = _normalise_points(waypoint_path_data)
+		var points_size = points.size()
+		for point_id in range(points_size):
+			if point_id == points_size - 1 && waypoint_id != waypoint_data.size() - 1:
+				continue
+			flattened_data.append(points[point_id])
+	return flattened_data
+
+
 func _set_path():
 
 	_directions = {}
-	var last_previous_position = null
 	if !_waypoint_data.empty():
-		var waypoint_data_size = _waypoint_data.size()
-		for waypoint_id in range(waypoint_data_size):
-			var waypoint_data = _waypoint_data[waypoint_id].get_path()
-			var points = _normalise_points(waypoint_data)
-			var points_size = points.size()
-			for id in range(points_size):
+		var flattened_data = _flatten(_waypoint_data)
+		for id in range(flattened_data.size()):
+			var previous_position = null
+			var current_position = flattened_data[id]
+			var next_position = null
+			var previous_id = id - 1
+			var next_id = id + 1
+
+			if previous_id >= 0:
+				previous_position = _get_normalised_relative_position(flattened_data[previous_id], current_position)
+
+			if next_id < flattened_data.size():
+				next_position = _get_normalised_relative_position(flattened_data[next_id], current_position)
+
+			var relative_directions = {"previous" : previous_position, "next" : next_position}
+			_set_direction(_normalise_position(current_position), relative_directions)
 				
-				var relative_directions = {"previous" : null, "next" : null}
-				var previous_id = id - 1
-				var next_id = id + 1
-				var current_position = _normalise_position(points[id])
-
-				if previous_id >= 0:
-					var previous_position = _normalise_position(points[previous_id])
-					var relative_previous_position = _get_relative_position(previous_position, current_position)
-					relative_directions["previous"] = relative_previous_position
-					last_previous_position = relative_previous_position 
-				else:
-					relative_directions["previous"] = last_previous_position
-
-				if next_id < points.size():
-					var next_position = _normalise_position(points[next_id])
-					relative_directions["next"] = _get_relative_position(next_position, current_position)
-
-				if id == points_size - 1 && waypoint_id != waypoint_data_size - 1:
-					break
-				_set_direction(current_position, relative_directions)
-				print("pos: " + str(current_position) + " " + str(relative_directions))
-					
 		for pos in _directions:
 			var linear_total = 0
 			var right_angle_total = 0
@@ -89,15 +90,21 @@ func _normalise_position(pos : Vector3):
 	return Vector2(pos.x, pos.z).floor()
 
 
-func _set_direction(pos : Vector2, relative_positions : Dictionary):
+func _set_direction(pos : Vector2, relative_positions : Dictionary): 
 
 	if !_directions.has(pos):
-		_directions[pos] = {"linear" : {}, "right_angle" : {}, "obtuse" : {}}
-
+		_directions[pos] = {"linear" : {}, "right_angle" : {}, "obtuse" : {}, "acute" : {}}
+	print("relative pos " + str(relative_positions))
 	var linear_half_id = _get_id_linear_half_line(relative_positions)
+	print("linear half id: " + str(linear_half_id))
 	var linear_id = _get_id_linear_line(relative_positions)
+	print("linear id: " + str(linear_id))
 	var bezier_obtuse_id = _get_id_bezier_obtuse(relative_positions)
+	print("linear obtuse id: " + str(bezier_obtuse_id))
 	var bezier_right_angle_id = _get_id_bezier_right_angle(relative_positions)
+	print("linear right angle id: " + str(bezier_right_angle_id))
+	var bezier_acute_id = _get_id_bezier_acute(relative_positions)
+	print("linear acute id: " + str(bezier_acute_id))
 
 	if linear_half_id != 0: 
 		_directions[pos]["linear"][linear_half_id] = linear_half_id
@@ -124,27 +131,36 @@ func _set_direction(pos : Vector2, relative_positions : Dictionary):
 	if bezier_obtuse_id != 0: 
 		_directions[pos]["obtuse"][bezier_obtuse_id] = bezier_obtuse_id
 
+	if bezier_acute_id != 0: 
+		_directions[pos]["acute"][bezier_acute_id] = bezier_acute_id
+
+
 func _get_id_linear_half_line(relative_pos : Dictionary):
 
 	var id = 0
+	print(relative_pos)
 	match relative_pos:
 		#linear half line
 		{"next" : Vector2(0, -1), "previous" : null}:
 			id = 1
 		{"next" : null, "previous" : Vector2(0, -1)}:
 			id = 1
-		#{"next" : Vector2(1, 1)}, {"previous" : Vector2(1, 1)}:
-		#	id = 2
+		{"next" : Vector2(1, 1), "previous" : null}:
+			id = 2
+		{"next" : null, "previous" : Vector2(1, 1)}:
+			id = 2
 		{"next" : null, "previous" : Vector2(0, 1)}:
 			id = 16 
 		{"next" : Vector2(0, 1), "previous" : null}:
 			id = 16 
-		#{"next" : Vector2(-1, 1)}, {"previous" : Vector2(-1, 1)}:
-			#id = 8
-		#{"next" : Vector2(-1, 0), "previous" : Vector2(-1, 0)}:
-			#id = 64
-		#{"next" : Vector2(-1, -1)}, {"previous" : Vector2(-1, -1)}:
-		#	id = 32
+		{"next" : Vector2(-1, 1), "previous" : null}:
+			id = 8
+		{"next" : null , "previous" : Vector2(-1, 1)}:
+			id = 8
+		{"next" : Vector2(-1, -1), "previous" : null}:
+			id = 32
+		{"next" : null, "previous" : Vector2(-1, -1)}:
+			id = 32
 		{"next" : Vector2(1, 0), "previous" : null}:
 			id = 4
 		{"next" : null, "previous" : Vector2(1, 0)}:
@@ -152,11 +168,25 @@ func _get_id_linear_half_line(relative_pos : Dictionary):
 		{"next" : null, "previous" : Vector2(-1, 0)}:
 			id = 64
 		{"next" : Vector2(-1, 0), "previous" : null}: 
-			id = 64
-		#{"next" : Vector2(1, -1)}, {"previous" : Vector2(1, -1)}:
-		#	id = 128
+			id = 65
+		{"next" : Vector2(1, -1), "previous" : null}:
+			id = 128
+		{"next" : null, "previous" : Vector2(1, -1)}:
+			id = 128
 
 	return id
+
+
+func _get_id_bezier_acute(relative_pos : Dictionary):
+
+    var id = 0
+	match relative_pos:
+		{"previous" : Vector2(0, 0), "next" : Vector2(0.5, 0)}, {"next" : Vector2(0, 0), "previous" : Vector2(0.5, 0)}:
+            id = 1
+		{"previous" : Vector2(0.5, 0), "next" : Vector2(1, 0)}, {"next" : Vector2(0.5, 0), "previous" : Vector2(1, 0)}:
+            id = 2
+		{"previous" : Vector2(1, 0), "next" : Vector2(1, 0.5)}, {"next" : Vector2(1, 0), "previous" : Vector2(1, 0.5)}:
+            id = 4
 
 
 func _get_id_linear_line(relative_pos : Dictionary):
@@ -195,7 +225,7 @@ func _get_id_bezier_obtuse(relative_pos : Dictionary):
 		{"previous" : Vector2(1, 0), "next" : Vector2(-1, 1)}, {"next" : Vector2(1, 0), "previous" : Vector2(-1, 1)}:
 			id = 64
 		{"previous" : Vector2(0, 1), "next" : Vector2(-1, -1)}, {"next" : Vector2(0, 1), "previous" : Vector2(-1, -1)}:
-			id = 8
+			id = 32
 
 	return id
 
@@ -206,7 +236,7 @@ func _get_id_bezier_right_angle(relative_pos : Dictionary):
 	match relative_pos:
 		# bezier sharp curve
 		{"previous" : Vector2(-1, 0), "next" : Vector2(0, 1)}, {"next" : Vector2(-1, 0), "previous" : Vector2(0, 1)}:
-			id = 16
+			id = 2
 		{"previous" : Vector2(0, 1), "next" : Vector2(1, 0)}, {"previous" : Vector2(1, 0), "next" : Vector2(0, 1)}: 
 			id = 4
 		{"previous" : Vector2(0, -1), "next" : Vector2(-1, 0)}, {"next" : Vector2(0, -1), "previous" : Vector2(-1, 0)}:
@@ -215,10 +245,10 @@ func _get_id_bezier_right_angle(relative_pos : Dictionary):
 			id = 1
 		{"previous" : Vector2(1, -1), "next" : Vector2(1, 1)}, {"next" : Vector2(1, -1), "previous" : Vector2(1, 1)}:
 			id = 16
-		{"previous" : Vector2(1, 1), "next" : Vector2(-1, 1)}, {"next" : Vector2(1, 1), "previous" : Vector2(-1, 1)}:
+		{"previous" : Vector2(-1, 1), "next" : Vector2(1, 1)}, {"next" : Vector2(-1, 1), "previous" : Vector2(1, 1)}:
 			id = 32
 		{"previous" : Vector2(-1, 1), "next" : Vector2(-1, -1)}, {"next" : Vector2(-1, 1), "previous" : Vector2(-1, -1)}:
-			id = 64
+			id = 8
 		{"previous" : Vector2(-1, -1), "next" : Vector2(1, -1)}, {"previous" : Vector2(-1, -1), "next" : Vector2(1, -1)}:
 			id = 128
 
@@ -228,4 +258,12 @@ func _get_id_bezier_right_angle(relative_pos : Dictionary):
 func _get_relative_position(pos1 : Vector2, pos2 : Vector2):
 
 	return  pos1 - pos2
+
+
+func _get_normalised_relative_position(pos : Vector3, pos2 : Vector3):
+
+	var normalised_position = _normalise_position(pos)
+	var normalised_position2 = _normalise_position(pos2)
+
+	return _get_relative_position(normalised_position, normalised_position2)
 	
