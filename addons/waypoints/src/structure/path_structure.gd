@@ -62,17 +62,14 @@ func _set_path():
 			_set_direction(_normalise_position(current_position), relative_directions)
 				
 		for pos in _directions:
-			var linear_total = 0
-			var right_angle_total = 0
-			var obtuse_total = 0
-
-			for id in _directions[pos]["linear"]:
-				linear_total += _directions[pos]["linear"][id]
-			for id in _directions[pos]["right_angle"]:
-				right_angle_total += _directions[pos]["right_angle"][id]
-			for id in _directions[pos]["obtuse"]:
-				obtuse_total += _directions[pos]["obtuse"][id]
-			_map.update(pos, Vector3(linear_total, right_angle_total, obtuse_total))
+			var col = Vector3.ZERO
+			if _directions[pos] == 256:
+				col = Vector3(0, 1, 0)
+			if _directions[pos] > 256:
+				col = Vector3(_directions[pos] - 256, 1, 0)
+			if _directions[pos] < 256:
+				col = Vector3(_directions[pos], 0, 0)
+			_map.update(pos, col)
 		_mask.set_shader_param("bezier_path_map", _map.get_map())
    
 
@@ -91,169 +88,218 @@ func _normalise_position(pos : Vector3):
 
 
 func _set_direction(pos : Vector2, relative_positions : Dictionary): 
-
+	
+	var id = 0
 	if !_directions.has(pos):
-		_directions[pos] = {"linear" : {}, "right_angle" : {}, "obtuse" : {}, "acute" : {}}
-	print("relative pos " + str(relative_positions))
-	var linear_half_id = _get_id_linear_half_line(relative_positions)
-	print("linear half id: " + str(linear_half_id))
-	var linear_id = _get_id_linear_line(relative_positions)
-	print("linear id: " + str(linear_id))
-	var bezier_obtuse_id = _get_id_bezier_obtuse(relative_positions)
-	print("linear obtuse id: " + str(bezier_obtuse_id))
-	var bezier_right_angle_id = _get_id_bezier_right_angle(relative_positions)
-	print("linear right angle id: " + str(bezier_right_angle_id))
-	var bezier_acute_id = _get_id_bezier_acute(relative_positions)
-	print("linear acute id: " + str(bezier_acute_id))
+		_directions[pos] = 0
 
-	if linear_half_id != 0: 
-		_directions[pos]["linear"][linear_half_id] = linear_half_id
+	print("Relative positions " + str(relative_positions))
 
-	if linear_id == 68: 
-		_directions[pos]["linear"][4] = 4
-		_directions[pos]["linear"][64] = 64
+	match relative_positions:
 
-	if linear_id == 34: 
-		_directions[pos]["linear"][2] = 2
-		_directions[pos]["linear"][32] = 32
+		# linear north, south 
+		{"previous" : Vector2(-1, -1), "next" : Vector2(1, 1)}:
+			id = 1 + 256
+		{"previous" : Vector2(1, 1), "next" : Vector2(-1, -1)}:
+			id = 1 + 256
+		{"previous" : null, "next" : Vector2(1, 1)}:
+			id = 16 + 256
+		{"previous" : Vector2(1, 1), "next" : null}:
+			id = 16 + 256
+		{"previous" : Vector2(-1, -1), "next" : null}: 
+			id = 16 + 1
+		{"previous" : null, "next" : Vector2(-1, -1)}: 
+			id = 16 + 1
 
-	if linear_id == 17: 
-		_directions[pos]["linear"][1] = 1
-		_directions[pos]["linear"][16] = 16
-
-	if linear_id == 136: 
-		_directions[pos]["linear"][8] = 8
-		_directions[pos]["linear"][128] = 128
-
-	if bezier_right_angle_id != 0:
-		_directions[pos]["right_angle"][bezier_right_angle_id] = bezier_right_angle_id
-
-	if bezier_obtuse_id != 0: 
-		_directions[pos]["obtuse"][bezier_obtuse_id] = bezier_obtuse_id
-
-	if bezier_acute_id != 0: 
-		_directions[pos]["acute"][bezier_acute_id] = bezier_acute_id
+		# linear east, west 
+		{"previous" : Vector2(1, -1), "next" : Vector2(-1, 1)}:
+			id = 64 + 4 
+		{"previous" : Vector2(-1, 1), "next" : Vector2(1, -1)}:
+			id = 64 + 4 
+		{"previous" : null, "next" : Vector2(-1, 1)}:
+			id = 64 + 16
+		{"previous" : Vector2(-1, 1), "next" : null}:
+			id = 64 + 16
+		{"previous" : Vector2(1, -1), "next" : null}: 
+			id = 4 + 16
+		{"previous" : null, "next" : Vector2(1, -1)}: 
+			id = 4 + 16
 
 
-func _get_id_linear_half_line(relative_pos : Dictionary):
+		# linear south west, north east 
+		{"previous" : Vector2(0, -1), "next" : Vector2(0, 1)}:
+			id = 2 + 128
+		{"previous" : Vector2(0, 1), "next" : Vector2(0, -1)}:
+			id = 2 + 128
+		{"previous" : null, "next" : Vector2(0, 1)}:
+			id = 16 + 128
+		{"previous" : Vector2(0, 1), "next" : null}: 
+			id = 16 + 128
+		{"previous" : Vector2(0, -1), "next" : null}: 
+			id = 2 + 16
+		{"previous" : null, "next" : Vector2(0, -1)}: 
+			id = 2 + 16
 
-	var id = 0
-	print(relative_pos)
-	match relative_pos:
-		#linear half line
-		{"next" : Vector2(0, -1), "previous" : null}:
-			id = 1
-		{"next" : null, "previous" : Vector2(0, -1)}:
-			id = 1
-		{"next" : Vector2(1, 1), "previous" : null}:
-			id = 2
-		{"next" : null, "previous" : Vector2(1, 1)}:
-			id = 2
-		{"next" : null, "previous" : Vector2(0, 1)}:
-			id = 16 
-		{"next" : Vector2(0, 1), "previous" : null}:
-			id = 16 
-		{"next" : Vector2(-1, 1), "previous" : null}:
-			id = 8
-		{"next" : null , "previous" : Vector2(-1, 1)}:
-			id = 8
-		{"next" : Vector2(-1, -1), "previous" : null}:
-			id = 32
-		{"next" : null, "previous" : Vector2(-1, -1)}:
-			id = 32
-		{"next" : Vector2(1, 0), "previous" : null}:
-			id = 4
-		{"next" : null, "previous" : Vector2(1, 0)}:
-			id = 4
-		{"next" : null, "previous" : Vector2(-1, 0)}:
-			id = 64
-		{"next" : Vector2(-1, 0), "previous" : null}: 
-			id = 65
-		{"next" : Vector2(1, -1), "previous" : null}:
-			id = 128
-		{"next" : null, "previous" : Vector2(1, -1)}:
-			id = 128
-
-	return id
+		# linear south east, north west
+		{"previous" : Vector2(-1, 0), "next" : Vector2(1, 0)}:
+			id = 8 + 32
+		{"previous" : Vector2(1, 0), "next" : Vector2(-1, 0)}:
+			id = 8 + 32
+		{"previous" : null, "next" : Vector2(1, 0)}:
+			id = 16 + 32
+		{"previous" : Vector2(1, 0), "next" : null}:
+			id = 16 + 32
+		{"previous" : Vector2(-1, 0), "next" : null}:
+			id = 8 + 16
+		{"previous" : null, "next" : Vector2(-1, 0)}:
+			id = 8 + 16
 
 
-func _get_id_bezier_acute(relative_pos : Dictionary):
+		# bezier curve north west to south west
+		{"previous" : Vector2(-1, 0), "next" : Vector2(0, 1)}:
+			id = 8 + 128
+		{"previous" : Vector2(0, 1), "next" : Vector2(-1, 0)}:
+			id = 8 + 128
 
-    var id = 0
-	match relative_pos:
-		{"previous" : Vector2(0, 0), "next" : Vector2(0.5, 0)}, {"next" : Vector2(0, 0), "previous" : Vector2(0.5, 0)}:
-            id = 1
-		{"previous" : Vector2(0.5, 0), "next" : Vector2(1, 0)}, {"next" : Vector2(0.5, 0), "previous" : Vector2(1, 0)}:
-            id = 2
-		{"previous" : Vector2(1, 0), "next" : Vector2(1, 0.5)}, {"next" : Vector2(1, 0), "previous" : Vector2(1, 0.5)}:
-            id = 4
+		# bezier curve north east to south east 
+		{"previous" : Vector2(0, -1), "next" : Vector2(1, 0)}:
+			id = 2 + 32
+		{"previous" : Vector2(1, 0), "next" : Vector2(0, -1)}:
+			id = 2 + 32
 
+		# bezier curve north west to north east 
+		{"previous" : Vector2(-1, 0), "next" : Vector2(0, -1)}:
+			id = 2 + 8
+		{"previous" : Vector2(0, -1), "next" : Vector2(-1, 0)}:
+			id = 2 + 8
 
-func _get_id_linear_line(relative_pos : Dictionary):
+		# bezier curve south east to south west 
+		{"previous" : Vector2(0, 1), "next" : Vector2(1, 0)}:
+			id = 32 + 128
+		{"previous" : Vector2(1, 0), "next" : Vector2(0, 1)}:
+			id = 32 + 128
+		
+		# bezier curve north to east 
+		{"previous" : Vector2(-1, -1), "next" : Vector2(1, -1)}:
+			id = 1 + 4
+		{"previous" : Vector2(1, -1), "next" : Vector2(-1, -1)}:
+			id = 1 + 4
 
-	var id = 0
-	match relative_pos:
-		{"previous" : Vector2(-1, 0), "next" : Vector2(1, 0)}, {"next" : Vector2(-1, 0), "previous" : Vector2(1, 0)}:
-			id = 68
-		{"previous" : Vector2(-1, -1), "next" : Vector2(1, 1)}, {"next" : Vector2(-1, -1), "previous" : Vector2(1, 1)}:
-			id = 34
-		{"previous" : Vector2(0, -1), "next" : Vector2(0, 1)}, {"next" : Vector2(0, -1), "previous" : Vector2(0, 1)}:
-			id = 17
-		{"previous" : Vector2(1, -1), "next" : Vector2(-1, 1)}, {"next" : Vector2(1, -1), "previous" : Vector2(-1, 1)}:
-			id = 136
+		# bezier curve east to south 
+		{"previous" : Vector2(1, -1), "next" : Vector2(1, 1)}:
+			id = 4 + 256 
+		{"previous" : Vector2(1, 1), "next" : Vector2(1, -1)}:
+			id = 4 + 256 
 
-	return id
+		# bezier curve south to west 
+		{"previous" : Vector2(1, 1), "next" : Vector2(-1, 1)}:
+			id = 256 + 64 
+		{"previous" : Vector2(-1, 1), "next" : Vector2(1, 1)}:
+			id = 256 + 64 
 
+		# bezier curve west to north 
+		{"previous" : Vector2(-1, 1), "next" : Vector2(-1, -1)}:
+			id = 64 + 1 
+		{"previous" : Vector2(-1, -1), "next" : Vector2(-1, 1)}:
+			id = 64 + 1
 
-func _get_id_bezier_obtuse(relative_pos : Dictionary):
+		# bezier curve north to south east
+		{"previous" : Vector2(-1, -1), "next" : Vector2(1, 0)}:
+			id = 1 + 32 
+		{"previous" : Vector2(1, 0), "next" : Vector2(-1, -1)}:
+			id = 1 + 32 
 
-	var id = 0
-	match relative_pos:
-		# bezier slight curve
-		{"previous" : Vector2(-1, 0), "next" : Vector2(1, 1)}, {"next" : Vector2(-1, 0), "previous" : Vector2(1, 1)}:
-			id = 128
-		{"previous" : Vector2(0, -1), "next" : Vector2(-1, 1)}, {"next" : Vector2(0, -1), "previous" : Vector2(-1, 1)}:
-			id = 2
-		{"previous" : Vector2(1, 0), "next" : Vector2(-1, -1)}, {"next" : Vector2(1, 0), "previous" : Vector2(-1, -1)}:
-			id = 4
-		{"previous" : Vector2(0, 1), "next" : Vector2(1, -1)}, {"next" : Vector2(0, 1), "previous" : Vector2(1, -1)}:
-			id = 8
-		{"previous" : Vector2(-1, 0), "next" : Vector2(1, -1)}, {"next" : Vector2(-1, 0), "previous" : Vector2(1, -1)}:
-			id = 16
-		{"previous" : Vector2(0, -1), "next" : Vector2(1, 1)}, {"next" : Vector2(0, -1), "previous" : Vector2(1, 1)}:
-			id = 1
-		{"previous" : Vector2(1, 0), "next" : Vector2(-1, 1)}, {"next" : Vector2(1, 0), "previous" : Vector2(-1, 1)}:
-			id = 64
-		{"previous" : Vector2(0, 1), "next" : Vector2(-1, -1)}, {"next" : Vector2(0, 1), "previous" : Vector2(-1, -1)}:
-			id = 32
+		# bezier curve north east to south 
+		{"previous" : Vector2(0, -1), "next" : Vector2(1, 1)}:
+			id = 2 + 256 
+		{"previous" : Vector2(1, 1), "next" : Vector2(0, -1)}:
+			id = 2 + 256 
 
-	return id
+		# bezier curve east to south west 
+		{"previous" : Vector2(1, -1), "next" : Vector2(0, 1)}:
+			id = 4 + 128 
+		{"previous" : Vector2(0, 1), "next" : Vector2(1, -1)}:
+			id = 4 + 128 
 
+		# bezier curve south east to west 
+		{"previous" : Vector2(1, 0), "next" : Vector2(-1, 1)}:
+			id = 32 + 64 
+		{"previous" : Vector2(-1, 1), "next" : Vector2(1, 0)}:
+			id = 33 + 64 
 
-func _get_id_bezier_right_angle(relative_pos : Dictionary):
+		# bezier curve south to north west 
+		{"previous" : Vector2(1, 1), "next" : Vector2(-1, 0)}:
+			id = 256 + 8 
+		{"previous" : Vector2(-1, 0), "next" : Vector2(1, 1)}:
+			id = 256 + 8 
 
-	var id = 0
-	match relative_pos:
-		# bezier sharp curve
-		{"previous" : Vector2(-1, 0), "next" : Vector2(0, 1)}, {"next" : Vector2(-1, 0), "previous" : Vector2(0, 1)}:
-			id = 2
-		{"previous" : Vector2(0, 1), "next" : Vector2(1, 0)}, {"previous" : Vector2(1, 0), "next" : Vector2(0, 1)}: 
-			id = 4
-		{"previous" : Vector2(0, -1), "next" : Vector2(-1, 0)}, {"next" : Vector2(0, -1), "previous" : Vector2(-1, 0)}:
-			id = 64
-		{"previous" : Vector2(1, 0), "next" : Vector2(0, -1)}, {"next" : Vector2(1, 0), "previous" : Vector2(0, -1)}:
-			id = 1
-		{"previous" : Vector2(1, -1), "next" : Vector2(1, 1)}, {"next" : Vector2(1, -1), "previous" : Vector2(1, 1)}:
-			id = 16
-		{"previous" : Vector2(-1, 1), "next" : Vector2(1, 1)}, {"next" : Vector2(-1, 1), "previous" : Vector2(1, 1)}:
-			id = 32
-		{"previous" : Vector2(-1, 1), "next" : Vector2(-1, -1)}, {"next" : Vector2(-1, 1), "previous" : Vector2(-1, -1)}:
-			id = 8
-		{"previous" : Vector2(-1, -1), "next" : Vector2(1, -1)}, {"previous" : Vector2(-1, -1), "next" : Vector2(1, -1)}:
-			id = 128
+		# bezier curve south west to north
+		{"previous" : Vector2(0, 1), "next" : Vector2(-1, -1)}:
+			id = 128 + 1 
+		{"previous" : Vector2(-1, -1), "next" : Vector2(0, 1)}:
+			id = 128 + 1 
 
-	return id 
-	  
+		# bezier curve west to north east 
+		{"previous" : Vector2(-1, 1), "next" : Vector2(0, -1)}:
+			id = 64 + 2 
+		{"previous" : Vector2(0, -1), "next" : Vector2(-1, 1)}:
+			id = 64 + 2 
+
+		# bezier curve north west to east
+		{"previous" : Vector2(-1, 0), "next" : Vector2(1, -1)}:
+			id = 8 + 4 
+		{"previous" : Vector2(1, -1), "next" : Vector2(-1, 0)}:
+			id = 8 + 4 
+
+		# bezier curve north to north east
+		{"previous" : Vector2(-1, -1), "next" : Vector2(0, -1)}:
+			id = 1 + 2 
+		{"previous" : Vector2(0, -1), "next" : Vector2(-1, -1)}:
+			id = 1 + 2 
+
+		# bezier curve north east to east
+		{"previous" : Vector2(0, -1), "next" : Vector2(1, -1)}:
+			id = 2 + 4
+		{"previous" : Vector2(1, -1), "next" : Vector2(0, -1)}:
+			id = 2 + 4
+
+		# bezier curve east to south east
+		{"previous" : Vector2(1, -1), "next" : Vector2(1, 0)}:
+			id = 4 + 32
+		{"previous" : Vector2(1, 0), "next" : Vector2(1, -1)}:
+			id = 4 + 32
+
+		# bezier curve south east to south
+		{"previous" : Vector2(1, 0), "next" : Vector2(1, 1)}:
+			id = 32 + 256
+		{"previous" : Vector2(1, 1), "next" : Vector2(1, 0)}:
+			id = 32 + 256
+
+		# bezier curve south to south west 
+		{"previous" : Vector2(1, 1), "next" : Vector2(0, 1)}:
+			id = 256 + 128
+		{"previous" : Vector2(0, 1), "next" : Vector2(1, 1)}:
+			id = 256 + 128
+
+		# bezier curve south west to west 
+		{"previous" : Vector2(0, 1), "next" : Vector2(-1, 1)}:
+			id = 128 + 64
+		{"previous" : Vector2(-1, 1), "next" : Vector2(0, 1)}:
+			id = 128 + 64
+
+		# bezier curve west to north west 
+		{"previous" : Vector2(-1, 1), "next" : Vector2(-1, 0)}:
+			id = 64 + 8
+		{"previous" : Vector2(-1, 0), "next" : Vector2(-1, 1)}:
+			id = 64 + 8
+		
+		# bezier curve north west to north 
+		{"previous" : Vector2(-1, 0), "next" : Vector2(-1, -1)}:
+			id = 8 + 1
+		{"previous" : Vector2(-1, -1), "next" : Vector2(-1, 0)}:
+			id = 8 + 1
+	_directions[pos] = id
+
 
 func _get_relative_position(pos1 : Vector2, pos2 : Vector2):
 
