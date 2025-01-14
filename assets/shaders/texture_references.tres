@@ -114,7 +114,9 @@ float path(vec2 uv, sampler2D ref_tex) {
 
     float col = 0.0;
 	const int ids[9] = int[9] (256, 128, 64, 32, 16, 8, 4, 2, 1);
+	const int corner_ids[4] = int[4] (8, 4, 2, 1);
     int total = int(ids_for_position.x) + (256 * int(ids_for_position.y));
+    int corner_total = int(ids_for_position.z);
     for (int id = 0; id < ids.length(); id++) {
 
         if (total >= ids[id]) {
@@ -132,6 +134,26 @@ float path(vec2 uv, sampler2D ref_tex) {
             }
         }
     }
+    
+    for (int id = 0; id < corner_ids.length(); id++) {
+        if (corner_total >= corner_ids[id]) {
+            if (corner_ids[id] == 1) {
+                col += create_bezier(fuv, vec2(-1.0, 1.0), vec2(0.0), vec2(1.0, -1.0)); 
+            }
+            if (corner_ids[id] == 2) {
+                col += create_bezier(fuv, vec2(2.0, 0.0), vec2(1.0), vec2(0.0, 2.0)); 
+            }
+            if (corner_ids[id] == 4) {
+                col += create_bezier(fuv, vec2(0.0, -1.0), vec2(1.0, 0.0), vec2(2.0, 1.0));
+            }
+            if (corner_ids[id] == 8) {
+                col += create_bezier(fuv, vec2(-1.0, 0.0), vec2(0.0, 1.0), vec2(1.0, 2.0));
+            }
+            corner_total -= corner_ids[id];
+        }
+    }
+
+
     return col;
 }
 
