@@ -8,6 +8,6 @@ func _init(waypoints_factory : MUW_Waypoints_Factory, world : MUW_World):
 	_world = world
 
 
-func create_3d(parent_node : Node, camera : Camera, size : Vector2,  world : World):
-	var waypoints = _waypoints_factory.create_3d_paths(parent_node, size, camera, world)
+func create_3d(parent_node : Node, camera : Camera, size : Vector2,  world : World, existing_paths = []):
+	var waypoints = _waypoints_factory.create_3d_paths(parent_node, size, camera, world, existing_paths)
 	return MUW_Waypoints_Operations.new(waypoints, _world)

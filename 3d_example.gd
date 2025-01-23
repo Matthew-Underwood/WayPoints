@@ -7,7 +7,12 @@ var _waypoints : MUW_Waypoints_Operations
 func _ready():
 	_viewport = get_viewport()
 	var world = MUW_World_Factory.new().create_3d(Vector3(0, -10, 0), self, _viewport.get_camera(), get_world())
-	_waypoints = world.create_waypoints(self, _viewport.get_camera(), get_world())
+	var existing_paths = [PoolVector3Array()]
+	var point = existing_paths[0]
+	point.append(Vector3(8, 0, 8))
+	point.append(Vector3(7, 0, 7))
+	existing_paths[0] = point
+	_waypoints = world.create_waypoints(self, _viewport.get_camera(), get_world(), existing_paths)
 	
 	
 	

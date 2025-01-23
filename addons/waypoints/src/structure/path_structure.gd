@@ -1,6 +1,6 @@
 class_name MUW_Path_Structure
 
-var _waypoint_data : Array
+var _path : Array
 var _map : MUT_Texture_Map
 var _directions : Dictionary
 var _mask
@@ -11,40 +11,28 @@ func _init(map : MUT_Texture_Map, mask):
 	_mask = mask
 
 
-func create(waypoint_data: MUW_Waypoint_Data):
-	_waypoint_data.append(waypoint_data)
-	_set_path()
+func send(path : Array):
+	_set_path(path)
 
 
-func update(id: int, waypoint_data: MUW_Waypoint_Data):
-	_waypoint_data[id] = waypoint_data
-	_set_path()
-
-
-func remove(id: int):
-	_waypoint_data.remove(id)
-	_set_path()
-
-
-
-func _flatten(waypoint_data : Array):
+func _flatten(path : Array):
 	var flattened_data = []
-	for waypoint_id in range(waypoint_data.size()):
-		var waypoint_path_data = waypoint_data[waypoint_id].get_path()
-		var points = _normalise_points(waypoint_path_data)
+	for path_items_id in range(path.size()):
+		var path_items = path[path_items_id]
+		var points = _normalise_points(path_items)
 		var points_size = points.size()
 		for point_id in range(points_size):
-			if point_id == points_size - 1 && waypoint_id != waypoint_data.size() - 1:
+			if point_id == points_size - 1 && path_items_id != path.size() - 1:
 				continue
 			flattened_data.append(points[point_id])
 	return flattened_data
 
 
-func _set_path():
+func _set_path(path : Array):
 
 	_directions = {}
-	if !_waypoint_data.empty():
-		var flattened_data = _flatten(_waypoint_data)
+	if !path.empty():
+		var flattened_data = _flatten(path)
 		for id in range(flattened_data.size()):
 			var previous_position = null
 			var current_position = flattened_data[id]
@@ -445,9 +433,6 @@ func _apply_corners(pos : Vector2, id : int):
 		256:
 			relative_directions[Vector2(1, 0)] = 4
 			relative_directions[Vector2(0, 1)] = 8
-
-
-
 
 	for relative_direction in relative_directions:
 		var absolute_pos = pos + relative_direction

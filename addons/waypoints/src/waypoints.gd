@@ -6,13 +6,15 @@ var _waypoints = []
 var _origin = Vector2(0, 0)
 var _waypoint_data_factory : MUW_Waypoint_Data_Factory
 var _structure
+var _existing_paths = []
 
 
-func _init(pathing : MUP_Pathing, waypoint_data_factory : MUW_Waypoint_Data_Factory, transformer, structure):
+func _init(pathing : MUP_Pathing, waypoint_data_factory : MUW_Waypoint_Data_Factory, transformer, structure, existing_paths = []): 
 	_pathing = pathing
 	_waypoint_data_factory = waypoint_data_factory
 	_transformer = transformer
 	_structure = structure
+	_existing_paths = existing_paths
 
 
 func create_waypoint(pos : Vector2) -> void:
@@ -22,7 +24,7 @@ func create_waypoint(pos : Vector2) -> void:
 	var path_points = _pathing.get_path(world_start, world_end)
 	var waypoint_data = _waypoint_data_factory.create(path_points, world_end)
 	_waypoints.append(waypoint_data)
-	_structure.create(waypoint_data)
+	_apply()
 
 
 func get_waypoint_id_from_pos(pos : Vector2):
@@ -46,8 +48,7 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 	var waypoint = _waypoints[id]
 	waypoint.set_world_position(world_end)
 	waypoint.set_path(path_points)
-	
-	_structure.update(id, waypoint)
+	_apply()
 	
 	var position_next_waypoint = _resolve_position_from_id(next_id, true)
 	
@@ -57,7 +58,7 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 		path_points = _pathing.get_path(world_start, world_end)
 		waypoint = _waypoints[next_id]
 		waypoint.set_path(path_points)
-		_structure.update(next_id, waypoint)
+		_apply()
 
 
 func remove_waypoint(id : int) -> void:
@@ -71,15 +72,25 @@ func remove_waypoint(id : int) -> void:
 		var waypoint = _waypoints[next_id]
 		var path_points = _pathing.get_path(start, end)
 		waypoint.set_path(path_points)
-		_structure.update(next_id, waypoint)
 
-	_structure.remove(id)
 	_waypoints.remove(id)
+	_apply()
 
 
 func empty() -> bool:
 
 	return _waypoints.empty()
+
+
+func export_as_paths() -> Array:
+	for waypoint in _waypoints:
+	   _existing_paths.append(waypoint.get_path())
+	return _existing_paths
+
+
+func _apply():
+	var path = export_as_paths()
+	_structure.send(path)
 
 
 func _resolve_position_from_id(id : int, absolute = false):

@@ -30,7 +30,7 @@ func create_3d_nodes(parent_node : Node, camera : Camera, world : World) -> MUW_
 	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure)
 
 
-func create_3d_paths(parent_node : Node, size : Vector2, camera : Camera, world : World) -> MUW_Waypoints:
+func create_3d_paths(parent_node : Node, size : Vector2, camera : Camera, world : World, existing_path = []) -> MUW_Waypoints:
 	var points = MUW_Points.new()
 	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
@@ -42,4 +42,4 @@ func create_3d_paths(parent_node : Node, size : Vector2, camera : Camera, world 
 	mask_shader.set_shader_param("bezier_path_map", texture_map.get_map())
 	var structure = MUW_Path_Structure.new(texture_map, mask_shader)
 
-	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure)
+	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure, existing_path)
