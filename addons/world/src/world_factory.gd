@@ -10,7 +10,7 @@ func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : W
 	var points = MUW_Points.new()
 	var tiles = MUW_Tiles_Factory.new(_tile_data_3d(), points).create_3d(cast_to, parent_node)
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints_factory = MUW_Waypoints_Factory.new(pathing, waypoint_data_factory, points)
+	var waypoints_factory = MUW_Waypoints_Factory.new(pathing, points)
 	var mesh_picker = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picker)
 

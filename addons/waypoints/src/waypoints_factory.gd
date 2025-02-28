@@ -1,14 +1,13 @@
 class_name MUW_Waypoints_Factory
 
 var _pathing : MUP_Pathing
-var _waypoint_data_factory : MUW_Waypoint_Data_Factory
 var _points : MUW_Points
+var _waypoint_collection_factory : MUW_Waypoints_Collection_Factory
 
-func _init(pathing : MUP_Pathing, waypoint_data_factory : MUW_Waypoint_Data_Factory, points : MUW_Points):
+func _init(pathing : MUP_Pathing, points : MUW_Points, waypoint_collection_factory : MUW_Waypoints_Collection_Factory):
 	_pathing = pathing
-	_waypoint_data_factory = waypoint_data_factory
 	_points = points
-
+    _waypoint_collection_factory = waypoint_collection_factory
 
 func create_2d_nodes(parent_node : Node, tilemap : TileMap) -> MUW_Waypoints:
 	var transformer = MUW_Transformers_Screen_Tilemap.new(tilemap)
@@ -16,7 +15,8 @@ func create_2d_nodes(parent_node : Node, tilemap : TileMap) -> MUW_Waypoints:
 	var waypoints_packed = preload("res://addons/waypoints/assets/scenes/2d/waypoints.tscn")
 	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed)
 	var structure = MUW_Node_Structure.new(waypoint_factory)
-	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure)
+    var waypoint_collection = _waypoint_collection_factory.create()
+	return MUW_Waypoints.new(_pathing, transformer, structure, waypoint_collection)
 
 
 func create_3d_nodes(parent_node : Node, camera : Camera, world : World) -> MUW_Waypoints:
@@ -27,7 +27,8 @@ func create_3d_nodes(parent_node : Node, camera : Camera, world : World) -> MUW_
 	var waypoints_packed = preload("res://addons/waypoints/assets/scenes/3d/waypoints.tscn")
 	var waypoint_factory = MUW_Waypoint_Factory.new(parent_node, waypoints_packed, waypoint_packed, _points)
 	var structure = MUW_Node_Structure.new(waypoint_factory)
-	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure)
+    var waypoint_collection = _waypoint_collection_factory.create()
+	return MUW_Waypoints.new(_pathing, transformer, structure, waypoint_collection)
 
 
 func create_3d_paths(parent_node : Node, size : Vector2, camera : Camera, world : World) -> MUW_Waypoints:
@@ -41,5 +42,5 @@ func create_3d_paths(parent_node : Node, size : Vector2, camera : Camera, world 
 	mask_shader.set_shader_param("map_size", size)
 	mask_shader.set_shader_param("bezier_path_map", texture_map.get_map())
 	var structure = MUW_Path_Structure.new(texture_map, mask_shader)
-
-	return MUW_Waypoints.new(_pathing, _waypoint_data_factory, transformer, structure)
+    var waypoint_collection = _waypoint_collection_factory.create()
+	return MUW_Waypoints.new(_pathing, transformer, structure, waypoint_collection)

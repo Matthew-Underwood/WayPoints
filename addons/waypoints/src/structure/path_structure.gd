@@ -11,52 +11,26 @@ func _init(map : MUT_Texture_Map, mask):
 	_mask = mask
 
 
-func create(waypoint_data: MUW_Waypoint_Data):
-	_waypoint_data.append(waypoint_data)
-	_set_path()
+func send(data : Array):
+	_set_path(data)
 
 
-func update(id: int, waypoint_data: MUW_Waypoint_Data):
-	_waypoint_data[id] = waypoint_data
-	_set_path()
-
-
-func remove(id: int):
-	_waypoint_data.remove(id)
-	_set_path()
-
-
-
-func _flatten(waypoint_data : Array):
-	var flattened_data = []
-	for waypoint_id in range(waypoint_data.size()):
-		var waypoint_path_data = waypoint_data[waypoint_id].get_path()
-		var points = _normalise_points(waypoint_path_data)
-		var points_size = points.size()
-		for point_id in range(points_size):
-			if point_id == points_size - 1 && waypoint_id != waypoint_data.size() - 1:
-				continue
-			flattened_data.append(points[point_id])
-	return flattened_data
-
-
-func _set_path():
+func _set_path(data : Array):
 
 	_directions = {}
-	if !_waypoint_data.empty():
-		var flattened_data = _flatten(_waypoint_data)
-		for id in range(flattened_data.size()):
+	if !data.empty():
+		for id in range(data.size()):
 			var previous_position = null
-			var current_position = flattened_data[id]
+			var current_position = data[id]
 			var next_position = null
 			var previous_id = id - 1
 			var next_id = id + 1
 
 			if previous_id >= 0:
-				previous_position = _get_normalised_relative_position(flattened_data[previous_id], current_position)
+				previous_position = _get_normalised_relative_position(data[previous_id], current_position)
 
-			if next_id < flattened_data.size():
-				next_position = _get_normalised_relative_position(flattened_data[next_id], current_position)
+			if next_id < data.size():
+				next_position = _get_normalised_relative_position(data[next_id], current_position)
 
 			var relative_directions = {"previous" : previous_position, "next" : next_position}
 			_set_direction(_normalise_position(current_position), relative_directions)
@@ -79,15 +53,6 @@ func _set_path():
 			_map.update(pos, col)
 		_mask.set_shader_param("bezier_path_map", _map.get_map())
    
-
-func _normalise_points(points : PoolVector3Array) -> PoolVector3Array:
-	
-	var normalised_points = PoolVector3Array()
-	for id in points:
-		if Vector2(id.x, id.z).floor() + Vector2(0.5, 0.5) == Vector2(id.x, id.z):
-			normalised_points.push_back(id)
-	return normalised_points
-
 
 func _normalise_position(pos : Vector3):
 	
@@ -447,8 +412,6 @@ func _apply_corners(pos : Vector2, id : int):
 			relative_directions[Vector2(0, 1)] = 8
 
 
-
-
 	for relative_direction in relative_directions:
 		var absolute_pos = pos + relative_direction
 		var direction_id = relative_directions[relative_direction]
@@ -457,6 +420,7 @@ func _apply_corners(pos : Vector2, id : int):
 			_directions[absolute_pos] = {"paths" : {}, "corners" : {}}
 		_directions[absolute_pos]["corners"][direction_id] = direction_id
 			
+
 func _get_relative_position(pos1 : Vector2, pos2 : Vector2):
 
 	return  pos1 - pos2
