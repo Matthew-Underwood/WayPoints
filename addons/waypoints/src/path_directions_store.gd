@@ -6,10 +6,10 @@ var _path_corners = {}
 
 #TODO check these ids
 var _relative_id_corners = {
-	Vector2(-1, 1) : {Vector2(-1, 0) : 4, Vector2(0, 1) : 1},
-	Vector2(1, -1) : {Vector2(0, -1) : 1, Vector2(1, 0) : 4},
-	Vector2(-1, -1) : {Vector2(-1, 0) : 2, Vector2(0, -1) : 8},
-	Vector2(1, 1) : {Vector2(0, 1) : 8, Vector2(1, 0) : 2}
+	Vector2(-1, 1) : {Vector2(-1, 0) : 1, Vector2(0, 1) : 2},
+	Vector2(1, -1) : {Vector2(0, -1) : 2, Vector2(1, 0) : 1},
+	Vector2(-1, -1) : {Vector2(-1, 0) : 4, Vector2(0, -1) : 8},
+	Vector2(1, 1) : {Vector2(0, 1) : 4, Vector2(1, 0) : 8}
 }
 
 var _relative_ids = {
@@ -92,11 +92,9 @@ func add_direction(pos, relative_pos) -> void:
 func _add_corner(offset : Vector2, pos : Vector2) -> void:
 
 	var relative_tiles = _relative_id_corners[offset]
-	
 	for relative_pos in relative_tiles:
-	
 		var corner_id = relative_tiles[relative_pos]
-		var tile_position = relative_pos - pos
+		var tile_position = relative_pos + pos
 
 		if !self.has_corners(tile_position):
 			_path_corners[tile_position] = {}

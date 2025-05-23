@@ -17,14 +17,16 @@ func _init(
 
 func create_3d_static_path(parent_node : Node, camera : Camera, size : Vector2,  world : World):
 
-	var waypoints = _waypoints_factory.create_3d(parent_node, size, camera, world)
-	return MUW_Static_Waypoints_Operations.new(waypoints, _world)
+	var waypoints_registry = _waypoints_factory.create_3d(parent_node, size, camera, world)
+	var static_waypoints_operations = waypoints_registry.get_static_waypoints()
+	return MUW_Static_Waypoints_Operations.new(static_waypoints_operations, _world)
 
 
 func create_3d_connected_path(parent_node : Node, camera : Camera, size : Vector2,  world : World):
 
-	var waypoints = _waypoints_factory.create_3d(parent_node, size, camera, world)
-	return MUW_Connected_Waypoints_Operations.new(waypoints, _world)
+	var waypoints_registry = _waypoints_factory.create_3d(parent_node, size, camera, world)
+	var connected_waypoints_operations = waypoints_registry.get_connected_waypoints()
+	return MUW_Connected_Waypoints_Operations.new(connected_waypoints_operations, _world)
 
 
 func create_switching_paths():

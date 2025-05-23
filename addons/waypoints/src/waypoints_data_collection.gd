@@ -55,7 +55,7 @@ func remove(id : int):
 	_calculate_directions()
 
 
-func add(path : PoolVector3Array, pos : Vector2):
+func add_direction(path : PoolVector3Array, pos : Vector2):
 
 	var waypoint_data = _waypoint_data_factory.create(path, pos)
 	_waypoints.append(waypoint_data)
@@ -87,5 +87,5 @@ func _calculate_directions():
 		var previous_pos = null if previous_id < 0 else flattened_directions[previous_id]
 		var next_pos = null if next_id >= flattened_size else flattened_directions[next_id]
 
-		_path_directions_store.add(current_pos, previous_pos)
-		_path_directions_store.add(current_pos, next_pos)
+		_path_directions_store.add_direction(current_pos, previous_pos)
+		_path_directions_store.add_direction(current_pos, next_pos)

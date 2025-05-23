@@ -7,7 +7,7 @@ var _world_position : Vector2
 
 func _init(path : PoolVector3Array, world_position : Vector2):
 
-	_path = path
+	set_path(path)
 	_world_position = world_position
 
 
@@ -35,8 +35,9 @@ func set_path(path : PoolVector3Array):
 func _set_path_vec2(path : PoolVector3Array):
 
 	_path_vec2 = []
-	for pos in path:
-		var vec2_pos = Vector2(pos.x, pos.z)
+	for v in range(path.size()):
+		var vec3_pos = path[v]
+		var vec2_pos = Vector2(vec3_pos.x, vec3_pos.z)
 		if vec2_pos == vec2_pos.floor() + Vector2(0.5, 0.5):
 			_path_vec2.append(vec2_pos.floor())
 

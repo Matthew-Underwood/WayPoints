@@ -30,11 +30,6 @@ func _input(event):
 			var click_pos = _viewport.get_mouse_position()
 			_static_waypoints.create(click_pos)
 				
-		if Input.is_action_pressed("select_waypoint"):
-
-			var dragged_pos = _viewport.get_mouse_position()
-			_static_waypoints.update(dragged_pos)
-
 		if Input.is_action_just_pressed("remove_waypoint"):
 
 			_static_waypoints.remove()
