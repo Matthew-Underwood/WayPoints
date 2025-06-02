@@ -1,8 +1,8 @@
 class_name MUW_Waypoints_Switch_Operations
 
 var _path_registry : MUW_Path_Directions_Store_Registry
-var _connected_active = false
-var _static_active = true
+var _connected_active = true
+var _static_active = false
 
 
 func _init(path_registry : MUW_Path_Directions_Store_Registry):

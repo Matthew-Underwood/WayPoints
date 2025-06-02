@@ -27,6 +27,8 @@ func send(path_store : MUW_Path_Directions_Store):
 			if corners.has(pos):
 				for id in corners[pos]:
 					corner_total += corners[pos][id]
+				corners.erase(pos)
+
 
 			if path_total == 256:
 				col = Vector3(0, 1, corner_total)

@@ -22,7 +22,7 @@ func create_waypoint(pos : Vector2) -> void:
 	var world_end = _transformer.transform(pos)
 	var path_points = _pathing.get_path(world_start, world_end)
 
-	_waypoints_collection.add(path_points, world_end)
+	_waypoints_collection.add_direction(path_points, world_end)
 	var store = _waypoints_collection.get_store()
 	_structure.send(store)
 

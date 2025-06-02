@@ -6,7 +6,7 @@ var _path_corners = {}
 
 #TODO check these ids
 var _relative_id_corners = {
-	Vector2(-1, 1) : {Vector2(-1, 0) : 1, Vector2(0, 1) : 2},
+	Vector2(-1, 1) : {Vector2(0, 1) : 1, Vector2(-1, 0) : 2},
 	Vector2(1, -1) : {Vector2(0, -1) : 2, Vector2(1, 0) : 1},
 	Vector2(-1, -1) : {Vector2(-1, 0) : 4, Vector2(0, -1) : 8},
 	Vector2(1, 1) : {Vector2(0, 1) : 4, Vector2(1, 0) : 8}
