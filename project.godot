@@ -634,6 +634,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/utilities/src/vector.gd"
 }, {
+"base": "Spatial",
+"class": "MUW_Connected_Waypoint_Input_Manager",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/input/connected_waypoint_input_manager.gd"
+}, {
+"base": "Spatial",
+"class": "MUW_Connected_Waypoint_Manager",
+"language": "GDScript",
+"path": "res://addons/waypoints/assets/scenes/3d/connected_waypoint_manager.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Connected_Waypoints_Operations",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/operations/connected_waypoints_operations.gd"
+}, {
 "base": "Reference",
 "class": "MUW_Mesh_Picker",
 "language": "GDScript",
@@ -655,6 +670,21 @@ _global_script_classes=[ {
 "path": "res://addons/waypoints/src/operations/node_waypoint_operations_factory.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Path_Directions_Store",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/path_directions_store.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Path_Directions_Store_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/path_directions_store_factory.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Path_Directions_Store_Registry",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/path_directions_store_registry.gd"
+}, {
+"base": "Reference",
 "class": "MUW_Path_Structure",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/structure/path_structure.gd"
@@ -663,6 +693,16 @@ _global_script_classes=[ {
 "class": "MUW_Points",
 "language": "GDScript",
 "path": "res://addons/world/src/points.gd"
+}, {
+"base": "Spatial",
+"class": "MUW_Static_Waypoint_Input_Manager",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/input/static_waypoint_input_manager.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Static_Waypoints_Operations",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/operations/static_waypoints_operations.gd"
 }, {
 "base": "GdUnitTestSuite",
 "class": "MUW_Test_World",
@@ -740,9 +780,19 @@ _global_script_classes=[ {
 "path": "res://addons/waypoints/src/waypoint/sprite.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Waypoints",
+"class": "MUW_Waypoints_Connected",
 "language": "GDScript",
-"path": "res://addons/waypoints/src/waypoints.gd"
+"path": "res://addons/waypoints/src/waypoints_connected.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoints_Data_Collection",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoints_data_collection.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoints_Data_Collection_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoints_data_collection_factory.gd"
 }, {
 "base": "Reference",
 "class": "MUW_Waypoints_Factory",
@@ -750,14 +800,29 @@ _global_script_classes=[ {
 "path": "res://addons/waypoints/src/waypoints_factory.gd"
 }, {
 "base": "Reference",
-"class": "MUW_Waypoints_Operations",
-"language": "GDScript",
-"path": "res://addons/waypoints/src/operations/waypoints_operations.gd"
-}, {
-"base": "Reference",
 "class": "MUW_Waypoints_Operations_Factory",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/operations/waypoints_operations_factory.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoints_Operations_Registry",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/operations/waypoint_operations_registry.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoints_Registry",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoint_registry.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoints_Static",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/waypoints_static.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Waypoints_Switch_Operations",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/operations/waypoints_switch_operations.gd"
 }, {
 "base": "Reference",
 "class": "MUW_World",
@@ -838,6 +903,16 @@ _global_script_classes=[ {
 "class": "StringFuzzer",
 "language": "GDScript",
 "path": "res://addons/gdUnit3/src/fuzzers/StringFuzzer.gd"
+}, {
+"base": "Reference",
+"class": "Test_Address",
+"language": "GDScript",
+"path": "res://address.gd"
+}, {
+"base": "Reference",
+"class": "Test_Names",
+"language": "GDScript",
+"path": "res://names.gd"
 }, {
 "base": "Resource",
 "class": "TimeUnit",
@@ -1000,12 +1075,20 @@ _global_script_class_icons={
 "MUT_Texture_Map": "",
 "MUT_Texture_Map_Factory": "",
 "MUU_Utilities_Vector": "",
+"MUW_Connected_Waypoint_Input_Manager": "",
+"MUW_Connected_Waypoint_Manager": "",
+"MUW_Connected_Waypoints_Operations": "",
 "MUW_Mesh_Picker": "",
 "MUW_Node_Structure": "",
 "MUW_Node_Waypoints_Operations": "",
 "MUW_Node_Waypoints_Operations_Factory": "",
+"MUW_Path_Directions_Store": "",
+"MUW_Path_Directions_Store_Factory": "",
+"MUW_Path_Directions_Store_Registry": "",
 "MUW_Path_Structure": "",
 "MUW_Points": "",
+"MUW_Static_Waypoint_Input_Manager": "",
+"MUW_Static_Waypoints_Operations": "",
 "MUW_Test_World": "",
 "MUW_Tile_Types": "",
 "MUW_Tiles": "",
@@ -1021,10 +1104,15 @@ _global_script_class_icons={
 "MUW_Waypoint_Factory": "",
 "MUW_Waypoint_Spatial": "",
 "MUW_Waypoint_Sprite": "",
-"MUW_Waypoints": "",
+"MUW_Waypoints_Connected": "",
+"MUW_Waypoints_Data_Collection": "",
+"MUW_Waypoints_Data_Collection_Factory": "",
 "MUW_Waypoints_Factory": "",
-"MUW_Waypoints_Operations": "",
 "MUW_Waypoints_Operations_Factory": "",
+"MUW_Waypoints_Operations_Registry": "",
+"MUW_Waypoints_Registry": "",
+"MUW_Waypoints_Static": "",
+"MUW_Waypoints_Switch_Operations": "",
 "MUW_World": "",
 "MUW_World_2d": "",
 "MUW_World_3d": "",
@@ -1041,6 +1129,8 @@ _global_script_class_icons={
 "RichTextLabelExt": "",
 "SignalHandler": "",
 "StringFuzzer": "",
+"Test_Address": "",
+"Test_Names": "",
 "TimeUnit": "",
 "ValueProvider": "",
 "Vector2Fuzzer": "",
@@ -1061,7 +1151,7 @@ enabled=PoolStringArray( "res://addons/pathing/plugin.cfg", "res://addons/waypoi
 
 [input]
 
-confirm_click={
+select_waypoint={
 "deadzone": 0.5,
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
  ]
@@ -1075,6 +1165,15 @@ rotate={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
+}
+switch_waypoint={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":32,"unicode":0,"echo":false,"script":null)
+ ]
+}
+cancel_waypoint={
+"deadzone": 0.5,
+"events": [  ]
 }
 
 [network]

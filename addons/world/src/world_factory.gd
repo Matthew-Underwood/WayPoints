@@ -6,17 +6,24 @@ var _world_size := Vector2(10, 10)
 
 
 func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : World) -> MUW_World_3d:
+
+	var path_store_factory = MUW_Path_Directions_Store_Factory.new()
+	var static_path_store = path_store_factory.create() 
+	var connected_path_store = path_store_factory.create() 
 	var waypoint_data_factory = MUW_Waypoint_Data_Factory.new()
+	var waypoint_data_collection_factory = MUW_Waypoints_Data_Collection_Factory.new(waypoint_data_factory, path_store_factory)
 	var points = MUW_Points.new()
 	var tiles = MUW_Tiles_Factory.new(_tile_data_3d(), points).create_3d(cast_to, parent_node)
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints_factory = MUW_Waypoints_Factory.new(pathing, waypoint_data_factory, points)
+	var path_store_registry = MUW_Path_Directions_Store_Registry.new(static_path_store, connected_path_store)
+	var waypoints_factory = MUW_Waypoints_Factory.new(pathing, points, waypoint_data_collection_factory, path_store_registry)
 	var mesh_picker = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picker)
 
+
 	var map_world = MUW_World.new(transformer, tiles)
 	var waypoint_node_operations_factory = MUW_Node_Waypoints_Operations_Factory.new(waypoints_factory, map_world)
-	var waypoint_operations_factory = MUW_Waypoints_Operations_Factory.new(waypoints_factory, map_world)
+	var waypoint_operations_factory = MUW_Waypoints_Operations_Factory.new(waypoints_factory, map_world, path_store_registry)
 	return MUW_World_3d.new(waypoint_operations_factory, waypoint_node_operations_factory)
 
 #func create_2d(tilemap : TileMap) -> MUW_World_2d:

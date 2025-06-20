@@ -1,11 +1,11 @@
 class_name MUW_Node_Waypoints_Operations
 
-var _waypoints : MUW_Waypoints
+var _waypoints 
 var _world : MUW_World
 var _id
 
 
-func _init(waypoints : MUW_Waypoints, world : MUW_World):
+func _init(waypoints, world : MUW_World):
 	_waypoints = waypoints
 	_world = world
 
