@@ -106,12 +106,39 @@ float createLinearLine(vec2 fuv, vec2 a, vec2 b) {
     return col;
 }
 
+float process_corners(float corners) {
 
-float path(vec2 uv, sampler2D ref_tex) {
-
-    vec4 directions = texture(ref_tex, uv) * 255.0;
+    const int corner_ids[4] = int[4] (8, 4, 2, 1);
     float col = 0.0;
+    for (int id = 0; id < corner_ids.length(); id++) {
+
+        int corner_id = corner_ids[id];
+    
+        if (corners > corner_id) {
+
+            if (corner_id == 8) {
+                col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+            }
+            if (corner_id == 4) {
+                col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+            }
+            if (corner_id == 2) {
+                col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+            }
+            if (corner_id == 1) {
+                col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+            }
+            corners -= corner_id;
+        }
+    }
+    return col;
+}
+
+
+float process_directions(float directions) {
+
     const int direction_ids[8] = int[8] (128, 64, 32, 16, 8, 4, 2, 1);
+    float col = 0.0;
 
     for (int id = 0; id < direction_ids.length(); id++) {
 
@@ -122,13 +149,12 @@ float path(vec2 uv, sampler2D ref_tex) {
             vec2 start_pos = vec2(0.5);
             vec2 end_pos = get_position_from_id(direction_id);
             return create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
-    
         }
     
         if (directions > direction_id) {
 
             directions -= direction_id;
-            vec4 inner_directions = directions;
+            float inner_directions = directions;
             int start_id = direction_id;
             vec2 start_pos = get_position_from_id(start_id);
 
@@ -142,7 +168,17 @@ float path(vec2 uv, sampler2D ref_tex) {
                 }
             }
         }
-    
+    }
+    return col;
+}
+
+float path(vec2 uv, sampler2D ref_tex) {
+
+    vec4 path_data = texture(ref_tex, uv).rg * 255.0;
+    float col = 0.0;
+
+    col += process_directions(path_data.r); 
+    col += process_corners(path_data.g); 
     return col; 
 }
 
