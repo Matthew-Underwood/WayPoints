@@ -11,6 +11,7 @@ uniform sampler2D terrian2:hint_albedo;
 uniform sampler2D terrian_ref;
 uniform sampler2D bezier_path_map;
 uniform int path_on;
+uniform vec4 path_colour:hint_color;
 
 float circle(vec2 uvc, vec2 pos, float rad) {
     vec2 dist = uvc - pos;
@@ -103,35 +104,28 @@ float createLinearLine(vec2 fuv, vec2 a, vec2 b) {
     return col;
 }
 
-float process_corners(int corners, vec2 fuv) {
+float process_corners(int corners, vec2 uv) {
 
-    const int corner_ids[4] = int[4] (8, 4, 2, 1);
+    const int corner_ids[4] = int[4] (128, 32, 4, 1);
+    vec2 fuv = fract(uv * map_size);
     float col = 0.0;
     for (int id = 0; id < corner_ids.length(); id++) {
 
         int corner_id = corner_ids[id];
     
-        if (corners > corner_id) {
+        if (corners >= corner_id) {
 
-            if (corner_id == 8) {
-                vec2 start_pos = vec2(0.0);
-                vec2 end_pos = vec2(0.0);
-                col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+            if (corner_id == 128) {
+                col += create_bezier(fuv, vec2(2.0, 0.0), vec2(1.0), vec2(0.0, 2.0)); 
+            }
+            if (corner_id == 32) {
+                col += create_bezier(fuv, vec2(-1.0, 0.0), vec2(0.0, 1.0), vec2(1.0, 2.0)); 
             }
             if (corner_id == 4) {
-                vec2 start_pos = vec2(0.0);
-                vec2 end_pos = vec2(0.0);
-                col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
-            }
-            if (corner_id == 2) {
-                vec2 start_pos = vec2(0.0);
-                vec2 end_pos = vec2(0.0);
-                col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+                col += create_bezier(fuv, vec2(0.0, -1.0), vec2(1.0, 0.0), vec2(2.0, 1.0)); 
             }
             if (corner_id == 1) {
-                vec2 start_pos = vec2(0.0);
-                vec2 end_pos = vec2(0.0);
-                col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+                col += create_bezier(fuv, vec2(-1.0, 1.0), vec2(0.0), vec2(1.0, -1.0)); 
             }
             corners -= corner_id;
         }
@@ -185,11 +179,11 @@ float process_directions(int directions, vec2 uv) {
 
 float path(vec2 uv, sampler2D ref_tex) {
 
-    vec2 path_data = texture(ref_tex, uv).rg * 255.0;
+    vec4 path_data = texture(ref_tex, uv) * 255.0;
     float col = 0.0;
 
     col += process_directions(int(path_data.r), uv); 
-//    col += process_corners(int(path_data.g), uv); 
+    col += process_corners(int(path_data.g), uv); 
     return col; 
 }
 
@@ -253,7 +247,7 @@ float path(vec2 uv, sampler2D ref_tex) {
     void fragment () {
 
         float path = path(UV, bezier_path_map); 
-        ALBEDO = vec3(path);
+        ALBEDO = vec3(path) * path_colour.rgb;
 
         if (path_on == 1) {
             ALPHA = path;
