@@ -11,6 +11,7 @@ uniform sampler2D terrian2:hint_albedo;
 uniform sampler2D terrian_ref;
 uniform sampler2D bezier_path_map;
 uniform int path_on;
+uniform vec4 path_colour:hint_color;
 
 float circle(vec2 uvc, vec2 pos, float rad) {
     vec2 dist = uvc - pos;
@@ -51,33 +52,31 @@ float box(vec2 pos, vec2 size, vec2 offset, float deg) {
 
 vec2 get_position_from_id(int id) {
 
-    vec2 pos = vec2(0, 0);
+    vec2 pos = vec2(0.0);
+
     switch(id) {
-        case 1:
+        case 1: //NW
             pos = vec2(0, 0);
             break;
-        case 2:
+        case 2: //N
             pos = vec2(0.5, 0);
             break;
-        case 4:
+        case 4: //NE
             pos = vec2(1.0, 0);
             break;
-        case 8:
+        case 8: //W
             pos = vec2(0, 0.5);
             break;
-        case 16:
-            pos = vec2(0.5);
-            break;
-        case 32:
+        case 16: //E
             pos = vec2(1.0, 0.5);
             break;
-        case 64:
+        case 32: //SW
             pos = vec2(0.0, 1.0);
             break;
-        case 128:
+        case 64: //S
             pos = vec2(0.5, 1.0);
             break;
-        case 256:
+        case 128: //SE
             pos = vec2(1.0);
             break;
     }
@@ -105,149 +104,155 @@ float createLinearLine(vec2 fuv, vec2 a, vec2 b) {
     return col;
 }
 
+float process_corners(int corners, vec2 uv) {
 
-float path(vec2 uv, sampler2D ref_tex) {
-
-    vec2 fuv = fract(uv);
-    vec2 path_ref_uv = (floor(uv) / map_size) + (1.0 / map_size * 0.5); 
-    vec4 ids_for_position = texture(ref_tex, path_ref_uv) * 255.0;
-
+    const int corner_ids[4] = int[4] (128, 32, 4, 1);
+    vec2 fuv = fract(uv * map_size);
     float col = 0.0;
-	const int ids[9] = int[9] (256, 128, 64, 32, 16, 8, 4, 2, 1);
-	const int corner_ids[4] = int[4] (8, 4, 2, 1);
-    int total = int(ids_for_position.x) + (256 * int(ids_for_position.y));
-    int corner_total = int(ids_for_position.z);
-    for (int id = 0; id < ids.length(); id++) {
+    for (int id = 0; id < corner_ids.length(); id++) {
 
-        if (total >= ids[id]) {
-            total -= ids[id];
-            int start_id = ids[id];
-            int total2 = total;
-            for (int id2 = 0; id2 < ids.length(); id2++) {
-                if (total2 >= ids[id2]) {
-                    int end_id = ids[id2];
-                    vec2 start_pos = get_position_from_id(start_id);
+        int corner_id = corner_ids[id];
+    
+        if (corners >= corner_id) {
+
+            if (corner_id == 128) {
+                col += create_bezier(fuv, vec2(2.0, 0.0), vec2(1.0), vec2(0.0, 2.0)); 
+            }
+            if (corner_id == 32) {
+                col += create_bezier(fuv, vec2(-1.0, 0.0), vec2(0.0, 1.0), vec2(1.0, 2.0)); 
+            }
+            if (corner_id == 4) {
+                col += create_bezier(fuv, vec2(0.0, -1.0), vec2(1.0, 0.0), vec2(2.0, 1.0)); 
+            }
+            if (corner_id == 1) {
+                col += create_bezier(fuv, vec2(-1.0, 1.0), vec2(0.0), vec2(1.0, -1.0)); 
+            }
+            corners -= corner_id;
+        }
+    }
+    return col;
+}
+
+
+float process_directions(int directions, vec2 uv) {
+
+    const int direction_ids[8] = int[8] (128, 64, 32, 16, 8, 4, 2, 1);
+    vec2 fuv = fract(uv * map_size);
+    float col = 0.0;
+    int directions_start = directions;
+
+    for (int id = 0; id < direction_ids.length(); id++) {
+
+        int direction_id = direction_ids[id];
+
+        if (directions_start == direction_id) {
+
+            vec2 start_pos = vec2(0.5);
+            vec2 end_pos = get_position_from_id(direction_id);
+            col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+        }
+    
+        if (directions >= direction_id) {
+            
+            vec2 start_pos = vec2(0.5);
+
+            if (directions > direction_id) {
+                int start_id = direction_id;
+                start_pos = get_position_from_id(start_id);
+            }
+            directions -= direction_id;
+            int inner_directions = directions;
+
+            for (int inner_id = 0; inner_id < direction_ids.length(); inner_id++) {
+                int inner_direction_id = direction_ids[inner_id];
+                if (inner_directions >= inner_direction_id) {
+                    int end_id = inner_direction_id;  
                     vec2 end_pos = get_position_from_id(end_id);
-                    col += create_bezier(fuv, start_pos, vec2(0.5), end_pos);
-                    total2 -= ids[id2];
+                    col += create_bezier(fuv, start_pos, vec2(0.5), end_pos); 
+                    inner_directions -= inner_direction_id;
                 }
             }
         }
     }
-    
-    for (int id = 0; id < corner_ids.length(); id++) {
-        if (corner_total >= corner_ids[id]) {
-            if (corner_ids[id] == 1) {
-                col += create_bezier(fuv, vec2(-1.0, 1.0), vec2(0.0), vec2(1.0, -1.0)); 
-            }
-            if (corner_ids[id] == 2) {
-                col += create_bezier(fuv, vec2(2.0, 0.0), vec2(1.0), vec2(0.0, 2.0)); 
-            }
-            if (corner_ids[id] == 4) {
-                col += create_bezier(fuv, vec2(0.0, -1.0), vec2(1.0, 0.0), vec2(2.0, 1.0));
-            }
-            if (corner_ids[id] == 8) {
-                col += create_bezier(fuv, vec2(-1.0, 0.0), vec2(0.0, 1.0), vec2(1.0, 2.0));
-            }
-            corner_total -= corner_ids[id];
-        }
-    }
-
     return col;
 }
 
-vec4 hash4(vec2 p) {
-	 return fract(
-		sin(
-			vec4(1.0 + dot(p, vec2(37.0,17.0)),
-			     2.0 + dot(p, vec2(11.0,47.0)),
-				 3.0 + dot(p, vec2(41.0,29.0)),
-				 4.0 + dot(p, vec2(23.0,31.0))
-				)
-		) * 103.0
-	);
+float path(vec2 uv, sampler2D ref_tex) {
+
+    vec4 path_data = texture(ref_tex, uv) * 255.0;
+    float col = 0.0;
+
+    col += process_directions(int(path_data.r), uv); 
+    col += process_corners(int(path_data.g), uv); 
+    return col; 
 }
 
-vec3 no_repeat(vec2 uv, sampler2D terrian) {
 
-    vec2 fluv = floor(uv);
-    vec2 fruv = fract(uv);
-
-    vec4 offseta = hash4(fluv + vec2(0.0, 0.0));
-    vec4 offsetb = hash4(fluv + vec2(1.0, 0.0));
-    vec4 offsetc = hash4(fluv + vec2(0.0, 1.0));
-    vec4 offsetd = hash4(fluv + vec2(1.0, 1.0));
-
-    vec2 ddx = dFdx(uv);
-    vec2 ddy = dFdy(uv);
-
-    offseta.zw = sign(offseta.zw - 0.5);
-    offsetb.zw = sign(offsetb.zw - 0.5);
-    offsetc.zw = sign(offsetc.zw - 0.5);
-    offsetd.zw = sign(offsetd.zw - 0.5);
-
-    vec2 uva = uv*offseta.zw + offseta.xy; vec2 ddxa = ddx*offseta.zw; vec2 ddya = ddy*offseta.zw;
-    vec2 uvb = uv*offsetb.zw + offsetb.xy; vec2 ddxb = ddx*offsetb.zw; vec2 ddyb = ddy*offsetb.zw;
-    vec2 uvc = uv*offsetc.zw + offsetc.xy; vec2 ddxc = ddx*offsetc.zw; vec2 ddyc = ddy*offsetc.zw;
-    vec2 uvd = uv*offsetd.zw + offsetd.xy; vec2 ddxd = ddx*offsetd.zw; vec2 ddyd = ddy*offsetd.zw;
-
-    vec2 b = smoothstep(0.25, 0.75, fruv);
-
-     return mix(
-        mix(textureGrad(terrian, uva, ddxa, ddya), textureGrad(terrian, uvb, ddxb, ddyb ), b.x), 
-        mix(textureGrad(terrian, uvc, ddxc, ddyc), textureGrad(terrian, uvd, ddxd, ddyd ), b.x), b.y
-    ).xyz;
-}
-
-vec3 determine_terrian(vec3 refcol, vec2 uv) {
-
-    vec3 tex;
-    if (refcol.r == 0.20) {
-        tex = no_repeat(uv, terrian1);
-    } else {
-        tex = no_repeat(uv, terrian2);
+    vec4 hash4(vec2 p) {
+         return fract(
+            sin(
+                vec4(1.0 + dot(p, vec2(37.0,17.0)),
+                     2.0 + dot(p, vec2(11.0,47.0)),
+                     3.0 + dot(p, vec2(41.0,29.0)),
+                     4.0 + dot(p, vec2(23.0,31.0))
+                    )
+            ) * 103.0
+        );
     }
 
-    return tex;
-}
+    vec3 no_repeat(vec2 uv, sampler2D terrian) {
 
-void fragment () {
+        vec2 fluv = floor(uv);
+        vec2 fruv = fract(uv);
 
-    vec2 muv = UV * map_size;
-    vec2 fruv = fract(muv);
-    vec2 suv = smoothstep(0.1, 0.9, fruv);
-    vec2 terrian_ref_unit = vec2(1.0, 1.0) / terrian_ref_size;
-    vec2 origin_ref_uv = terrian_ref_unit * (terrian_ref_size / map_size * floor(muv)) + fruv * terrian_ref_unit;
-    
+        vec4 offseta = hash4(fluv + vec2(0.0, 0.0));
+        vec4 offsetb = hash4(fluv + vec2(1.0, 0.0));
+        vec4 offsetc = hash4(fluv + vec2(0.0, 1.0));
+        vec4 offsetd = hash4(fluv + vec2(1.0, 1.0));
 
-    float path = path(muv, bezier_path_map); 
-    vec2 ruv1 = origin_ref_uv;
-	vec2 ruv2 = vec2(origin_ref_uv.x + terrian_ref_unit.x, origin_ref_uv.y);
-    vec2 ruv3 = vec2(origin_ref_uv.x, origin_ref_uv.y + terrian_ref_unit.y);
-	vec2 ruv4 = origin_ref_uv + terrian_ref_unit; 
+        vec2 ddx = dFdx(uv);
+        vec2 ddy = dFdy(uv);
 
-    vec3 ref_tex1 = texture(terrian_ref, ruv1).rgb;
-    vec3 ref_tex2 = texture(terrian_ref, ruv2).rgb;
-    vec3 ref_tex3 = texture(terrian_ref, ruv3).rgb;
-    vec3 ref_tex4 = texture(terrian_ref, ruv4).rgb;
+        offseta.zw = sign(offseta.zw - 0.5);
+        offsetb.zw = sign(offsetb.zw - 0.5);
+        offsetc.zw = sign(offsetc.zw - 0.5);
+        offsetd.zw = sign(offsetd.zw - 0.5);
 
-    vec3 tex1 = determine_terrian(ref_tex1, muv);
-    vec3 tex2 = determine_terrian(ref_tex2, muv);
-    vec3 tex3 = determine_terrian(ref_tex3, muv);
-    vec3 tex4 = determine_terrian(ref_tex4, muv);
+        vec2 uva = uv*offseta.zw + offseta.xy; vec2 ddxa = ddx*offseta.zw; vec2 ddya = ddy*offseta.zw;
+        vec2 uvb = uv*offsetb.zw + offsetb.xy; vec2 ddxb = ddx*offsetb.zw; vec2 ddyb = ddy*offsetb.zw;
+        vec2 uvc = uv*offsetc.zw + offsetc.xy; vec2 ddxc = ddx*offsetc.zw; vec2 ddyc = ddy*offsetc.zw;
+        vec2 uvd = uv*offsetd.zw + offsetd.xy; vec2 ddxd = ddx*offsetd.zw; vec2 ddyd = ddy*offsetd.zw;
 
-    vec3 mix1 = mix(tex1, tex2, suv.x);
-    vec3 mix2 = mix(tex3, tex4, suv.x);
-    vec3 mix3 = mix(mix1, mix2, suv.y);
-    
-    //Debugging
-    //ALBEDO = mix3;
-    ALBEDO = vec3(path);
+        vec2 b = smoothstep(0.25, 0.75, fruv);
 
-    if (path_on == 1) {
-        ALPHA = path;
-    } else {
-        ALPHA = 1.0;
+
+         return mix(
+            mix(textureGrad(terrian, uva, ddxa, ddya), textureGrad(terrian, uvb, ddxb, ddyb ), b.x), 
+            mix(textureGrad(terrian, uvc, ddxc, ddyc), textureGrad(terrian, uvd, ddxd, ddyd ), b.x), b.y
+        ).xyz;
     }
+
+    vec3 determine_terrian(vec3 refcol, vec2 uv) {
+
+        vec3 tex;
+        if (refcol.r == 0.20) {
+            tex = no_repeat(uv, terrian1);
+        } else {
+            tex = no_repeat(uv, terrian2);
+        }
+
+        return tex;
+    }
+
+    void fragment () {
+
+        float path = path(UV, bezier_path_map); 
+        ALBEDO = vec3(path) * path_colour.rgb;
+
+        if (path_on == 1) {
+            ALPHA = path;
+        } else {
+            ALPHA = 1.0;
+        }
 }
 "

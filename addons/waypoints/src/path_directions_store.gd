@@ -6,10 +6,10 @@ var _path_corners = {}
 
 #TODO check these ids
 var _relative_id_corners = {
-	Vector2(-1, 1) : {Vector2(0, 1) : 1, Vector2(-1, 0) : 2},
-	Vector2(1, -1) : {Vector2(0, -1) : 2, Vector2(1, 0) : 1},
-	Vector2(-1, -1) : {Vector2(-1, 0) : 4, Vector2(0, -1) : 8},
-	Vector2(1, 1) : {Vector2(0, 1) : 4, Vector2(1, 0) : 8}
+	Vector2(-1, 1) : {Vector2(0, 1) : 1, Vector2(-1, 0) : 128},
+	Vector2(1, -1) : {Vector2(0, -1) : 128, Vector2(1, 0) : 1},
+	Vector2(-1, -1) : {Vector2(-1, 0) : 4, Vector2(0, -1) : 32},
+	Vector2(1, 1) : {Vector2(0, 1) : 4, Vector2(1, 0) : 32}
 }
 
 var _relative_ids = {
@@ -17,10 +17,10 @@ var _relative_ids = {
 	Vector2(0, -1) : 2,
 	Vector2(1, -1) : 4,
 	Vector2(-1, 0) : 8,
-	Vector2(1, 0) : 32,
-	Vector2(-1, 1) : 64,
-	Vector2(0, 1) : 128,
-	Vector2(1, 1) : 256
+	Vector2(1, 0) : 16,
+	Vector2(-1, 1) : 32,
+	Vector2(0, 1) : 64,
+	Vector2(1, 1) : 128
 }
 
 func get_all_directions() -> Dictionary:
@@ -70,13 +70,6 @@ func is_empty() -> bool:
 
 func add_direction(pos, relative_pos) -> void:
 	
-	if relative_pos == null:
-		if !self.has_directions(pos):
-			_path_directions[pos] = {}
-
-		_path_directions[pos][16] = 16
-		return
-
 	var offset = relative_pos - pos
 	var direction = _relative_ids[offset]
 

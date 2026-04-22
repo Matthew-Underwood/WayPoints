@@ -73,7 +73,8 @@ func _calculate_directions():
 	for id in range(size):
 		var waypoint_data = _waypoints[id]
 		var path = waypoint_data.get_path_as_vec2()
-		for current_id in range(path.size()):
+		for current_id in range(path.size()): 
+			# Skip if it is the last point and NOT the last waypoint 
 			if id != size - 1 && current_id == path.size() - 1:
 				continue
 			flattened_directions.append(path[current_id])
@@ -86,6 +87,7 @@ func _calculate_directions():
 		var current_pos = flattened_directions[id] 
 		var previous_pos = null if previous_id < 0 else flattened_directions[previous_id]
 		var next_pos = null if next_id >= flattened_size else flattened_directions[next_id]
-
-		_path_directions_store.add_direction(current_pos, previous_pos)
-		_path_directions_store.add_direction(current_pos, next_pos)
+		if previous_pos != null:
+			_path_directions_store.add_direction(current_pos, previous_pos)
+		if next_pos != null:
+			_path_directions_store.add_direction(current_pos, next_pos)
