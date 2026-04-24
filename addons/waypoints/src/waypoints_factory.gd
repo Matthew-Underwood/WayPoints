@@ -50,9 +50,9 @@ func create_3d(parent_node : Node, size : Vector2, camera : Camera, world : Worl
 	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
 	var roads = parent_node.find_node("RoadsMask")
-    var path_materials_store_factory = MUW_Path_Materials_Store_Factory.new(MUW_Path_Factory.new())	
+	var path_materials_store_factory = MUW_Path_Materials_Store_Factory.new(MUW_Path_Factory.new())	
 	var path_materials_store = path_materials_store_factory.create([{"size":10}])
-    
+	
 	var material_id = 0
 	for path_material in range(path_materials_store.get_all()
 		roads.mesh.surface_set_material(material_id++, path_material)

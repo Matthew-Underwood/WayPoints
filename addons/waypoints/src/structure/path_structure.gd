@@ -16,32 +16,19 @@ func send(path_store : MUW_Path_Directions_Store):
 			var path_total = 0
 			var corner_total = 0
 			var col = Vector3.ZERO
-
 			for id in directions[pos]:
 				path_total += directions[pos][id]
+				if corners.has(pos):
+					for corner_id in corners[pos]:
+						corner_total += corners[pos][corner_id]
+					corners.erase(pos)
+			_map.update(pos, Vector3(path_total, corner_total, 0))
 
-			if corners.has(pos):
-				for id in corners[pos]:
-					corner_total += corners[pos][id]
-				corners.erase(pos)
-
-
-			if path_total == 256:
-				col = Vector3(0, 1, corner_total)
-			if path_total > 256:
-				col = Vector3(path_total - 256, 1, corner_total)
-			if path_total < 256:
-				col = Vector3(path_total, 0, corner_total)
-
-			_texture_map.update(pos, col)
-
-		# Finish off with positions that only contain corners
 		for pos in corners:
 			var corner_total = 0
 			for id in corners[pos]:
 				corner_total += corners[pos][id]
-			var col = Vector3(0, 0, corner_total)
+				_map.update(pos, Vector3(0, corner_total, 0))
 
 			_texture_map.update(pos, col)
-
 		_material.set_shader_param("bezier_path_map", _texture_map.get_map())
