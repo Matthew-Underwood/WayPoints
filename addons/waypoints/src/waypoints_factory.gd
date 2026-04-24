@@ -49,14 +49,15 @@ func create_3d(parent_node : Node, size : Vector2, camera : Camera, world : Worl
 	var points = MUW_Points.new()
 	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
-	var texture_map = MUT_Texture_Map_Factory.new().create(size)
 	var roads = parent_node.find_node("RoadsMask")
-	var mask_shader = roads.get_active_material(0)
+    var path_materials_store_factory = MUW_Path_Materials_Store_Factory.new(MUW_Path_Factory.new())	
+	var path_materials_store = path_materials_store_factory.create([{"size":10}])
+    
+	var material_id = 0
+	for path_material in range(path_materials_store.get_all()
+		roads.mesh.surface_set_material(material_id++, path_material)
 
-	mask_shader.set_shader_param("map_size", size)
-	mask_shader.set_shader_param("bezier_path_map", texture_map.get_map())
-
-	var structure = MUW_Path_Structure.new(texture_map, mask_shader)
+	var structure = MUW_Path_Structure.new(path_material, texture_map)
 	var static_waypoint_collection = _waypoint_collection_factory.create()
 	var static_path_store = static_waypoint_collection.get_store()
 	var connected_waypoint_collection = _waypoint_collection_factory.create()

@@ -685,6 +685,11 @@ _global_script_classes=[ {
 "path": "res://addons/waypoints/src/path_directions_store_registry.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Path_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/path_factory.gd"
+}, {
+"base": "Reference",
 "class": "MUW_Path_Structure",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/structure/path_structure.gd"
@@ -1085,6 +1090,7 @@ _global_script_class_icons={
 "MUW_Path_Directions_Store": "",
 "MUW_Path_Directions_Store_Factory": "",
 "MUW_Path_Directions_Store_Registry": "",
+"MUW_Path_Factory": "",
 "MUW_Path_Structure": "",
 "MUW_Points": "",
 "MUW_Static_Waypoint_Input_Manager": "",
