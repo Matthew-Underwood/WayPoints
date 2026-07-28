@@ -9,7 +9,7 @@ func create(path_config : Array) -> MUW_Path_Materials_Store:
 
 	var paths = []
 	for config in path_config:
-		paths.append(_path_factory.create(config["size"]))
+		paths.append(_path_factory.create(config["size"], config["id"]))
 	
 	return MUW_Path_Materials_Store.new(paths)
 
