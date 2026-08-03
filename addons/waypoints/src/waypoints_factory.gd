@@ -50,13 +50,18 @@ func create_3d(parent_node : Node, size : Vector2, camera : Camera, world : Worl
 	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
 	var roads = parent_node.find_node("RoadsMask")
-	var path_materials_store_factory = MUW_Path_Materials_Store_Factory.new(MUW_Path_Factory.new())	
-	var path_materials_store = path_materials_store_factory.create([{"id" : 0, "size" : Vector2(10, 10)}, {"id" : 1, "size": Vector2(10, 10)}])
-	
-	for path_material in path_materials_store.get_all():
-		roads.mesh.surface_set_material(0, path_material.get_material())
+	var path_material_factory = MUW_Path_Material_Factory.new()
 
-	var structure = MUW_Path_Structure.new(path_materials_store)
+	var path_material = path_material_factory.create(
+		[
+			{"id" : 0, "colour" : Vector3(1.0, 1.0, 1.0), "size" : Vector2(10, 10)},
+			{"id" : 1, "colour" : Vector3(0.0, 1.0, 0.0), "size" : Vector2(10, 10)}
+		]
+	)
+	
+	roads.mesh.surface_set_material(0, path_material.get_material())
+
+	var structure = MUW_Path_Structure.new(path_material)
 	var static_waypoint_collection = _waypoint_collection_factory.create()
 	var static_path_store = static_waypoint_collection.get_store()
 	var connected_waypoint_collection = _waypoint_collection_factory.create()

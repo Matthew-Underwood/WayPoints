@@ -4,14 +4,12 @@
 code = "shader_type spatial;
 render_mode unshaded, world_vertex_coords;
 
-uniform vec2 map_size;
-uniform vec2 terrian_ref_size;
-uniform sampler2D terrian1:hint_albedo;
-uniform sampler2D terrian2:hint_albedo;
-uniform sampler2D terrian_ref;
-uniform sampler2D bezier_path_map;
-uniform int path_on;
-uniform vec4 path_colour:hint_color;
+uniform vec2 map_size1;
+uniform vec2 map_size2;
+uniform sampler2D path_reference_map1;
+uniform sampler2D path_reference_map2;
+uniform vec3 path_colour1;
+uniform vec3 path_colour2;
 
 float circle(vec2 uvc, vec2 pos, float rad) {
     vec2 dist = uvc - pos;
@@ -104,7 +102,7 @@ float createLinearLine(vec2 fuv, vec2 a, vec2 b) {
     return col;
 }
 
-float process_corners(int corners, vec2 uv) {
+float process_corners(int corners, vec2 uv, vec2 map_size) {
 
     const int corner_ids[4] = int[4] (128, 32, 4, 1);
     vec2 fuv = fract(uv * map_size);
@@ -134,7 +132,7 @@ float process_corners(int corners, vec2 uv) {
 }
 
 
-float process_directions(int directions, vec2 uv) {
+float process_directions(int directions, vec2 uv, vec2 map_size) {
 
     const int direction_ids[8] = int[8] (128, 64, 32, 16, 8, 4, 2, 1);
     vec2 fuv = fract(uv * map_size);
@@ -177,82 +175,29 @@ float process_directions(int directions, vec2 uv) {
     return col;
 }
 
-float path(vec2 uv, sampler2D ref_tex) {
+float path(vec2 uv, sampler2D ref_tex, vec2 map_size) {
 
     vec4 path_data = texture(ref_tex, uv) * 255.0;
     float col = 0.0;
 
-    col += process_directions(int(path_data.r), uv); 
-    col += process_corners(int(path_data.g), uv); 
+    col += process_directions(int(path_data.r), uv, map_size); 
+    col += process_corners(int(path_data.g), uv, map_size); 
     return col; 
 }
 
 
-    vec4 hash4(vec2 p) {
-         return fract(
-            sin(
-                vec4(1.0 + dot(p, vec2(37.0,17.0)),
-                     2.0 + dot(p, vec2(11.0,47.0)),
-                     3.0 + dot(p, vec2(41.0,29.0)),
-                     4.0 + dot(p, vec2(23.0,31.0))
-                    )
-            ) * 103.0
-        );
+void fragment () {
+
+    float path1 = path(UV, path_reference_map1, map_size1); 
+    vec3 colour1 = vec3(path1) * path_colour1.rgb;
+
+    ALBEDO = colour1; 
+
+    float path2 = path(UV, path_reference_map2, map_size2); 
+    vec3 colour2 = vec3(path2) * path_colour2.rgb;
+
+    if (colour2 != vec3(0.0, 0.0, 0.0)) {
+        ALBEDO = colour2;
     }
-
-    vec3 no_repeat(vec2 uv, sampler2D terrian) {
-
-        vec2 fluv = floor(uv);
-        vec2 fruv = fract(uv);
-
-        vec4 offseta = hash4(fluv + vec2(0.0, 0.0));
-        vec4 offsetb = hash4(fluv + vec2(1.0, 0.0));
-        vec4 offsetc = hash4(fluv + vec2(0.0, 1.0));
-        vec4 offsetd = hash4(fluv + vec2(1.0, 1.0));
-
-        vec2 ddx = dFdx(uv);
-        vec2 ddy = dFdy(uv);
-
-        offseta.zw = sign(offseta.zw - 0.5);
-        offsetb.zw = sign(offsetb.zw - 0.5);
-        offsetc.zw = sign(offsetc.zw - 0.5);
-        offsetd.zw = sign(offsetd.zw - 0.5);
-
-        vec2 uva = uv*offseta.zw + offseta.xy; vec2 ddxa = ddx*offseta.zw; vec2 ddya = ddy*offseta.zw;
-        vec2 uvb = uv*offsetb.zw + offsetb.xy; vec2 ddxb = ddx*offsetb.zw; vec2 ddyb = ddy*offsetb.zw;
-        vec2 uvc = uv*offsetc.zw + offsetc.xy; vec2 ddxc = ddx*offsetc.zw; vec2 ddyc = ddy*offsetc.zw;
-        vec2 uvd = uv*offsetd.zw + offsetd.xy; vec2 ddxd = ddx*offsetd.zw; vec2 ddyd = ddy*offsetd.zw;
-
-        vec2 b = smoothstep(0.25, 0.75, fruv);
-
-
-         return mix(
-            mix(textureGrad(terrian, uva, ddxa, ddya), textureGrad(terrian, uvb, ddxb, ddyb ), b.x), 
-            mix(textureGrad(terrian, uvc, ddxc, ddyc), textureGrad(terrian, uvd, ddxd, ddyd ), b.x), b.y
-        ).xyz;
-    }
-
-    vec3 determine_terrian(vec3 refcol, vec2 uv) {
-
-        vec3 tex;
-        if (refcol.r == 0.20) {
-            tex = no_repeat(uv, terrian1);
-        } else {
-            tex = no_repeat(uv, terrian2);
-        }
-
-        return tex;
-    }
-
-    void fragment () {
-
-        float path = path(UV, bezier_path_map); 
-        ALBEDO = vec3(path) * path_colour.rgb;
-
-        if (path_on == 1) {
-            ALPHA = path;
-        } else {
-            ALPHA = 1.0;
-        }
 }
 "

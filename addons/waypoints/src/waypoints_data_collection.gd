@@ -1,5 +1,6 @@
 class_name MUW_Waypoints_Data_Collection
 
+var _layer = 0
 var _waypoints = []
 var _waypoint_data_factory : MUW_Waypoint_Data_Factory
 var _persist : bool
@@ -10,6 +11,10 @@ func _init(waypoint_data_factory : MUW_Waypoint_Data_Factory, path_directions_st
 	_waypoint_data_factory = waypoint_data_factory
 	_path_directions_store = path_directions_store
 	_persist = persist
+
+
+func set_layer(id : int):
+	_layer = id
 
 
 func get_store() -> MUW_Path_Directions_Store:
@@ -88,6 +93,6 @@ func _calculate_directions():
 		var previous_pos = null if previous_id < 0 else flattened_directions[previous_id]
 		var next_pos = null if next_id >= flattened_size else flattened_directions[next_id]
 		if previous_pos != null:
-			_path_directions_store.add_direction(current_pos, previous_pos)
+			_path_directions_store.add_direction(current_pos, previous_pos, _layer)
 		if next_pos != null:
-			_path_directions_store.add_direction(current_pos, next_pos)
+			_path_directions_store.add_direction(current_pos, next_pos, _layer)

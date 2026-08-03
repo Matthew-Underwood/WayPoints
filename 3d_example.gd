@@ -4,6 +4,7 @@ var _viewport
 var _static_waypoints
 var _connected_waypoints
 var _switch_waypoints
+var _layer = 0
 
 func _ready():
 
@@ -12,7 +13,10 @@ func _ready():
 	var waypoints_registry = world.create_waypoints(self, _viewport.get_camera(), get_world())
 
 	_static_waypoints = waypoints_registry.get_static_waypoints()
+	_static_waypoints.set_layer(_layer)
+
 	_connected_waypoints = waypoints_registry.get_connected_waypoints()
+	_connected_waypoints.set_layer(_layer)
 	_switch_waypoints = waypoints_registry.get_switch_waypoints()
 
 
@@ -25,6 +29,13 @@ func _input(event):
 
 	if _switch_waypoints.is_static_active():
 
+		if Input.is_action_just_pressed("switch_layer_0"):
+			_static_waypoints.set_layer(0)
+
+		if Input.is_action_just_pressed("switch_layer_1"):
+			_layer = 1
+			_static_waypoints.set_layer(1)
+
 		if Input.is_action_just_pressed("select_waypoint"):
 
 			var click_pos = _viewport.get_mouse_position()
@@ -35,6 +46,12 @@ func _input(event):
 			_static_waypoints.remove()
 
 	if _switch_waypoints.is_connected_active():
+
+		if Input.is_action_just_pressed("switch_layer_0"):
+			_connected_waypoints.set_layer(0)
+
+		if Input.is_action_just_pressed("switch_layer_1"):
+			_connected_waypoints.set_layer(1)
 
 		if Input.is_action_just_pressed("select_waypoint"):
 
@@ -57,4 +74,3 @@ func _input(event):
 	if Input.is_action_just_pressed("switch_waypoint"):
 
 		_switch_waypoints.switch()
-

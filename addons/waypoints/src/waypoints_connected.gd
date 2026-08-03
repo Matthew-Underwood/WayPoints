@@ -6,6 +6,7 @@ var _waypoints = []
 var _origin = Vector2(0, 0)
 var _structure
 var _waypoints_collection : MUW_Waypoints_Data_Collection
+var _layer
 
 
 func _init(pathing : MUP_Pathing, transformer, structure, waypoints_collection):
@@ -16,6 +17,11 @@ func _init(pathing : MUP_Pathing, transformer, structure, waypoints_collection):
 	_waypoints_collection = waypoints_collection
 
 
+func set_layer(id : int):
+	_waypoints_collection.set_layer(id)
+	_layer = id
+
+
 func create_waypoint(pos : Vector2) -> void:
 	
 	var world_start = _resolve_position_from_id(-1)
@@ -24,7 +30,7 @@ func create_waypoint(pos : Vector2) -> void:
 
 	_waypoints_collection.add_direction(path_points, world_end)
 	var store = _waypoints_collection.get_store()
-	_structure.send(store)
+	_structure.send(store, _layer)
 
 
 func get_waypoint_id_from_pos(pos : Vector2):
@@ -57,7 +63,7 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 
 	_waypoints_collection.update(id, path_points, world_end)
 	var store = _waypoints_collection.get_store()
-	_structure.send(store)
+	_structure.send(store, _layer)
 		
 	var position_next_waypoint = _resolve_position_from_id(next_id, true)
 	
@@ -67,7 +73,7 @@ func update_waypoints_from_pos(id : int, pos : Vector2) -> void:
 		path_points = _pathing.get_path(world_start, world_end)
 		_waypoints_collection.update(next_id, path_points, world_end)
 		store = _waypoints_collection.get_store()
-		_structure.send(store)
+		_structure.send(store, _layer)
 
 
 func remove_waypoint(id : int) -> void:
@@ -83,7 +89,7 @@ func remove_waypoint(id : int) -> void:
 
 	_waypoints_collection.remove(id)
 	var store = _waypoints_collection.get_store()
-	_structure.send(store)	
+	_structure.send(store, _layer)	
 
 
 func is_empty() -> bool:

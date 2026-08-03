@@ -10,6 +10,10 @@ func _init(waypoints, world : MUW_World):
 	_world = world
 
 
+func set_layer(id):
+	_waypoints.set_layer(id)
+
+
 func create(pos):
 	
 	if !self._valid_click(pos):
