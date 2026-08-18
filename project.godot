@@ -914,16 +914,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/gdUnit3/src/fuzzers/StringFuzzer.gd"
 }, {
-"base": "Reference",
-"class": "Test_Address",
-"language": "GDScript",
-"path": "res://address.gd"
-}, {
-"base": "Reference",
-"class": "Test_Names",
-"language": "GDScript",
-"path": "res://names.gd"
-}, {
 "base": "Resource",
 "class": "TimeUnit",
 "language": "GDScript",
@@ -1141,8 +1131,6 @@ _global_script_class_icons={
 "RichTextLabelExt": "",
 "SignalHandler": "",
 "StringFuzzer": "",
-"Test_Address": "",
-"Test_Names": "",
 "TimeUnit": "",
 "ValueProvider": "",
 "Vector2Fuzzer": "",
