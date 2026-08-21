@@ -1,17 +1,29 @@
 class_name MUW_Connected_Waypoints_Operations
 
-var _waypoints
+var _waypoints : MUW_Waypoints_Connected
 var _world : MUW_World
 var _id
 
 
-func _init(waypoints, world : MUW_World):
+func _init(waypoints : MUW_Waypoints_Connected, world : MUW_World):
+
 	_waypoints = waypoints
 	_world = world
 
 
 func set_layer(id):
+
 	_waypoints.set_layer(id)
+
+
+func set_origin(pos):
+
+	_waypoints.set_origin(pos)
+
+
+func is_empty():
+
+	return _waypoints.is_empty()
 
 
 func create(pos):
@@ -23,6 +35,7 @@ func create(pos):
 
 
 func update(pos):
+
 	if _id == null:
 		return
 	var waypoint_id = _waypoints.get_waypoint_id_from_pos(pos)
@@ -32,16 +45,29 @@ func update(pos):
 	
 
 func remove():
+
 	if _id == null:
 		return
 	_waypoints.remove_waypoint(_id)
 	_id = null
 
 
+func cancel():
+
+	_waypoints.cancel()
+
+
+func apply():
+
+	_waypoints.apply()
+
+
 func get(pos):
+
 	return _waypoints.get_waypoint_id_from_pos(pos)
 
 
 func _valid_click(pos : Vector2) -> bool:
+
 	#TODO need to fix bug where you can create waypoint on player position. This needs handling somewhere else
 	return _world.is_walkable(pos)

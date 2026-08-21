@@ -6,9 +6,11 @@ func _init(path_material : MUW_Path_Material):
 	_path_material = path_material 
 
 
-func send(path_store : MUW_Path_Directions_Store, layer : int = 0):
+func send(path_store : MUW_Path_Directions_Store):
 	
-	if !path_store.is_empty():
+	_path_material.clear_map()
+
+	for layer in path_store.get_all_layers():
 		var directions = path_store.get_all_directions(layer)
 		var corners = path_store.get_all_corners(layer)
 

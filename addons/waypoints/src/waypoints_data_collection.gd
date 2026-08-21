@@ -17,6 +17,10 @@ func set_layer(id : int):
 	_layer = id
 
 
+func clear_all():
+
+	_waypoints = []
+
 func get_store() -> MUW_Path_Directions_Store:
 
 	return _path_directions_store

@@ -14,6 +14,13 @@ func update_map(pos : Vector2, colour : Vector3, layer : int):
 	_texture_maps[layer].update(pos, colour)
 
 
+func clear_map():
+
+	var layers = _texture_maps.keys()
+	for layer in layers:
+		_texture_maps[layer].clear()
+
+
 func get_material() -> ShaderMaterial:
 
 	return _material

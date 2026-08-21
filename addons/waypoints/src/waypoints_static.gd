@@ -2,7 +2,6 @@ class_name MUW_Waypoints_Static
 
 var _pathing : MUP_Pathing
 var _transformer
-var _waypoints = []
 var _origin = Vector2(0, 0)
 var _structure
 var _waypoints_collection : MUW_Waypoints_Data_Collection
@@ -18,6 +17,7 @@ func _init(pathing : MUP_Pathing, transformer, structure, waypoints_collection :
 
 
 func set_layer(id : int):
+
 	_waypoints_collection.set_layer(id)
 	_layer = id
 

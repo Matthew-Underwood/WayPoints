@@ -22,6 +22,12 @@ var _relative_ids = {
 	Vector2(1, 1) : 128
 }
 
+
+func get_all_layers():
+
+	return _path_directions.keys()
+
+
 func get_all_directions(layer = null) -> Dictionary:
 
 	if layer == null:
