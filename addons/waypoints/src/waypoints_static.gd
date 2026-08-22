@@ -2,10 +2,10 @@ class_name MUW_Waypoints_Static
 
 var _pathing : MUP_Pathing
 var _transformer
-var _waypoints = []
 var _origin = Vector2(0, 0)
 var _structure
 var _waypoints_collection : MUW_Waypoints_Data_Collection
+var _layer
 
 
 func _init(pathing : MUP_Pathing, transformer, structure, waypoints_collection : MUW_Waypoints_Data_Collection):
@@ -14,6 +14,12 @@ func _init(pathing : MUP_Pathing, transformer, structure, waypoints_collection :
 	_transformer = transformer
 	_structure = structure
 	_waypoints_collection = waypoints_collection
+
+
+func set_layer(id : int):
+
+	_waypoints_collection.set_layer(id)
+	_layer = id
 
 
 func create_waypoint(pos : Vector2) -> void:
@@ -25,7 +31,7 @@ func create_waypoint(pos : Vector2) -> void:
 	_waypoints_collection.add_direction(path_points, world_end)
 	_waypoints_collection.empty()
 	var path_store = _waypoints_collection.get_store()	
-	_structure.send(path_store)
+	_structure.send(path_store, _layer)
 
 
 func remove_waypoint(pos : Vector2) -> void:
@@ -33,7 +39,7 @@ func remove_waypoint(pos : Vector2) -> void:
 	var world_pos = _transformer.transform(pos)
 	var store = _waypoints_collection.get_store()
 	store.remove(world_pos)
-	_structure.send(store)
+	_structure.send(store, _layer)
 	
 
 func _resolve_position_from_id(id : int, absolute = false):

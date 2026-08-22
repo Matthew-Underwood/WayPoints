@@ -2,18 +2,31 @@ class_name MUW_Waypoints_Connected
 
 var _pathing : MUP_Pathing
 var _transformer
-var _waypoints = []
-var _origin = Vector2(0, 0)
+var _origin = null 
 var _structure
 var _waypoints_collection : MUW_Waypoints_Data_Collection
+var _layer
+var _store
 
-
-func _init(pathing : MUP_Pathing, transformer, structure, waypoints_collection):
+func _init(pathing : MUP_Pathing, transformer, structure, waypoints_collection, store):
 
 	_pathing = pathing
 	_transformer = transformer
 	_structure = structure
 	_waypoints_collection = waypoints_collection
+	_store = store
+
+
+func set_origin(pos : Vector2):
+
+	var origin = _transformer.transform(pos)
+	_origin = origin
+
+
+func set_layer(id : int):
+
+	_waypoints_collection.set_layer(id)
+	_layer = id
 
 
 func create_waypoint(pos : Vector2) -> void:
@@ -83,12 +96,40 @@ func remove_waypoint(id : int) -> void:
 
 	_waypoints_collection.remove(id)
 	var store = _waypoints_collection.get_store()
-	_structure.send(store)	
+	_structure.send(store)
+
+
+func cancel() -> void:
+
+	var directions = _store.get_all_directions().duplicate(true)
+	var corners = _store.get_all_corners().duplicate(true)
+
+	var store = _waypoints_collection.get_store()
+	store.set_directions(directions)
+	store.set_corners(corners)
+
+	_waypoints_collection.clear_all()
+	_origin = null
+	_structure.send(_store)
 
 
 func is_empty() -> bool:
 
-	return _waypoints_collection.is_empty()
+	return _origin == null
+
+
+func apply():
+
+	var store = _waypoints_collection.get_store()
+
+	var directions = store.get_all_directions().duplicate(true)
+	var corners = store.get_all_corners().duplicate(true)
+
+	_store.set_directions(directions)
+	_store.set_corners(corners)
+
+	_waypoints_collection.clear_all()
+	_origin = null
 
 
 func _resolve_position_from_id(id : int, absolute = false):

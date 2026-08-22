@@ -1,20 +1,18 @@
 class_name MUW_Path_Structure
 
-var _map : MUT_Texture_Map
-var _mask
+var _path_material
 
-
-func _init(map : MUT_Texture_Map, mask):
-
-	_map = map
-	_mask = mask
+func _init(path_material : MUW_Path_Material):
+	_path_material = path_material 
 
 
 func send(path_store : MUW_Path_Directions_Store):
+	
+	_path_material.clear_map()
 
-	if !path_store.is_empty():
-		var directions = path_store.get_all_directions()
-		var corners = path_store.get_all_corners()
+	for layer in path_store.get_all_layers():
+		var directions = path_store.get_all_directions(layer)
+		var corners = path_store.get_all_corners(layer)
 
 		for pos in directions:
 			var path_total = 0
@@ -26,12 +24,12 @@ func send(path_store : MUW_Path_Directions_Store):
 					for corner_id in corners[pos]:
 						corner_total += corners[pos][corner_id]
 					corners.erase(pos)
-			_map.update(pos, Vector3(path_total, corner_total, 0))
+			_path_material.update_map(pos, Vector3(path_total, corner_total, 0), layer)
 
 		for pos in corners:
 			var corner_total = 0
 			for id in corners[pos]:
 				corner_total += corners[pos][id]
-				_map.update(pos, Vector3(0, corner_total, 0))
+				_path_material.update_map(pos, Vector3(0, corner_total, 0), layer)
 
-		_mask.set_shader_param("bezier_path_map", _map.get_map())
+		_path_material.update_material(layer)

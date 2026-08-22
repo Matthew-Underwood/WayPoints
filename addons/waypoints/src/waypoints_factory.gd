@@ -49,23 +49,29 @@ func create_3d(parent_node : Node, size : Vector2, camera : Camera, world : Worl
 	var points = MUW_Points.new()
 	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picking)
-	var texture_map = MUT_Texture_Map_Factory.new().create(size)
 	var roads = parent_node.find_node("RoadsMask")
-	var mask_shader = roads.get_active_material(0)
+	var path_material_factory = MUW_Path_Material_Factory.new()
 
-	mask_shader.set_shader_param("map_size", size)
-	mask_shader.set_shader_param("bezier_path_map", texture_map.get_map())
+	var path_material = path_material_factory.create(
+		[
+			{"id" : 0, "colour" : Vector3(1.0, 1.0, 1.0), "size" : Vector2(10, 10)},
+			{"id" : 1, "colour" : Vector3(0.0, 1.0, 0.0), "size" : Vector2(10, 10)}
+		]
+	)
+	
+	roads.mesh.surface_set_material(0, path_material.get_material())
 
-	var structure = MUW_Path_Structure.new(texture_map, mask_shader)
+	var structure = MUW_Path_Structure.new(path_material)
 	var static_waypoint_collection = _waypoint_collection_factory.create()
 	var static_path_store = static_waypoint_collection.get_store()
 	var connected_waypoint_collection = _waypoint_collection_factory.create()
 	var connected_path_store = connected_waypoint_collection.get_store()
 	_path_store_registry.set_static_path_store(static_path_store)
 	_path_store_registry.set_connected_path_store(connected_path_store)
+	var path_store = MUW_Path_Directions_Store_Factory.new().create()
 	
 	var static_waypoints = MUW_Waypoints_Static.new(_pathing, transformer, structure, static_waypoint_collection)
-	var connected_waypoints = MUW_Waypoints_Connected.new(_pathing, transformer, structure, connected_waypoint_collection)
+	var connected_waypoints = MUW_Waypoints_Connected.new(_pathing, transformer, structure, connected_waypoint_collection, path_store)
 
 	return MUW_Waypoints_Registry.new(static_waypoints, connected_waypoints)
 

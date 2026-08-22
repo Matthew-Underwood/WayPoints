@@ -685,6 +685,16 @@ _global_script_classes=[ {
 "path": "res://addons/waypoints/src/path_directions_store_registry.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Path_Material",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/path_material.gd"
+}, {
+"base": "Reference",
+"class": "MUW_Path_Material_Factory",
+"language": "GDScript",
+"path": "res://addons/waypoints/src/path_material_factory.gd"
+}, {
+"base": "Reference",
 "class": "MUW_Path_Structure",
 "language": "GDScript",
 "path": "res://addons/waypoints/src/structure/path_structure.gd"
@@ -904,16 +914,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/gdUnit3/src/fuzzers/StringFuzzer.gd"
 }, {
-"base": "Reference",
-"class": "Test_Address",
-"language": "GDScript",
-"path": "res://address.gd"
-}, {
-"base": "Reference",
-"class": "Test_Names",
-"language": "GDScript",
-"path": "res://names.gd"
-}, {
 "base": "Resource",
 "class": "TimeUnit",
 "language": "GDScript",
@@ -1085,6 +1085,8 @@ _global_script_class_icons={
 "MUW_Path_Directions_Store": "",
 "MUW_Path_Directions_Store_Factory": "",
 "MUW_Path_Directions_Store_Registry": "",
+"MUW_Path_Material": "",
+"MUW_Path_Material_Factory": "",
 "MUW_Path_Structure": "",
 "MUW_Points": "",
 "MUW_Static_Waypoint_Input_Manager": "",
@@ -1129,8 +1131,6 @@ _global_script_class_icons={
 "RichTextLabelExt": "",
 "SignalHandler": "",
 "StringFuzzer": "",
-"Test_Address": "",
-"Test_Names": "",
 "TimeUnit": "",
 "ValueProvider": "",
 "Vector2Fuzzer": "",
@@ -1166,14 +1166,25 @@ rotate={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
-switch_waypoint={
+apply_waypoint={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":32,"unicode":0,"echo":false,"script":null)
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":16777221,"unicode":0,"echo":false,"script":null)
  ]
 }
 cancel_waypoint={
 "deadzone": 0.5,
-"events": [  ]
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":85,"unicode":0,"echo":false,"script":null)
+ ]
+}
+switch_layer_0={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":49,"unicode":0,"echo":false,"script":null)
+ ]
+}
+switch_layer_1={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":50,"unicode":0,"echo":false,"script":null)
+ ]
 }
 
 [network]
