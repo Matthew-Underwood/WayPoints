@@ -44,7 +44,7 @@ func _init(
 #	return MUW_Waypoints.new(_pathing, transformer, structure, waypoint_collection)
 
 
-func create_3d(parent_node : Node, size : Vector2, camera : Camera, world : World) -> MUW_Waypoints_Registry:
+func create_3d(parent_node : Node, size : Vector2, camera : Camera, world : World):
 
 	var points = MUW_Points.new()
 	var mesh_picking = MUW_Mesh_Picker.new(camera, world)
@@ -70,8 +70,7 @@ func create_3d(parent_node : Node, size : Vector2, camera : Camera, world : Worl
 	_path_store_registry.set_connected_path_store(connected_path_store)
 	var path_store = MUW_Path_Directions_Store_Factory.new().create()
 	
-	var static_waypoints = MUW_Waypoints_Static.new(_pathing, transformer, structure, static_waypoint_collection)
 	var connected_waypoints = MUW_Waypoints_Connected.new(_pathing, transformer, structure, connected_waypoint_collection, path_store)
 
-	return MUW_Waypoints_Registry.new(static_waypoints, connected_waypoints)
+	return connected_waypoints
 
