@@ -10,9 +10,7 @@ func _ready():
 
 	_viewport = get_viewport()
 	var world = MUW_World_Factory.new().create_3d(Vector3(0, -10, 0), self, _viewport.get_camera(), get_world())
-	var waypoints_registry = world.create_waypoints(self, _viewport.get_camera(), get_world())
-
-	_connected_waypoints = waypoints_registry.get_connected_waypoints()
+	_connected_waypoints = world.create_waypoints(self, _viewport.get_camera(), get_world())
 	_connected_waypoints.set_layer(_layer)
 
 

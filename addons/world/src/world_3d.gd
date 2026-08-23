@@ -12,13 +12,11 @@ func _init(
 	_waypoint_node_operations_factory = waypoint_node_operations_factory 
 	
 
-func create_waypoints(parent_node : Node, camera : Camera, world : World) -> MUW_Waypoints_Operations_Registry:
+func create_waypoints(parent_node : Node, camera : Camera, world : World) -> MUW_Waypoints_Connected:
 
-	var switching_waypoints = _waypoints_operations_factory.create_switching_paths()
-	var static_waypoints = _waypoints_operations_factory.create_3d_static_path(parent_node, camera, Vector2(10, 10), world)
 	var connected_waypoints = _waypoints_operations_factory.create_3d_connected_path(parent_node, camera, Vector2(10, 10), world)
 
-	return MUW_Waypoints_Operations_Registry.new(static_waypoints, connected_waypoints, switching_waypoints)
+	return connected_waypoints
 
 
 func create_node_waypoints(parent_node : Node, camera : Camera, world : World) -> MUW_Node_Waypoints_Operations:
