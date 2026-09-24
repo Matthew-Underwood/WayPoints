@@ -3,14 +3,12 @@ class_name MUW_Waypoints_Data_Collection
 var _layer = 0
 var _waypoints = []
 var _waypoint_data_factory : MUW_Waypoint_Data_Factory
-var _persist : bool
 var _path_directions_store : MUW_Path_Directions_Store 
 
-func _init(waypoint_data_factory : MUW_Waypoint_Data_Factory, path_directions_store : MUW_Path_Directions_Store, persist : bool):
+func _init(waypoint_data_factory : MUW_Waypoint_Data_Factory, path_directions_store : MUW_Path_Directions_Store):
 
 	_waypoint_data_factory = waypoint_data_factory
 	_path_directions_store = path_directions_store
-	_persist = persist
 
 
 func set_layer(id : int):
@@ -76,8 +74,7 @@ func _calculate_directions():
 	var flattened_directions = []
 	var size = _waypoints.size()
 
-	if !_persist:
-		_path_directions_store.empty()
+	_path_directions_store.empty()
 
 	for id in range(size):
 		var waypoint_data = _waypoints[id]

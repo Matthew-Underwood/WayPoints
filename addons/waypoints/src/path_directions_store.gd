@@ -1,8 +1,8 @@
 class_name MUW_Path_Directions_Store
 
 var _path_directions = {}
-
 var _path_corners = {}
+var _transformer
 
 var _relative_id_corners = {
 	Vector2(-1, 1) : {Vector2(0, 1) : 1, Vector2(-1, 0) : 128},
@@ -21,6 +21,10 @@ var _relative_ids = {
 	Vector2(0, 1) : 64,
 	Vector2(1, 1) : 128
 }
+
+func _init(transformer : MUW_Transformers_Path):
+
+	_transformer = transformer
 
 
 func get_all_layers():
@@ -62,22 +66,26 @@ func set_corners(corners : Dictionary):
 
 func get_corners(pos : Vector2, layer : int) -> Dictionary:
 
-	return _path_corners[layer][pos]
+	var transformed_pos = _transformer.transform(pos, layer)
+	return _path_corners[layer][transformed_pos]
 
 
 func get_directions(pos : Vector2, layer : int) -> Dictionary:
 
-	return _path_directions[layer][pos]
+	var transformed_pos = _transformer.transform(pos, layer)
+	return _path_directions[layer][transformed_pos]
 
 
 func has_directions(pos : Vector2, layer : int) -> bool:
 
-	return _path_directions[layer].has(pos)
+	var transformed_pos = _transformer.transform(pos, layer)
+	return _path_directions[layer].has(transformed_pos)
 
 
 func has_corners(pos : Vector2, layer : int) -> bool:
 
-	return _path_corners[layer].has(pos)
+	var transformed_pos = _transformer.transform(pos, layer)
+	return _path_corners[layer].has(transformed_pos)
 
 
 func is_empty() -> bool:
@@ -87,19 +95,21 @@ func is_empty() -> bool:
 
 func add_direction(pos : Vector2, relative_pos : Vector2, layer : int) -> void:
 	
-	var offset = relative_pos - pos
+	var transformed_pos = _transformer.transform(pos, layer)
+	var transformed_relative_pos = _transformer.transform(relative_pos, layer)
+	var offset = transformed_relative_pos - transformed_pos
 	var direction = _relative_ids[offset]
 
 	if !_path_directions.has(layer):
 		_path_directions[layer] = {}
 
 	if offset in _relative_id_corners.keys():
-		_add_corner(offset, pos, layer)
+		_add_corner(offset, transformed_pos, layer)
 
 	if !self.has_directions(pos, layer):
-		_path_directions[layer][pos] = {}
+		_path_directions[layer][transformed_pos] = {}
 
-	_path_directions[layer][pos][direction] = direction
+	_path_directions[layer][transformed_pos][direction] = direction
 
 
 func _add_corner(offset : Vector2, pos : Vector2, layer : int) -> void:
