@@ -33,6 +33,7 @@ func create_waypoint(pos : Vector2) -> void:
 	
 	var world_start = _resolve_position_from_id(-1)
 	var world_end = _transformer.transform(pos)
+
 	var path_points = _pathing.get_path(world_start, world_end)
 
 	_waypoints_collection.add_direction(path_points, world_end)

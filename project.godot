@@ -735,6 +735,11 @@ _global_script_classes=[ {
 "path": "res://addons/world/src/tiles/tiles_processor_factory.gd"
 }, {
 "base": "Reference",
+"class": "MUW_Transformers_Path",
+"language": "GDScript",
+"path": "res://addons/world/src/transformers/path.gd"
+}, {
+"base": "Reference",
 "class": "MUW_Transformers_Screen_Mesh",
 "language": "GDScript",
 "path": "res://addons/world/src/transformers/screen_mesh.gd"
@@ -1060,6 +1065,7 @@ _global_script_class_icons={
 "MUW_Tiles_Processor_2d": "",
 "MUW_Tiles_Processor_3d": "",
 "MUW_Tiles_Processor_Factory": "",
+"MUW_Transformers_Path": "",
 "MUW_Transformers_Screen_Mesh": "",
 "MUW_Transformers_Screen_Tilemap": "",
 "MUW_WayPoint_Line": "",
