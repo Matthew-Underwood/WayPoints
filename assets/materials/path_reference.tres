@@ -15,3 +15,5 @@ shader_param/map_size1 = Vector2( 0, 0 )
 shader_param/map_size2 = null
 shader_param/path_colour1 = null
 shader_param/path_colour2 = null
+shader_param/path_size1 = null
+shader_param/path_size2 = null

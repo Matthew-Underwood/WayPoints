@@ -1,15 +1,18 @@
 class_name MUW_Waypoints_Factory
 
+var _config : Dictionary
 var _pathing : MUP_Pathing
 var _points : MUW_Points
 var _waypoint_collection_factory : MUW_Waypoints_Data_Collection_Factory
 
 func _init(
+	config : Dictionary,
 	pathing : MUP_Pathing,
 	points : MUW_Points,
 	waypoint_collection_factory : MUW_Waypoints_Data_Collection_Factory
 ):
 
+	_config = config
 	_pathing = pathing
 	_points = points
 	_waypoint_collection_factory = waypoint_collection_factory
@@ -49,19 +52,13 @@ func create_3d(parent_node : Node, size : Vector2, camera : Camera, world : Worl
 	var roads = parent_node.find_node("RoadsMask")
 	var path_material_factory = MUW_Path_Material_Factory.new()
 
-	var config = [
-			{"id" : 0, "colour" : Vector3(1.0, 1.0, 1.0), "size" : Vector2(5, 5)},
-			{"id" : 1, "colour" : Vector3(0.0, 1.0, 0.0), "size" : Vector2(10, 10)}
-		]
-
-
-	var path_material = path_material_factory.create(config)
+	var path_material = path_material_factory.create(_config)
 	
 	roads.mesh.surface_set_material(0, path_material.get_material())
 
 	var structure = MUW_Path_Structure.new(path_material)
-	var connected_waypoint_collection = _waypoint_collection_factory.create(config)
-	var path_store = MUW_Path_Directions_Store_Factory.new().create(config)
+	var connected_waypoint_collection = _waypoint_collection_factory.create()
+	var path_store = MUW_Path_Directions_Store_Factory.new().create()
 	
 	var connected_waypoints = MUW_Waypoints_Connected.new(_pathing, transformer, structure, connected_waypoint_collection, path_store)
 

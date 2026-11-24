@@ -24,6 +24,9 @@ func send(path_store : MUW_Path_Directions_Store):
 					for corner_id in corners[pos]:
 						corner_total += corners[pos][corner_id]
 					corners.erase(pos)
+
+			print(pos)
+			print(path_total)
 			_path_material.update_map(pos, Vector3(path_total, corner_total, 0), layer)
 
 		for pos in corners:
