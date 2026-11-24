@@ -64,7 +64,7 @@ func remove(id : int):
 
 func add_direction(path : PoolVector3Array, pos : Vector2):
 
-	var waypoint_data = _waypoint_data_factory.create(path, pos)
+	var waypoint_data = _waypoint_data_factory.create(path, pos, _layer)
 	_waypoints.append(waypoint_data)
 	_calculate_directions()
 
@@ -83,10 +83,11 @@ func _calculate_directions():
 			# Skip if it is the last point and NOT the last waypoint 
 			if id != size - 1 && current_id == path.size() - 1:
 				continue
+			if flattened_directions.has(path[current_id]):
+				continue
 			flattened_directions.append(path[current_id])
 			
 	var flattened_size = flattened_directions.size()
-
 	for id in range(flattened_size):
 		var previous_id = id - 1
 		var next_id = id + 1

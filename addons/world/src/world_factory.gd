@@ -7,12 +7,34 @@ var _world_size := Vector2(10, 10)
 
 func create_3d(cast_to : Vector3, parent_node : Node, camera : Camera, world : World) -> MUW_World_3d:
 
-	var waypoint_data_factory = MUW_Waypoint_Data_Factory.new()
+	var config = {
+		"layers" : [
+			{
+				"id" : 0,
+				"colour" : Vector3(1.0, 1.0, 1.0),
+				"size" : Vector2(3.3, 3.3),
+				"reference_map_size" : Vector2(4, 4),
+				"tiles_per_point" : Vector2(3, 3),
+				"path_size" : 1.0
+			},
+			{
+				"id" : 1,
+				"colour" : Vector3(0.0, 1.0, 0.0),
+				"size" : Vector2(10, 10),
+				"reference_map_size" : Vector2(10, 10),
+				"tiles_per_point" : Vector2(1, 1),
+				"path_size" : 0.2
+			}	
+		],
+		"world_size" : _world_size
+	}
+
+	var waypoint_data_factory = MUW_Waypoint_Data_Factory.new(config)
 	var waypoint_data_collection_factory = MUW_Waypoints_Data_Collection_Factory.new(waypoint_data_factory)
 	var points = MUW_Points.new()
 	var tiles = MUW_Tiles_Factory.new(_tile_data_3d(), points).create_3d(cast_to, parent_node)
 	var pathing = MUP_Pathing_Factory.new(tiles).create()
-	var waypoints_factory = MUW_Waypoints_Factory.new(pathing, points, waypoint_data_collection_factory)
+	var waypoints_factory = MUW_Waypoints_Factory.new(config, pathing, points, waypoint_data_collection_factory)
 	var mesh_picker = MUW_Mesh_Picker.new(camera, world)
 	var transformer = MUW_Transformers_Screen_Mesh.new(mesh_picker)
 

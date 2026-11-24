@@ -2,11 +2,13 @@ class_name MUT_Texture_Map
 
 var _texture : ImageTexture
 var _size : Vector2
+var _size_limit : Vector2
 
 func _init(texture : ImageTexture, size : Vector2):
 
 	_texture = texture
 	_size = size
+	_size_limit = _size - Vector2(1, 1)
 
 
 func clear():
@@ -24,6 +26,9 @@ func clear():
 func update(pos : Vector2, colour : Vector3):
 
 	var image = _texture.get_data()
+	if pos.x > _size_limit.x || pos.y > _size_limit.y:
+		return
+
 	image.lock()
 	image.set_pixelv(pos, Color8(colour.x, colour.y, colour.z))
 	image.unlock()
